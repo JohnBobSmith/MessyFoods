@@ -1,0 +1,48 @@
+#ifndef ENEMY_H
+#define ENEMY_H
+
+#include <SFML/Graphics.hpp>
+
+class Enemy
+{
+    public:
+        //Setup our textures automatically
+        Enemy();
+
+        //The enemy sprite to draw on screen
+        sf::Sprite enemySprite;
+
+        //The enemies position and velocity
+        float velocityX = 0;
+        float velocityY = 0;
+        float positionX = 0;
+        float positionY = 0;
+
+        //Is the enemy alive?
+        bool isDead = true;
+
+        //The enemies base health
+        float enemyHealth = 50.0f;
+
+        //Damage our objects based on N damage applied.
+        void applyDamage(float damage);
+
+        //Get the width and height of the enemy texture/sprite
+        int getWidth() { return enemyTexture.getSize().x; }
+        int getHeight() { return enemyTexture.getSize().y; }
+
+        //Expose the max number of enemies
+        int getMaxEnemies() { return maxEnemies; }
+
+    private:
+        //The enemies texture
+        sf::Texture enemyTexture;
+
+        //How many we have on screen
+        const int maxEnemies = 64;
+
+        //Constant movement speed
+        const int enemyVelocity = 20.0f;
+};
+
+#endif // ENEMY_H
