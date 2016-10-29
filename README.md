@@ -20,7 +20,9 @@ beginning to look like asteroids are the least of your concerns.
 
 ##How to play:
 Left mouse - Fire main cannon
+
 Right mouse - Hold to enable shield
+
 Spacebar - Hold to shoot laser
 
 ##What works, what doesn't, what has yet to be implented:
