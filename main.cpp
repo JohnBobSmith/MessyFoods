@@ -73,23 +73,11 @@ int main()
     //a boolean value to determine when the lasers is in use or not
     bool isLaserOn = false;
 
-    //Our shield
-    //Enabled with right click, off otherwise
-    sf::RectangleShape shieldSprite;
-    shieldSprite.setFillColor(sf::Color::Cyan);
-    shieldSprite.setSize(sf::Vector2f(20, 20));
-    //shieldSprite.setRadius(25);
-    //Max number of shield blocks to have
-    const int maxShieldBlocks = 26;
-    //determine if shield is in use or not
-    bool isShieldActive = false;
+    //Our collision detection object
+    CollisionBox collisionbox;
 
-    //Store our shield sprites in an std::vector for
-    //easier collision detection
-    std::vector<sf::RectangleShape> shieldVector;
-    for (int i = 0; i < maxShieldBlocks; ++i) {
-        shieldVector.push_back(shieldSprite);
-    }
+    //Frame rate limiter
+    const float timeStep = 1/60.0f;
 
     //Our bullet object, and Bullet pointers
     //Store our bullets in the vector
@@ -150,15 +138,6 @@ int main()
             ammountToMove = -800;
         }
     }
-    //Our collision detection object
-    CollisionBox collisionbox;
-
-    //Our mouse angle used in calculating
-    //bullet trajectories
-    float mouseAngle = 0.0f;
-
-    //Frame rate limiter
-    const float timeStep = 1/60.0f;
 
     /* * * * MAIN LOOP * * * */
     while(window.isOpen()) {
@@ -177,21 +156,24 @@ int main()
             //If we release right mouse, turn off shield
             if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Right) {
-                    isShieldActive = false;
+                    //isShieldActive = false;
                 }
             }
         } //End event loop
 
-       //Calculate the mouse angle each frame
-        if (event.type == sf::Event::MouseMoved) {
+        //Mouse down and moved events
+        //Removes a global variable
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || event.type == sf::Event::MouseMoved) {
+            //Our mouse angle used in calculating
+            //bullet trajectories
+            static float mouseAngle = 0.0f;
+
+            //Calculate the mouse position first
             float mouseX = event.mouseMove.x;
             float mouseY = event.mouseMove.y;
             mouseAngle = calculateMouseAngle(mouseX, mouseY,
                     player.getPosition().x, player.getPosition().y);
-        }
 
-        //Mouse down event
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             //Shoot only one bullet at a time with mouse down
             static float delay = 0.5f;
             delay -= 0.01f;
@@ -220,7 +202,7 @@ int main()
         //Mouse right event
         if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
             //Shields up!
-            isShieldActive = true;
+            //isShieldActive = true;
         }
 
         //Hold the keyboard to enable the laser
@@ -271,13 +253,6 @@ int main()
         //Draw our laser
         if (isLaserOn) {
             window.draw(laser);
-        }
-
-        //Draw our shield
-        if (isShieldActive) {
-            for (int i = 0; i < maxShieldBlocks; ++i) {
-                window.draw(shieldVector[i]);
-            }
         }
 
         //Check collision of enemies against laser
