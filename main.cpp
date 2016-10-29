@@ -65,6 +65,8 @@ int main()
     //Move the  to the bottom middle of the screen
     player.setOrigin(playerTexture.getSize().x / 2, playerTexture.getSize().y / 2);
     player.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT - playerTexture.getSize().y / 2);
+    //Our player health
+    float playerHealth = 50.0f;
 
     //Our laser sprite
     sf::Sprite laser;
@@ -230,7 +232,82 @@ int main()
             isLaserOn = true;
         }
 
-        //Clear and draw the background
+        //END OF EVENTS, START OF GAME LOGIC OUTSIDE OF window.draw();
+
+        //Check for collision of enemies against shield
+        for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+            for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
+                //Shield is up and enemy isnt dead
+                if (shieldVector[i]->isShieldUp && !enemyVector[j]->isDead) {
+                    if (collisionbox.checkAABBcollision(shieldVector[i]->positionX, shieldVector[i]->positionY,
+                                                        shield.getWidth(), shield.getHeight(),
+                                                        enemyVector[j]->positionX, enemyVector[j]->positionY,
+                                                        enemy.getWidth(), enemy.getHeight())) {
+
+                        //Take out a shield chunk and damage the enemy,
+                        //Thus allowing it to take out more shield
+                        //chunks thus destroying our shield in a cool way.
+                        shieldVector[i]->applyDamage(999);
+                        enemyVector[j]->applyDamage(30.0);
+                    }
+                }
+            }
+        }
+
+        //Check collision of enemies against laser
+        if (isLaserOn) {
+            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                if (collisionbox.checkAABBcollision(laser.getPosition().x, laser.getPosition().y,
+                                                laserTexture.getSize().x, laserTexture.getSize().y,
+                                                enemyVector[i]->positionX, enemyVector[i]->positionY,
+                                                enemy.getWidth(), enemy.getHeight())) {
+
+                    //Slowly damage the enemy, for
+                    //a more realistic effect
+                    enemyVector[i]->applyDamage(0.1);
+                }
+            }
+        }
+
+        //Did any of our bullets collide with the enemies?
+        //If so, damage the enemy and remove the bullet
+        for (int i = 0; i < bullet.getMaxBullets(); ++i) {
+            for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
+                //Ensure our bullet is actually capable of damaging our objects
+                if (bulletVector[i]->isActive && !enemyVector[j]->isDead) {
+                    if (collisionbox.checkAABBcollision(bulletVector[i]->positionX, bulletVector[i]->positionY,
+                                                        bullet.getWidth(), bullet.getHeight(),
+                                                        enemyVector[j]->positionX, enemyVector[j]->positionY,
+                                                        enemy.getWidth(), enemy.getHeight())) {
+                        //Collision detected!
+                        bulletVector[i]->isActive = false; //No longer rendered
+                        enemyVector[j]->applyDamage(bullet.bulletDamage);
+                    }
+                }
+            }
+        }
+
+        //If a bullet misses and goes off screen, kill it too
+        for (int i = 0; i < bullet.getMaxBullets(); ++i) {
+            if (bulletVector[i]->positionX > SCREEN_WIDTH || bulletVector[i]->positionX < 0) {
+                bulletVector[i]->isActive = false;
+            }
+            if (bulletVector[i]->positionY > SCREEN_HEIGHT || bulletVector[i]->positionY < 0) {
+                bulletVector[i]->isActive = false;
+            }
+        }
+
+        //If the bullets are dead...
+        for (int i = 0; i < bullet.getMaxBullets(); ++i) {
+            if (!bulletVector[i]->isActive) {
+                //re-set their initial positions
+                //so they can be used again
+                bulletVector[i]->positionX = SCREEN_WIDTH / 2;
+                bulletVector[i]->positionY = SCREEN_HEIGHT - playerTexture.getSize().y;
+            }
+        }
+
+        //DRAW STUFF HERE
         window.clear(sf::Color::Black);
         window.draw(background);
 
@@ -279,78 +356,6 @@ int main()
         for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
             if (shieldVector[i]->isShieldUp) {
                 window.draw(shieldVector[i]->shieldSprite);
-            }
-        }
-
-        //Check for collision of enemies against shield
-        for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-            for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
-                //Shield is up and enemy isnt dead
-                if (shieldVector[i]->isShieldUp && !enemyVector[j]->isDead) {
-                    if (collisionbox.checkAABBcollision(shieldVector[i]->positionX, shieldVector[i]->positionY,
-                                                        shield.getWidth(), shield.getHeight(),
-                                                        enemyVector[j]->positionX, enemyVector[j]->positionY,
-                                                        enemy.getWidth(), enemy.getHeight())) {
-
-                        //Take out a shield chunk and damage the enemy,
-                        //Thus allowing it to take out more shield
-                        //chunks thus destroying our shield in a cool way.
-                        shieldVector[i]->applyDamage(999);
-                        enemyVector[j]->applyDamage(30.0);
-                    }
-                }
-            }
-        }
-
-        //Check collision of enemies against laser
-        if (isLaserOn) {
-            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                if (collisionbox.checkAABBcollision(laser.getPosition().x, laser.getPosition().y,
-                                                laserTexture.getSize().x, laserTexture.getSize().y,
-                                                enemyVector[i]->positionX, enemyVector[i]->positionY,
-                                                enemy.getWidth(), enemy.getHeight())) {
-
-                    //Kill the enemy
-                    enemyVector[i]->isDead = true;
-                }
-            }
-        }
-
-        //Did any of our bullets collide with the enemies?
-        //If so, damage the enemy and remove the bullet
-        for (int i = 0; i < bullet.getMaxBullets(); ++i) {
-            for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
-                //Ensure our bullet is actually capable of damaging our objects
-                if (bulletVector[i]->isActive && !enemyVector[j]->isDead) {
-                    if (collisionbox.checkAABBcollision(bulletVector[i]->positionX, bulletVector[i]->positionY,
-                                                        bullet.getWidth(), bullet.getHeight(),
-                                                        enemyVector[j]->positionX, enemyVector[j]->positionY,
-                                                        enemy.getWidth(), enemy.getHeight())) {
-                        //Collision detected!
-                        bulletVector[i]->isActive = false; //No longer rendered
-                        enemyVector[j]->applyDamage(bullet.bulletDamage);
-                    }
-                }
-            }
-        }
-
-        //If a bullet misses and goes off screen, kill it too
-        for (int i = 0; i < bullet.getMaxBullets(); ++i) {
-            if (bulletVector[i]->positionX > SCREEN_WIDTH || bulletVector[i]->positionX < 0) {
-                bulletVector[i]->isActive = false;
-            }
-            if (bulletVector[i]->positionY > SCREEN_HEIGHT || bulletVector[i]->positionY < 0) {
-                bulletVector[i]->isActive = false;
-            }
-        }
-
-        //If the bullets are dead...
-        for (int i = 0; i < bullet.getMaxBullets(); ++i) {
-            if (!bulletVector[i]->isActive) {
-                //re-set their initial positions
-                //so they can be used again
-                bulletVector[i]->positionX = SCREEN_WIDTH / 2;
-                bulletVector[i]->positionY = SCREEN_HEIGHT - playerTexture.getSize().y;
             }
         }
 
