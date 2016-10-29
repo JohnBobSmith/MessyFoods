@@ -19,7 +19,7 @@ bool IS_DEBUG = false;
 sf::Vector2f calculateQuadratic(float n)
 {
     sf::Vector2f tempVector;
-    float y = 350 + (2.5 * (std::pow(n, 2)) / 800);
+    float y = 370 + (2.2 * (std::pow(n, 2)) / 800);
     float x = 390 + n;
     tempVector.x = x;
     tempVector.y = y;

@@ -24,10 +24,6 @@ class Shield
         //Is an individual shield block running?
         bool isShieldUp = false;
 
-        //Kill the shield regardless of the
-        //state of the blocks (or vice versa)
-        bool masterShieldOnOff = true;
-
         //Drain our shields on a per-block basis
         void applyDamage(float damage);
 
