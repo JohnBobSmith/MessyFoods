@@ -30,7 +30,7 @@ sf::Vector2f calculateQuadratic(float n)
 float calculateMouseAngle(float mouseX, float mouseY, float positionX, float positionY)
 {
     float angle = std::atan2(mouseY - positionY, mouseX - positionX);
-    angle = angle * (180/pi);
+    angle = angle * 180 / pi;
 
     if (angle < 0)
     {
@@ -42,6 +42,9 @@ float calculateMouseAngle(float mouseX, float mouseY, float positionX, float pos
 
 int main()
 {
+    //Frame rate limiter
+    const float timeStep = 1/60.0f;
+
     //Our window and event union
     const int SCREEN_HEIGHT = 600;
     const int SCREEN_WIDTH = 800;
@@ -76,9 +79,6 @@ int main()
 
     //Our collision detection object
     CollisionBox collisionbox;
-
-    //Frame rate limiter
-    const float timeStep = 1/60.0f;
 
     //Our bullet object, and Bullet pointers
     //Store our bullets in the vector
@@ -187,7 +187,7 @@ int main()
                 float mouseX = event.mouseMove.x;
                 float mouseY = event.mouseMove.y;
                 mouseAngle = calculateMouseAngle(mouseX, mouseY,
-                        player.getPosition().x, player.getPosition().y);
+                        (SCREEN_WIDTH / 2), (SCREEN_HEIGHT - playerTexture.getSize().y));
             }
 
             //If we release right mouse, turn off laser
@@ -220,7 +220,7 @@ int main()
                 bulletVector[currentBullet]->velocityX = bullet.getConstantVelocity() * (cos(mouseAngle * pi / 180));
                 bulletVector[currentBullet]->velocityY = bullet.getConstantVelocity() * (sin(mouseAngle * pi / 180));
 
-                //Re-set the rateOfFire
+                //Re-set the rateOfFire counter
                 rateOfFire = 0.5;
             }
         }
@@ -296,7 +296,7 @@ int main()
                         //Thus allowing it to take out more shield
                         //chunks thus destroying our shield in a cool way.
                         shieldVector[i]->applyDamage(999);
-                        enemyVector[j]->applyDamage(25.0);
+                        enemyVector[j]->applyDamage(30.0);
                     }
                 }
             }
