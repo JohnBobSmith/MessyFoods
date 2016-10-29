@@ -11,6 +11,20 @@
 constexpr double pi_value() { return M_PI; }
 double pi = pi_value();
 
+//Are we in "debug" mode:
+bool IS_DEBUG = false;
+
+//Calculate a quadratic equation
+sf::Vector2f calculateQuadratic(float n)
+{
+    sf::Vector2f tempVector;
+    float y = 350 + (2.5 * (std::pow(n, 2)) / 800);
+    float x = 390 + n;
+    tempVector.x = x;
+    tempVector.y = y;
+    return tempVector;
+}
+
 //Calculate the mouse angle, in degrees
 float calculateMouseAngle(float mouseX, float mouseY, float positionX, float positionY)
 {
@@ -27,18 +41,6 @@ float calculateMouseAngle(float mouseX, float mouseY, float positionX, float pos
 
 int main()
 {
-/*
-    //Not being used but good example code (imo).
-    //Seed our random number generator
-    std::random_device rd;
-    std::mt19937 eng(rd());
-    //Define the range of the generator
-    std::uniform_int_distribution<> distr(0, 800);
-
-    for (int i = 0; i < 100; ++i) {
-        std::cout << distr(eng) << "\n";
-    }
-*/
     //Our window and event union
     const int SCREEN_HEIGHT = 600;
     const int SCREEN_WIDTH = 800;
@@ -60,7 +62,7 @@ int main()
     player.setOrigin(playerTexture.getSize().x / 2, playerTexture.getSize().y / 2);
     player.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT - playerTexture.getSize().y / 2);
 
-    //Our laser feature sprite
+    //Our laser sprite
     sf::Sprite laser;
     sf::Texture laserTexture;
     laserTexture.loadFromFile("textures/laser.png");
@@ -70,6 +72,59 @@ int main()
     laser.setPosition(0, SCREEN_HEIGHT - 50);
     //a boolean value to determine when the lasers is in use or not
     bool isLaserOn = false;
+
+    //Our shield
+    //Enabled with right click, off otherwise
+    sf::RectangleShape shieldSprite;
+    shieldSprite.setFillColor(sf::Color::Cyan);
+    shieldSprite.setSize(sf::Vector2f(20, 20));
+    //shieldSprite.setRadius(25);
+    //Max number of shield blocks to have
+    const int maxShieldBlocks = 26;
+    //determine if shield is in use or not
+    bool isShieldActive = false;
+
+    //Store our shield sprites in an std::vector for
+    //easier collision detection
+    std::vector<sf::RectangleShape> shieldVector;
+    for (int i = 0; i < maxShieldBlocks; ++i) {
+        shieldVector.push_back(shieldSprite);
+    }
+
+    for (int i = 0; i <= maxShieldBlocks; ++i) {
+        shieldVector[i].setPosition(calculateQuadratic(quadValue));
+    }
+
+/*
+    //Manually enter the positions for our shield
+    //until a better way is found...
+    shieldVector[0].setPosition(calculateQuadratic(-250));
+    shieldVector[1].setPosition(calculateQuadratic(-230));
+    shieldVector[2].setPosition(calculateQuadratic(-210));
+    shieldVector[3].setPosition(calculateQuadratic(-190));
+    shieldVector[4].setPosition(calculateQuadratic(-170));
+    shieldVector[5].setPosition(calculateQuadratic(-150));
+    shieldVector[6].setPosition(calculateQuadratic(-130));
+    shieldVector[7].setPosition(calculateQuadratic(-110));
+    shieldVector[8].setPosition(calculateQuadratic(-90));
+    shieldVector[9].setPosition(calculateQuadratic(-70));
+    shieldVector[10].setPosition(calculateQuadratic(-50));
+    shieldVector[11].setPosition(calculateQuadratic(-30));
+    shieldVector[12].setPosition(calculateQuadratic(-10));
+    shieldVector[13].setPosition(calculateQuadratic(10));
+    shieldVector[14].setPosition(calculateQuadratic(30));
+    shieldVector[15].setPosition(calculateQuadratic(50));
+    shieldVector[16].setPosition(calculateQuadratic(70));
+    shieldVector[17].setPosition(calculateQuadratic(90));
+    shieldVector[18].setPosition(calculateQuadratic(110));
+    shieldVector[19].setPosition(calculateQuadratic(130));
+    shieldVector[20].setPosition(calculateQuadratic(150));
+    shieldVector[21].setPosition(calculateQuadratic(170));
+    shieldVector[22].setPosition(calculateQuadratic(190));
+    shieldVector[23].setPosition(calculateQuadratic(210));
+    shieldVector[24].setPosition(calculateQuadratic(230));
+    shieldVector[25].setPosition(calculateQuadratic(250));
+*/
 
     //Our bullet object, and Bullet pointers
     //Store our bullets in the vector
@@ -93,12 +148,10 @@ int main()
         enemyVector[i]->isDead = false;
     }
 
-    //Position our enemies
-    //Keep track of how many enemies
-    //we've place on the X axis
+    //Position our enemies on the X axis
     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
         static int counterX = 0;
-        enemyVector[i]->positionX = counterX * 100;
+        enemyVector[i]->positionX = counterX * 105;
         counterX += 1;
         if (counterX == 8) {
             counterX = 0;
@@ -142,19 +195,27 @@ int main()
     //Frame rate limiter
     const float timeStep = 1/60.0f;
 
-    //Main loop
+    /* * * * MAIN LOOP * * * */
     while(window.isOpen()) {
         while(window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-            //We release the spacebar
+            //If we release the spacebar
             if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Space) {
+                    //Turn off the laser
                     isLaserOn = false;
                 }
             }
-        }
+
+            //If we release right mouse, turn off shield
+            if (event.type == sf::Event::MouseButtonReleased) {
+                if (event.mouseButton.button == sf::Mouse::Right) {
+                    isShieldActive = false;
+                }
+            }
+        } //End event loop
 
        //Calculate the mouse angle each frame
         if (event.type == sf::Event::MouseMoved) {
@@ -164,6 +225,7 @@ int main()
                     player.getPosition().x, player.getPosition().y);
         }
 
+        //Mouse down event
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             //Shoot only one bullet at a time with mouse down
             static float delay = 0.5f;
@@ -190,6 +252,12 @@ int main()
             }
         }
 
+        //Mouse right event
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+            //Shields up!
+            isShieldActive = true;
+        }
+
         //Hold the keyboard to enable the laser
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
             isLaserOn = true;
@@ -198,6 +266,21 @@ int main()
         //Clear and draw the background
         window.clear(sf::Color::Black);
         window.draw(background);
+
+        //Draw our debug squares
+        if (IS_DEBUG) {
+            sf::RectangleShape square;
+            square.setFillColor(sf::Color::Yellow);
+            square.setSize(sf::Vector2f(50, 50));
+            sf::Vector2f squarePath;
+            for (float i = -800.0f; i <= 800.0f; i += 20.0f) {
+                squarePath.x = calculateQuadratic(i).x;
+                squarePath.y = calculateQuadratic(i).y;
+                square.setPosition(squarePath.x, squarePath.y);
+                //Draw our debug square
+                window.draw(square);
+            }
+        }
 
         //Draw the enemies
         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
@@ -223,6 +306,13 @@ int main()
         //Draw our laser
         if (isLaserOn) {
             window.draw(laser);
+        }
+
+        //Draw our shield
+        if (isShieldActive) {
+            for (int i = 0; i < maxShieldBlocks; ++i) {
+                window.draw(shieldVector[i]);
+            }
         }
 
         //Check collision of enemies against laser

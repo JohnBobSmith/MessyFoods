@@ -1,0 +1,56 @@
+# depslib dependency file v1.0
+1475250560 source:/home/jbs/cpp/sfml_asteroids/main.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	"Entity.h"
+
+1475341861 /home/jbs/cpp/sfml_asteroids/Entity.h
+	<string>
+
+1475341861 source:/home/jbs/cpp/sfml_asteroids/Entity.cpp
+	"Entity.h"
+	<string>
+	<iostream>
+
+1475345049 source:/home/jbs/cpp/spacey_rocks/Entity.cpp
+	"Entity.h"
+	<SFML/Graphics.hpp>
+	<string>
+	<iostream>
+
+1475345049 /home/jbs/cpp/spacey_rocks/Entity.h
+	<SFML/Graphics.hpp>
+	<string>
+
+1477688476 source:/home/jbs/cpp/spacey_rocks/main.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	<cmath>
+	<vector>
+	<random>
+	"Bullet.h"
+	"Enemy.h"
+	"CollisionBox.h"
+
+1477442383 source:/home/jbs/cpp/spacey_rocks/Bullet.cpp
+	<SFML/Graphics.hpp>
+	"Bullet.h"
+	<iostream>
+
+1477533915 /home/jbs/cpp/spacey_rocks/Bullet.h
+	<SFML/Graphics.hpp>
+
+1477523576 source:/home/jbs/cpp/spacey_rocks/Enemy.cpp
+	<SFML/Graphics.hpp>
+	"Enemy.h"
+	<iostream>
+
+1477528056 /home/jbs/cpp/spacey_rocks/Enemy.h
+	<SFML/Graphics.hpp>
+
+1477446693 source:/home/jbs/cpp/spacey_rocks/CollisionBox.cpp
+	"CollisionBox.h"
+
+1477446693 /home/jbs/cpp/spacey_rocks/CollisionBox.h
+	<SFML/Graphics.hpp>
+
