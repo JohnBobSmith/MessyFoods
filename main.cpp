@@ -5,6 +5,7 @@
 #include <random>
 #include "Bullet.h"
 #include "Enemy.h"
+#include "Shield.h"
 #include "CollisionBox.h"
 
 //Allow the the use of pi
@@ -101,6 +102,32 @@ int main()
         enemyVector[i]->isDead = false;
     }
 
+    Shield shield;
+    std::vector<Shield*> shieldVector;
+    for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+        shieldVector.push_back(new Shield());
+        //Set the initial position offscreen, to avoid
+        //extraneous sprites being drawn on-screen
+        shieldVector[i]->positionX = -999;
+        shieldVector[i]->positionY = -999;
+        shieldVector[i]->shieldSprite.setPosition(shieldVector[i]->positionX, shieldVector[i]->positionY);
+    }
+
+    //Position the shield blocks
+    static int counter = 0;
+    for (float i = -300; i <= 300; i += 10) {
+        float x = calculateQuadratic(i).x;
+        float y = calculateQuadratic(i).y;
+        shieldVector[counter]->positionX = x;
+        shieldVector[counter]->positionY = y;
+        shieldVector[counter]->shieldSprite.setPosition(shieldVector[counter]->positionX,
+                                                        shieldVector[counter]->positionY);
+        if (counter == shield.getMaxShieldBlocks() - 1) {
+            break;
+        }
+        counter += 1;
+    }
+
     //Position our enemies on the X axis
     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
         static int counterX = 0;
@@ -139,6 +166,9 @@ int main()
         }
     }
 
+    //Our mouse angle used for bullet paths
+    static float mouseAngle = 0.0f;
+
     /* * * * MAIN LOOP * * * */
     while(window.isOpen()) {
         while(window.pollEvent(event)) {
@@ -152,28 +182,24 @@ int main()
                     isLaserOn = false;
                 }
             }
+            if (event.type == sf::Event::MouseMoved) {
+                //Calculate the mouse position first
+                float mouseX = event.mouseMove.x;
+                float mouseY = event.mouseMove.y;
+                mouseAngle = calculateMouseAngle(mouseX, mouseY,
+                        player.getPosition().x, player.getPosition().y);
+            }
 
             //If we release right mouse, turn off shield
             if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Right) {
-                    //isShieldActive = false;
+                    shield.isShieldUp = false;
                 }
             }
         } //End event loop
 
         //Mouse down and moved events
-        //Removes a global variable
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || event.type == sf::Event::MouseMoved) {
-            //Our mouse angle used in calculating
-            //bullet trajectories
-            static float mouseAngle = 0.0f;
-
-            //Calculate the mouse position first
-            float mouseX = event.mouseMove.x;
-            float mouseY = event.mouseMove.y;
-            mouseAngle = calculateMouseAngle(mouseX, mouseY,
-                    player.getPosition().x, player.getPosition().y);
-
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             //Shoot only one bullet at a time with mouse down
             static float delay = 0.5f;
             delay -= 0.01f;
@@ -202,7 +228,7 @@ int main()
         //Mouse right event
         if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
             //Shields up!
-            //isShieldActive = true;
+            shield.isShieldUp = true;
         }
 
         //Hold the keyboard to enable the laser
@@ -253,6 +279,27 @@ int main()
         //Draw our laser
         if (isLaserOn) {
             window.draw(laser);
+        }
+
+        //Draw our shield
+        if (shield.isShieldUp) {
+            for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+                window.draw(shieldVector[i]->shieldSprite);
+            }
+        }
+
+        //Check for collision of enemies against shield
+        if (shield.isShieldUp) {
+            for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+                for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
+                    if (collisionbox.checkAABBcollision(shieldVector[i]->positionX, shieldVector[i]->positionY,
+                                                        shield.getWidth(), shield.getHeight(),
+                                                        enemyVector[j]->positionX, enemyVector[j]->positionY,
+                                                        enemy.getWidth(), enemy.getHeight())) {
+                        enemyVector[j]->isDead = true;
+                    }
+                }
+            }
         }
 
         //Check collision of enemies against laser
@@ -312,6 +359,11 @@ int main()
         window.draw(player);
         window.display();
     } //End game loop
+
+    std::cout << "Cleaning up shields... Done\n";
+    for (std::vector<Shield*>::iterator it = shieldVector.begin(); it != shieldVector.end(); it++){
+        delete *it;
+    }
 
     std::cout << "Cleaning up bullets... Done\n";
     for (std::vector<Bullet*>::iterator it = bulletVector.begin(); it != bulletVector.end(); it++){

@@ -33,7 +33,7 @@ class Bullet
         float getConstantVelocity() { return bulletVelocity; };
 
         //Expose the maximum amount of bullets allowed
-        float getMaxBullets() { return maxBullets; };
+        int getMaxBullets() { return maxBullets; };
 
     private:
         //Every bullet must have a texture
