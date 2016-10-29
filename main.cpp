@@ -91,41 +91,6 @@ int main()
         shieldVector.push_back(shieldSprite);
     }
 
-    for (int i = 0; i <= maxShieldBlocks; ++i) {
-        shieldVector[i].setPosition(calculateQuadratic(quadValue));
-    }
-
-/*
-    //Manually enter the positions for our shield
-    //until a better way is found...
-    shieldVector[0].setPosition(calculateQuadratic(-250));
-    shieldVector[1].setPosition(calculateQuadratic(-230));
-    shieldVector[2].setPosition(calculateQuadratic(-210));
-    shieldVector[3].setPosition(calculateQuadratic(-190));
-    shieldVector[4].setPosition(calculateQuadratic(-170));
-    shieldVector[5].setPosition(calculateQuadratic(-150));
-    shieldVector[6].setPosition(calculateQuadratic(-130));
-    shieldVector[7].setPosition(calculateQuadratic(-110));
-    shieldVector[8].setPosition(calculateQuadratic(-90));
-    shieldVector[9].setPosition(calculateQuadratic(-70));
-    shieldVector[10].setPosition(calculateQuadratic(-50));
-    shieldVector[11].setPosition(calculateQuadratic(-30));
-    shieldVector[12].setPosition(calculateQuadratic(-10));
-    shieldVector[13].setPosition(calculateQuadratic(10));
-    shieldVector[14].setPosition(calculateQuadratic(30));
-    shieldVector[15].setPosition(calculateQuadratic(50));
-    shieldVector[16].setPosition(calculateQuadratic(70));
-    shieldVector[17].setPosition(calculateQuadratic(90));
-    shieldVector[18].setPosition(calculateQuadratic(110));
-    shieldVector[19].setPosition(calculateQuadratic(130));
-    shieldVector[20].setPosition(calculateQuadratic(150));
-    shieldVector[21].setPosition(calculateQuadratic(170));
-    shieldVector[22].setPosition(calculateQuadratic(190));
-    shieldVector[23].setPosition(calculateQuadratic(210));
-    shieldVector[24].setPosition(calculateQuadratic(230));
-    shieldVector[25].setPosition(calculateQuadratic(250));
-*/
-
     //Our bullet object, and Bullet pointers
     //Store our bullets in the vector
     Bullet bullet;
