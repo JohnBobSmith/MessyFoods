@@ -21,8 +21,7 @@ class Bullet
         //do we render this bullet?
         bool isActive = false;
 
-        //Every bullet does 10 damage
-        //consistently
+        //Every bullet does damage
         const int bulletDamage = 12;
 
         //Self explanatory. Allow us to grab the texture/sprite width and height

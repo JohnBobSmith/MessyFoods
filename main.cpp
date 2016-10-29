@@ -129,38 +129,47 @@ int main()
     //Position our enemies on the X axis
     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
         static int counterX = 0;
-        enemyVector[i]->positionX = counterX * 105;
+        enemyVector[i]->positionX = counterX * 90;
         counterX += 1;
-        if (counterX == 8) {
+        if (counterX == 9) {
             counterX = 0;
             //Reset the width
         }
     }
 
     //Setup the y values properly
-    for (int i = 8; i < enemy.getMaxEnemies(); ++i) {
+    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
         static int ammountToMove = -100;
         enemyVector[i]->positionY = ammountToMove;
-        if (i == (8 * 2)) {
+        if (i == (9)) {
             ammountToMove = -200;
         }
-        if (i == (8 * 3)) {
+        if (i == (18)) {
             ammountToMove = -300;
         }
-        if (i == (8 * 4)) {
+        if (i == (27)) {
             ammountToMove = -400;
         }
-        if (i == (8 * 5)) {
+        if (i == (36)) {
             ammountToMove = -500;
         }
-        if (i == (8 * 6)) {
+        if (i == (45)) {
             ammountToMove = -600;
         }
-        if (i == (8 * 7)) {
+        if (i == (54)) {
             ammountToMove = -700;
         }
-        if (i == (8 * 8)) {
+        if (i == (63)) {
             ammountToMove = -800;
+        }
+        if (i == (72)) {
+            ammountToMove = -900;
+        }
+        if (i == (81)) {
+            ammountToMove = -1000;
+        }
+        if (i == (90)) {
+            ammountToMove = -1100;
         }
     }
 
@@ -192,13 +201,13 @@ int main()
         //Mouse down and moved events
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             //Shoot only one bullet at a time with mouse down
-            static float delay = 0.5f;
-            delay -= 0.01f;
+            static float rateOfFire = 0.5f;
+            rateOfFire -= 0.01f;
             //Current bullet being shot.
             //Used to shoot exactly one bullet at a time.
             static int currentBullet = 0;
 
-            if (delay <= 0.0f) { //The delay is done, so...
+            if (rateOfFire <= 0.0f) { //The rateOfFire is done, so...
                 //Fire our bullets one at a time
                 currentBullet += 1;
                 //If we run out of bullets, re-set to prevent a crash
@@ -211,8 +220,8 @@ int main()
                 bulletVector[currentBullet]->velocityX = bullet.getConstantVelocity() * (cos(mouseAngle * pi / 180));
                 bulletVector[currentBullet]->velocityY = bullet.getConstantVelocity() * (sin(mouseAngle * pi / 180));
 
-                //Re-set the delay
-                delay = 0.5;
+                //Re-set the rateOfFire
+                rateOfFire = 0.5;
             }
         }
 
@@ -276,15 +285,19 @@ int main()
         //Check for collision of enemies against shield
         for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
             for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
-                if (collisionbox.checkAABBcollision(shieldVector[i]->positionX, shieldVector[i]->positionY,
-                                                    shield.getWidth(), shield.getHeight(),
-                                                    enemyVector[j]->positionX, enemyVector[j]->positionY,
-                                                    enemy.getWidth(), enemy.getHeight())) {
+                //Shield is up and enemy isnt dead
+                if (shieldVector[i]->isShieldUp && !enemyVector[j]->isDead) {
+                    if (collisionbox.checkAABBcollision(shieldVector[i]->positionX, shieldVector[i]->positionY,
+                                                        shield.getWidth(), shield.getHeight(),
+                                                        enemyVector[j]->positionX, enemyVector[j]->positionY,
+                                                        enemy.getWidth(), enemy.getHeight())) {
 
-                    //Take out a shield chunk and kill
-                    //the enemy
-                    shieldVector[i]->applyDamage(999);
-                    enemyVector[j]->isDead = true;
+                        //Take out a shield chunk and damage the enemy,
+                        //Thus allowing it to take out more shield
+                        //chunks thus destroying our shield in a cool way.
+                        shieldVector[i]->applyDamage(999);
+                        enemyVector[j]->applyDamage(25.0);
+                    }
                 }
             }
         }
@@ -308,7 +321,6 @@ int main()
         for (int i = 0; i < bullet.getMaxBullets(); ++i) {
             for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
                 //Ensure our bullet is actually capable of damaging our objects
-                //before doing collision detection.
                 if (bulletVector[i]->isActive && !enemyVector[j]->isDead) {
                     if (collisionbox.checkAABBcollision(bulletVector[i]->positionX, bulletVector[i]->positionY,
                                                         bullet.getWidth(), bullet.getHeight(),

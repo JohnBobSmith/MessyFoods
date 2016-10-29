@@ -14,7 +14,7 @@ void Shield::applyDamage(float damage)
 {
     //If shield block has any energy left
     if (shieldEnergy >= 0.0f) {
-        //Subtract the damage from the health
+        //Subtract the damage from the energy
         shieldEnergy -= damage;
     }
 
@@ -22,10 +22,4 @@ void Shield::applyDamage(float damage)
     if (shieldEnergy <= 0.0f) {
         isShieldUp = false; //Kill it.
     }
-}
-
-//Apply damage to the shield as a whole
-void applyDamageMaster(float damge)
-{
-
 }

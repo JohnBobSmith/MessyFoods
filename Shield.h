@@ -15,9 +15,6 @@ class Shield
         //The shields energy on a per-block basis
         float shieldEnergy = 100.0f;
 
-        //The total energy of the shield
-        float totalShieldCapacity = 100;
-
         //Velocities and positions
         float velocityX = 0;
         float velocityY = 0;
@@ -33,9 +30,6 @@ class Shield
 
         //Drain our shields on a per-block basis
         void applyDamage(float damage);
-
-        //Apply damage to the shield as a whole
-        void applyDamageMaster(float damge);
 
         //Grab the width and height of our sprite
         int getWidth() { return shieldTexture.getSize().x; }
