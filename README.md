@@ -43,9 +43,7 @@ Spacebar - Hold to shoot laser
 
 -Laser texture
 
--Large ammounts falling asteroids
-
-  -Have yet to break them up into waves though
+-Large ammounts falling asteroids I Have yet to break them up into waves though
   
 -Collision between bullet and asteroid
 
