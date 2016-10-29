@@ -106,10 +106,8 @@ int main()
     std::vector<Shield*> shieldVector;
     for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
         shieldVector.push_back(new Shield());
-        //Set the initial position offscreen, to avoid
-        //extraneous sprites being drawn on-screen
-        shieldVector[i]->positionX = -999;
-        shieldVector[i]->positionY = -999;
+        //Enable the shield
+        shieldVector[i]->isShieldUp = true;
         shieldVector[i]->shieldSprite.setPosition(shieldVector[i]->positionX, shieldVector[i]->positionY);
     }
 
@@ -175,13 +173,6 @@ int main()
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-            //If we release the spacebar
-            if (event.type == sf::Event::KeyReleased) {
-                if (event.key.code == sf::Keyboard::Space) {
-                    //Turn off the laser
-                    isLaserOn = false;
-                }
-            }
             if (event.type == sf::Event::MouseMoved) {
                 //Calculate the mouse position first
                 float mouseX = event.mouseMove.x;
@@ -190,10 +181,10 @@ int main()
                         player.getPosition().x, player.getPosition().y);
             }
 
-            //If we release right mouse, turn off shield
+            //If we release right mouse, turn off laser
             if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Right) {
-                    shield.isShieldUp = false;
+                    isLaserOn = false;
                 }
             }
         } //End event loop
@@ -227,12 +218,6 @@ int main()
 
         //Mouse right event
         if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-            //Shields up!
-            shield.isShieldUp = true;
-        }
-
-        //Hold the keyboard to enable the laser
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
             isLaserOn = true;
         }
 
@@ -282,22 +267,24 @@ int main()
         }
 
         //Draw our shield
-        if (shield.isShieldUp) {
-            for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+        for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+            if (shieldVector[i]->isShieldUp) {
                 window.draw(shieldVector[i]->shieldSprite);
             }
         }
 
         //Check for collision of enemies against shield
-        if (shield.isShieldUp) {
-            for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-                for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
-                    if (collisionbox.checkAABBcollision(shieldVector[i]->positionX, shieldVector[i]->positionY,
-                                                        shield.getWidth(), shield.getHeight(),
-                                                        enemyVector[j]->positionX, enemyVector[j]->positionY,
-                                                        enemy.getWidth(), enemy.getHeight())) {
-                        enemyVector[j]->isDead = true;
-                    }
+        for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+            for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
+                if (collisionbox.checkAABBcollision(shieldVector[i]->positionX, shieldVector[i]->positionY,
+                                                    shield.getWidth(), shield.getHeight(),
+                                                    enemyVector[j]->positionX, enemyVector[j]->positionY,
+                                                    enemy.getWidth(), enemy.getHeight())) {
+
+                    //Take out a shield chunk and kill
+                    //the enemy
+                    shieldVector[i]->applyDamage(999);
+                    enemyVector[j]->isDead = true;
                 }
             }
         }
