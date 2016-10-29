@@ -27,3 +27,12 @@
 *.exe
 *.out
 *.app
+
+# Bad paths
+bin/
+obj/
+
+#Code blocks files
+*.cbp
+*.depend
+*.layout
