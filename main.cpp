@@ -68,6 +68,16 @@ int main()
     gameOverText.setStyle(sf::Text::Regular);
     gameOverText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 3);
 
+    //Our player's "health bar"
+    //Change the color of the bar to
+    //represent the players health
+    sf::RectangleShape playerHealthBar;
+    playerHealthBar.setSize(sf::Vector2f(20, 50));
+    //The player starts with a full (green) HP bar
+    playerHealthBar.setFillColor(sf::Color::Green);
+    //Position the bar on our player structure
+    playerHealthBar.setPosition(SCREEN_WIDTH / 2 - 10, SCREEN_HEIGHT - 75);
+
     //Our background image
     sf::Sprite background;
     sf::Texture backgroundTexture;
@@ -83,7 +93,7 @@ int main()
     player.setOrigin(playerTexture.getSize().x / 2, playerTexture.getSize().y / 2);
     player.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT - playerTexture.getSize().y / 2);
     //Our player health
-    float playerHealth = 50.0f;
+    float playerHealth = 100.0f;
 
     //Our laser sprite
     sf::Sprite laser;
@@ -252,6 +262,38 @@ int main()
 
         //END OF EVENTS, START OF GAME LOGIC OUTSIDE OF window.draw();
 
+        //Check for enemy collisions against the player
+        for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+            if (!enemyVector[i]->isDead) {
+                if (collisionbox.checkAABBcollision(player.getPosition().x - playerTexture.getSize().x / 2,
+                                                    player.getPosition().y - playerTexture.getSize().y / 2 + 30,
+                                                    playerTexture.getSize().x, playerTexture.getSize().y,
+                                                    enemyVector[i]->positionX, enemyVector[i]->positionY,
+                                                    enemy.getWidth(), enemy.getHeight())) {
+                    //Kill the enemy, damage the player
+                    enemyVector[i]->isDead = true;
+                    playerHealth -= 10;
+                    //As we damage the player, change the health bar color
+                    //Starts off by default as green, we don't account
+                    //for that condition here.
+                    if (playerHealth <= 70) {
+                        //Yellow health
+                        playerHealthBar.setFillColor(sf::Color::Yellow);
+                    }
+                    if (playerHealth <= 30) {
+                        //red health
+                        playerHealthBar.setFillColor(sf::Color::Red);
+                    }
+                    if (playerHealth <= 0) {
+                        //Setting this to false completely
+                        //stops the game, but wont exit.
+                        //Game over, you died. ;(
+                        IS_PLAYING = false;
+                    }
+                }
+            }
+        }
+
         //Check for collision of enemies against shield
         for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
             for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
@@ -325,28 +367,8 @@ int main()
             }
         }
 
-        //Check for enemy collisions against the player
-        for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-            if (!enemyVector[i]->isDead) {
-                if (collisionbox.checkAABBcollision(player.getPosition().x - playerTexture.getSize().x / 2,
-                                                    player.getPosition().y - playerTexture.getSize().y / 2 + 30,
-                                                    playerTexture.getSize().x, playerTexture.getSize().y,
-                                                    enemyVector[i]->positionX, enemyVector[i]->positionY,
-                                                    enemy.getWidth(), enemy.getHeight())) {
-                    //Kill the enemy, damage the player
-                    enemyVector[i]->isDead = true;
-                    playerHealth -= 10;
-                    if (playerHealth <= 0) {
-                        //Setting this to false
-                        //completely stops the game,
-                        //but wont exit.
-                        IS_PLAYING = false;
-                    }
-                }
-            }
-        }
-
-        //DRAW STUFF HERE
+        //END OF GAME LOGIC, START OF DRAWING STUFF
+        //Clear window always
         window.clear(sf::Color::Black);
         //Always draw the background
         window.draw(background);
@@ -401,6 +423,9 @@ int main()
 
             //Draw our player
             window.draw(player);
+
+            //Draw our player's health bar
+            window.draw(playerHealthBar);
         } else {
             //Kill everything because we are no longer playing
             for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
