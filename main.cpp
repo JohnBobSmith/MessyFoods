@@ -105,11 +105,12 @@ int main()
     }
 
     Shield shield;
+    //CLEAN THIS UP AS WELL
     std::vector<Shield*> shieldVector;
     for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
         shieldVector.push_back(new Shield());
         //Enable the shield
-        shieldVector[i]->isShieldUp = true;
+        shieldVector[i]->isShieldUp = false; //Off for testing
         shieldVector[i]->shieldSprite.setPosition(shieldVector[i]->positionX, shieldVector[i]->positionY);
     }
 
@@ -304,6 +305,20 @@ int main()
                 //so they can be used again
                 bulletVector[i]->positionX = SCREEN_WIDTH / 2;
                 bulletVector[i]->positionY = SCREEN_HEIGHT - playerTexture.getSize().y;
+            }
+        }
+
+        //Check for enemy collisions against the player
+        for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+            if (!enemyVector[i]->isDead) {
+                if (collisionbox.checkAABBcollision(player.getPosition().x - playerTexture.getSize().x / 2,
+                                                    player.getPosition().y - playerTexture.getSize().y / 2 + 30,
+                                                    playerTexture.getSize().x, playerTexture.getSize().y,
+                                                    enemyVector[i]->positionX, enemyVector[i]->positionY,
+                                                    enemy.getWidth(), enemy.getHeight())) {
+                    //Kill the enemy
+                    enemyVector[i]->isDead = true;
+                }
             }
         }
 
