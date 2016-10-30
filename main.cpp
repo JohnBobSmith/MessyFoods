@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -108,6 +109,11 @@ int main()
     const int SCREEN_WIDTH = 800;
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Spacey Rocks");
     sf::Event event;
+
+    //Our audio files
+    sf::Music music;
+    music.openFromFile("music/main_theme.wav");
+    music.play(); //Start playing immediately
 
     //Our square font
     sf::Font blockFont;
@@ -391,11 +397,7 @@ int main()
 
         //If an enemy misses and goes off screen, kill it too
         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-            if (enemyVector[i]->positionX > SCREEN_WIDTH || enemyVector[i]->positionX < 0) {
-                enemyVector[i]->isDead = true;
-                IS_PLAYING = false; //instant loss, colony destroyed
-            }
-            if (enemyVector[i]->positionY > SCREEN_HEIGHT || enemyVector[i]->positionY < 0) {
+            if (enemyVector[i]->positionY > SCREEN_HEIGHT) {
                 enemyVector[i]->isDead = true;
                 IS_PLAYING = false; //instant loss, colony destroyed
             }
