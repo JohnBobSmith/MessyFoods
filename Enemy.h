@@ -21,6 +21,12 @@ class Enemy
         //Is the enemy alive?
         bool isDead = true;
 
+        //Is the enemy counted?
+        //Used to assist with win checking,
+        //where a win is defined as no more
+        //enemies on screen.
+        bool isCounted = false;
+
         //constant max health, used to
         //re-set the enemies to full health
         const float maxEnemyHealth = 50.0f;
@@ -43,7 +49,7 @@ class Enemy
         sf::Texture enemyTexture;
 
         //How many we have on screen
-        const int maxEnemies = 90;
+        const int maxEnemies = 1;
 
         //Constant movement speed
         const int enemyVelocity = 40.0f;

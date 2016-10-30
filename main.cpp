@@ -19,6 +19,9 @@ bool IS_DEBUG = false;
 //For example, if the player dies, game over
 bool IS_PLAYING = false;
 
+//If the player beat the game/level
+bool IS_WIN = false;
+
 //Calculate a quadratic equation
 sf::Vector2f calculateQuadratic(float n)
 {
@@ -119,7 +122,7 @@ int main()
     gameOverText.setStyle(sf::Text::Regular);
     gameOverText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 3);
 
-    //Our "click to restart text"
+    //Our click to restart text
     sf::Text clickToRestartText;
     clickToRestartText.setFont(blockFont);
     clickToRestartText.setString("Left click to re-start");
@@ -127,6 +130,15 @@ int main()
     clickToRestartText.setColor(sf::Color::Yellow);
     clickToRestartText.setStyle(sf::Text::Regular);
     clickToRestartText.setPosition(SCREEN_WIDTH / 25, SCREEN_HEIGHT / 2);
+
+    //Our victory text
+    sf::Text winText;
+    winText.setFont(blockFont);
+    winText.setString("You WIN!");
+    winText.setCharacterSize(110);
+    winText.setColor(sf::Color::Green);
+    winText.setStyle(sf::Text::Regular);
+    winText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 3);
 
     //Our background image
     sf::Sprite background;
@@ -358,7 +370,7 @@ int main()
                                                         bullet.getWidth(), bullet.getHeight(),
                                                         enemyVector[j]->positionX, enemyVector[j]->positionY,
                                                         enemy.getWidth(), enemy.getHeight())) {
-                        //Collision detected!
+                        //Collision detected.
                         bulletVector[i]->isActive = false; //No longer rendered
                         enemyVector[j]->applyDamage(bullet.bulletDamage);
                     }
@@ -373,6 +385,19 @@ int main()
             }
             if (bulletVector[i]->positionY > SCREEN_HEIGHT || bulletVector[i]->positionY < 0) {
                 bulletVector[i]->isActive = false;
+            }
+        }
+
+
+        //If an enemy misses and goes off screen, kill it too
+        for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+            if (enemyVector[i]->positionX > SCREEN_WIDTH || enemyVector[i]->positionX < 0) {
+                enemyVector[i]->isDead = true;
+                IS_PLAYING = false; //instant loss, colony destroyed
+            }
+            if (enemyVector[i]->positionY > SCREEN_HEIGHT || enemyVector[i]->positionY < 0) {
+                enemyVector[i]->isDead = true;
+                IS_PLAYING = false; //instant loss, colony destroyed
             }
         }
 
@@ -410,6 +435,22 @@ int main()
 
         //Running our actual game
         if (IS_PLAYING) {
+            //If we win where a win is defined by
+            //no more enemies in play
+            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                static int counter = enemy.getMaxEnemies();
+                if (enemyVector[i]->isDead && !enemyVector[i]->isCounted) {
+                    counter -= 1;
+                    enemyVector[i]->isCounted = true;
+                }
+                if (counter <= 0) {
+                    IS_WIN = true;
+                    IS_PLAYING = false;
+                    enemyVector[i]->isCounted = false;
+                    counter = enemy.getMaxEnemies();
+                }
+            }
+
             //Draw the enemies
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 if (!enemyVector[i]->isDead) { //The enemy is NOT dead...
@@ -461,24 +502,30 @@ int main()
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
                 bulletVector[i]->isActive = false;
             }
-            //Display our game over text
-            window.draw(gameOverText);
 
-            //Display our "click to restart" text
-            window.draw(clickToRestartText);
+            //If we won..
 
-            //Click to re-start
+            if (IS_WIN) {
+                //Game victory text
+                window.draw(winText);
+                //Click to restart prompt
+                window.draw(clickToRestartText);
+            } else {
+                //Game over text
+                window.draw(gameOverText);
+                window.draw(clickToRestartText);
+            }
+
+            //Click to re-start event
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 //Turn everything back on...
                 for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-                    shieldVector[i]->isShieldUp = true;
+                    shieldVector[i]->isShieldUp = false;
                 }
 
                 for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                     enemyVector[i]->isDead = false;
                 }
-                //Don't account for the bullets because they
-                //are off when the game first starts
 
                 //Re-position the enemies
                 resetEnemy(enemyVector, enemy.getMaxEnemies());
@@ -494,8 +541,8 @@ int main()
                 //Reset the player health
                 playerHealth = playerMaxHealth;
 
-                //Shield don't have a health, don't account
-                //for them. Only turn then on (done up ^ there already)
+                //Re-set the win
+                IS_WIN = false;
 
                 //Start playing again
                 IS_PLAYING = true;
