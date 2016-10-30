@@ -86,5 +86,10 @@ please contact me and we will settle it right away. I don't check my emails very
 to get back to you. This also means you are free to use all of my art, subject to the MIT license. I'll try
 to include .xcf (open source image) whenever it makes sense to do so.
 
+Included is the electronic highway sign font from: 
+http://www.dafont.com/theme.php?cat=302&page=2
+The font description says "100%" free so I hope that means I can include 
+it here. :)
+
 I've used space invaders as a reference and inspiration for this project, and as a reference and inspiration only. I take
 no credit for the original space invaders released by Taito in 1978.

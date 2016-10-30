@@ -12,8 +12,12 @@
 constexpr double pi_value() { return M_PI; }
 double pi = pi_value();
 
-//Are we in "debug" mode:
+//Are we in "debug" mode
 bool IS_DEBUG = false;
+
+//Allow for us to pause/unpause the game,
+//For example, if the player dies, game over
+bool IS_PLAYING = true;
 
 //Calculate a quadratic equation
 sf::Vector2f calculateQuadratic(float n)
@@ -50,6 +54,19 @@ int main()
     const int SCREEN_WIDTH = 800;
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Spacey Rocks");
     sf::Event event;
+
+    //Our droid font
+    sf::Font droidFont;
+    droidFont.loadFromFile("fonts/ehsmb.ttf");
+
+    //Our game over text
+    sf::Text gameOverText;
+    gameOverText.setFont(droidFont);
+    gameOverText.setString("Game Over");
+    gameOverText.setCharacterSize(110);
+    gameOverText.setColor(sf::Color::Red);
+    gameOverText.setStyle(sf::Text::Regular);
+    gameOverText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 3);
 
     //Our background image
     sf::Sprite background;
@@ -316,66 +333,92 @@ int main()
                                                     playerTexture.getSize().x, playerTexture.getSize().y,
                                                     enemyVector[i]->positionX, enemyVector[i]->positionY,
                                                     enemy.getWidth(), enemy.getHeight())) {
-                    //Kill the enemy
+                    //Kill the enemy, damage the player
                     enemyVector[i]->isDead = true;
+                    playerHealth -= 10;
+                    if (playerHealth <= 0) {
+                        //Setting this to false
+                        //completely stops the game,
+                        //but wont exit.
+                        IS_PLAYING = false;
+                    }
                 }
             }
         }
 
         //DRAW STUFF HERE
         window.clear(sf::Color::Black);
+        //Always draw the background
         window.draw(background);
-
-        //Draw our debug squares
-        if (IS_DEBUG) {
-            sf::RectangleShape square;
-            square.setFillColor(sf::Color::Yellow);
-            square.setSize(sf::Vector2f(50, 50));
-            sf::Vector2f squarePath;
-            for (float i = -800.0f; i <= 800.0f; i += 20.0f) {
-                squarePath.x = calculateQuadratic(i).x;
-                squarePath.y = calculateQuadratic(i).y;
-                square.setPosition(squarePath.x, squarePath.y);
-                //Draw our debug square
-                window.draw(square);
+        if (IS_PLAYING) {
+            //Draw our debug squares
+            if (IS_DEBUG) {
+                sf::RectangleShape square;
+                square.setFillColor(sf::Color::Yellow);
+                square.setSize(sf::Vector2f(50, 50));
+                sf::Vector2f squarePath;
+                for (float i = -800.0f; i <= 800.0f; i += 20.0f) {
+                    squarePath.x = calculateQuadratic(i).x;
+                    squarePath.y = calculateQuadratic(i).y;
+                    square.setPosition(squarePath.x, squarePath.y);
+                    //Draw our debug square
+                    window.draw(square);
+                }
             }
-        }
 
-        //Draw the enemies
-        for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-            if (!enemyVector[i]->isDead) { //The enemy is NOT dead...
-                enemyVector[i]->velocityY = 5.0; //Gravity on the Y axis
-                enemyVector[i]->positionX += enemyVector[i]->velocityX * timeStep;
-                enemyVector[i]->positionY += enemyVector[i]->velocityY * timeStep;
-                enemyVector[i]->enemySprite.setPosition(enemyVector[i]->positionX, enemyVector[i]->positionY);
-                window.draw(enemyVector[i]->enemySprite);
+            //Draw the enemies
+            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                if (!enemyVector[i]->isDead) { //The enemy is NOT dead...
+                    enemyVector[i]->velocityY = 5.0; //Gravity on the Y axis
+                    enemyVector[i]->positionX += enemyVector[i]->velocityX * timeStep;
+                    enemyVector[i]->positionY += enemyVector[i]->velocityY * timeStep;
+                    enemyVector[i]->enemySprite.setPosition(enemyVector[i]->positionX, enemyVector[i]->positionY);
+                    window.draw(enemyVector[i]->enemySprite);
+                }
             }
-        }
 
-        //Draw the bullets
-        for (int i = 0; i < bullet.getMaxBullets(); ++i) {
-            if (bulletVector[i]->isActive) { //Live bullet, so move it
-                bulletVector[i]->positionX += bulletVector[i]->velocityX * timeStep;
-                bulletVector[i]->positionY += bulletVector[i]->velocityY * timeStep;
-                bulletVector[i]->bulletSprite.setPosition(bulletVector[i]->positionX, bulletVector[i]->positionY);
-                window.draw(bulletVector[i]->bulletSprite);
+            //Draw the bullets
+            for (int i = 0; i < bullet.getMaxBullets(); ++i) {
+                if (bulletVector[i]->isActive) { //Live bullet, so move it
+                    bulletVector[i]->positionX += bulletVector[i]->velocityX * timeStep;
+                    bulletVector[i]->positionY += bulletVector[i]->velocityY * timeStep;
+                    bulletVector[i]->bulletSprite.setPosition(bulletVector[i]->positionX, bulletVector[i]->positionY);
+                    window.draw(bulletVector[i]->bulletSprite);
+                }
             }
-        }
 
-        //Draw our laser
-        if (isLaserOn) {
-            window.draw(laser);
-        }
-
-        //Draw our shield
-        for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-            if (shieldVector[i]->isShieldUp) {
-                window.draw(shieldVector[i]->shieldSprite);
+            //Draw our laser
+            if (isLaserOn) {
+                window.draw(laser);
             }
-        }
 
-        //Draw our player
-        window.draw(player);
+            //Draw our shield
+            for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+                if (shieldVector[i]->isShieldUp) {
+                    window.draw(shieldVector[i]->shieldSprite);
+                }
+            }
+
+            //Draw our player
+            window.draw(player);
+        } else {
+            //Kill everything because we are no longer playing
+            for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+                shieldVector[i]->isShieldUp = false;
+            }
+
+            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                enemyVector[i]->isDead = true;
+            }
+
+            for (int i = 0; i < bullet.getMaxBullets(); ++i) {
+                bulletVector[i]->isActive = false;
+            }
+            //Display our game over text
+            window.draw(gameOverText);
+        }
+        //Display our window regardless
+        //of if we are playing the game or not
         window.display();
     } //End game loop
 
