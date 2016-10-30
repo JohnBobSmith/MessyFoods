@@ -1,10 +1,9 @@
 # SpaceyRocks
 A space invaders inspired game. Pop the waves of asteroids with your main cannon,
 roast them with the laser if they try to get past you, and protect yourself
-with a toggleable bubble shield! Be careful though! The shield and laser
-only have a limited ammount of energy! Collect powerups to replenish health,
-energy, or unlock temporary upgrades like a rate of fire booster. Beware
-of things far worse than asteroids...
+with a destructible bubble shield! Be careful though! The laser has a limitted ammount
+energy. Collect powerups to replenish health, energy, shield, or unlock temporary 
+upgrades like a rate of fire booster. Beware of things far worse than asteroids...
 
 ##Basic "storyline":
 You are at a research facility on the moon, investigating strange radio signals.
@@ -13,17 +12,17 @@ very edge of colony, for the best signal. Suddenly, a great deal of space debris
 starts rocketing towards you. A meteor shower! You decide to overload your radio, 
 turning it into a powerful space cannon! However, the energy drain nearly froze you
 and the research facility. You can no longer risk keeping the hot laser
-and shielding up at all times, for you may freese to death! As if things couldn't
-get bad enough, the moonbase's defenses have mysteriously gone offline. It looks
+up at all times, for you may freese to death! As if things couldn't get any worse, 
+sure enough, the moonbase's defenses have mysteriously gone offline. It looks
 like its up to you to save the colony from complete desctruction... And it's 
 beginning to look like asteroids are the least of your concerns.
 
 ##How to play:
 Left mouse - Fire main cannon
 
-Right mouse - Hold to enable shield
+Right mouse - Laser
 
-Spacebar - Hold to shoot laser
+Mouse movement - Aim the main cannon
 
 ##What works, what doesn't, what has yet to be implented:
 ###Things that work: Completion > 85%
@@ -39,33 +38,37 @@ Spacebar - Hold to shoot laser
 
 -The moonbase texture
 
--Shooting the laser
-
 -Laser texture
 
--Large ammounts falling asteroids I Have yet to break them up into waves though
+-Large ammounts falling asteroids, less waves (being worked on)
   
 -Collision between bullet and asteroid
 
 -Collision between laser and asteroid
 
+-Collision between player and asteroid
+
+-Player health bar and health
+
+-A very simple game over screen
+
+-Destructible bubble shield and mechanics
+
+-Core game mechanics less powerups
+
+-Laser damage model
+
 ###Things that are being worked on: Completion > 35% but < 85%
--Quadratic functions for the shield
+-Very early UI
 
--The shield itself
-
--Shield collision
-
--Any other shield-based parameter
+-Wave based asteroids system
 
 ###Things that have not been started or aren't actively being worked on: Completeion < 35%
--The energy system to limit the shield and laser
+-The energy system to limit the laser
 
 -Addional enemy types
 
 -Powerup system
-
--Any form of user interface
 
 -A state machine. This would be useful for implementing proper UI menus, among other things
 
