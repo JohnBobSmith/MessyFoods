@@ -21,8 +21,12 @@ class Enemy
         //Is the enemy alive?
         bool isDead = true;
 
-        //The enemies base health
-        float enemyHealth = 50.0f;
+        //constant max health, used to
+        //re-set the enemies to full health
+        const float maxEnemyHealth = 50.0f;
+
+        //The enemies base, modify-able health
+        float enemyHealth = maxEnemyHealth;
 
         //Damage our objects based on N damage applied.
         void applyDamage(float damage);

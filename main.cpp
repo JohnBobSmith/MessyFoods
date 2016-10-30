@@ -17,7 +17,7 @@ bool IS_DEBUG = false;
 
 //Allow for us to pause/unpause the game,
 //For example, if the player dies, game over
-bool IS_PLAYING = true;
+bool IS_PLAYING = false;
 
 //Calculate a quadratic equation
 sf::Vector2f calculateQuadratic(float n)
@@ -44,6 +44,57 @@ float calculateMouseAngle(float mouseX, float mouseY, float positionX, float pos
     return angle;
 }
 
+//Reset the asteroids positions, WIP wave-based system
+void resetEnemy(std::vector<Enemy*> tempEnemyVector, int maxEnemies)
+{
+    //Position our enemies on the X axis
+    for (int i = 0; i < maxEnemies; ++i) {
+        static int counterX = 0;
+        tempEnemyVector[i]->positionX = counterX * 90;
+        counterX += 1;
+        if (counterX == 9) {
+            counterX = 0;
+            //Reset the width
+        }
+    }
+
+    //Setup the y values properly
+    for (int i = 0; i < maxEnemies; ++i) {
+        static int ammountToMove = 0;
+        tempEnemyVector[i]->positionY = ammountToMove;
+        if (i == (9)) {
+            ammountToMove = -100;
+        }
+        if (i == (18)) {
+            ammountToMove = -200;
+        }
+        if (i == (27)) {
+            ammountToMove = -300;
+        }
+        if (i == (36)) {
+            ammountToMove = -400;
+        }
+        if (i == (45)) {
+            ammountToMove = -500;
+        }
+        if (i == (54)) {
+            ammountToMove = -600;
+        }
+        if (i == (63)) {
+            ammountToMove = -700;
+        }
+        if (i == (72)) {
+            ammountToMove = -800;
+        }
+        if (i == (81)) {
+            ammountToMove = -900;
+        }
+        if (i == (90)) {
+            ammountToMove = -1000;
+        }
+    }
+}
+
 int main()
 {
     //Frame rate limiter
@@ -55,18 +106,33 @@ int main()
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Spacey Rocks");
     sf::Event event;
 
-    //Our droid font
-    sf::Font droidFont;
-    droidFont.loadFromFile("fonts/ehsmb.ttf");
+    //Our square font
+    sf::Font blockFont;
+    blockFont.loadFromFile("fonts/ehsmb.ttf");
 
     //Our game over text
     sf::Text gameOverText;
-    gameOverText.setFont(droidFont);
+    gameOverText.setFont(blockFont);
     gameOverText.setString("Game Over");
     gameOverText.setCharacterSize(110);
     gameOverText.setColor(sf::Color::Red);
     gameOverText.setStyle(sf::Text::Regular);
     gameOverText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 3);
+
+    //Our "click to restart text"
+    sf::Text clickToRestartText;
+    clickToRestartText.setFont(blockFont);
+    clickToRestartText.setString("Left click to re-start");
+    clickToRestartText.setCharacterSize(55);
+    clickToRestartText.setColor(sf::Color::Yellow);
+    clickToRestartText.setStyle(sf::Text::Regular);
+    clickToRestartText.setPosition(SCREEN_WIDTH / 25, SCREEN_HEIGHT / 2);
+
+    //Our background image
+    sf::Sprite background;
+    sf::Texture backgroundTexture;
+    backgroundTexture.loadFromFile("textures/bg.png");
+    background.setTexture(backgroundTexture);
 
     //Our player's "health bar"
     //Change the color of the bar to
@@ -78,12 +144,6 @@ int main()
     //Position the bar on our player structure
     playerHealthBar.setPosition(SCREEN_WIDTH / 2 - 10, SCREEN_HEIGHT - 75);
 
-    //Our background image
-    sf::Sprite background;
-    sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("textures/bg.png");
-    background.setTexture(backgroundTexture);
-
     //Our stationary player
     sf::Sprite player;
     sf::Texture playerTexture;
@@ -92,8 +152,11 @@ int main()
     //Move the  to the bottom middle of the screen
     player.setOrigin(playerTexture.getSize().x / 2, playerTexture.getSize().y / 2);
     player.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT - playerTexture.getSize().y / 2);
-    //Our player health
-    float playerHealth = 100.0f;
+    //Our players constant max health,
+    //used to re-set the game
+    const float playerMaxHealth = 100.0f;
+    //Our modify-able player health
+    float playerHealth = playerMaxHealth;
 
     //Our laser sprite
     sf::Sprite laser;
@@ -137,7 +200,7 @@ int main()
     for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
         shieldVector.push_back(new Shield());
         //Enable the shield
-        shieldVector[i]->isShieldUp = false; //Off for testing
+        shieldVector[i]->isShieldUp = true;
         shieldVector[i]->shieldSprite.setPosition(shieldVector[i]->positionX, shieldVector[i]->positionY);
     }
 
@@ -156,52 +219,8 @@ int main()
         counter += 1;
     }
 
-    //Position our enemies on the X axis
-    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-        static int counterX = 0;
-        enemyVector[i]->positionX = counterX * 90;
-        counterX += 1;
-        if (counterX == 9) {
-            counterX = 0;
-            //Reset the width
-        }
-    }
-
-    //Setup the y values properly
-    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-        static int ammountToMove = -100;
-        enemyVector[i]->positionY = ammountToMove;
-        if (i == (9)) {
-            ammountToMove = -200;
-        }
-        if (i == (18)) {
-            ammountToMove = -300;
-        }
-        if (i == (27)) {
-            ammountToMove = -400;
-        }
-        if (i == (36)) {
-            ammountToMove = -500;
-        }
-        if (i == (45)) {
-            ammountToMove = -600;
-        }
-        if (i == (54)) {
-            ammountToMove = -700;
-        }
-        if (i == (63)) {
-            ammountToMove = -800;
-        }
-        if (i == (72)) {
-            ammountToMove = -900;
-        }
-        if (i == (81)) {
-            ammountToMove = -1000;
-        }
-        if (i == (90)) {
-            ammountToMove = -1100;
-        }
-    }
+    //Position our asteroids
+    resetEnemy(enemyVector, enemy.getMaxEnemies());
 
     //Our mouse angle used for bullet paths
     static float mouseAngle = 0.0f;
@@ -368,26 +387,29 @@ int main()
         }
 
         //END OF GAME LOGIC, START OF DRAWING STUFF
+
         //Clear window always
         window.clear(sf::Color::Black);
         //Always draw the background
         window.draw(background);
-        if (IS_PLAYING) {
-            //Draw our debug squares
-            if (IS_DEBUG) {
-                sf::RectangleShape square;
-                square.setFillColor(sf::Color::Yellow);
-                square.setSize(sf::Vector2f(50, 50));
-                sf::Vector2f squarePath;
-                for (float i = -800.0f; i <= 800.0f; i += 20.0f) {
-                    squarePath.x = calculateQuadratic(i).x;
-                    squarePath.y = calculateQuadratic(i).y;
-                    square.setPosition(squarePath.x, squarePath.y);
-                    //Draw our debug square
-                    window.draw(square);
-                }
+        //Allways allow for the debug squares
+        //Draw our debug squares
+        if (IS_DEBUG) {
+            sf::RectangleShape square;
+            square.setFillColor(sf::Color::Yellow);
+            square.setSize(sf::Vector2f(50, 50));
+            sf::Vector2f squarePath;
+            for (float i = -800.0f; i <= 800.0f; i += 20.0f) {
+                squarePath.x = calculateQuadratic(i).x;
+                squarePath.y = calculateQuadratic(i).y;
+                square.setPosition(squarePath.x, squarePath.y);
+                //Draw our debug square
+                window.draw(square);
             }
+        }
 
+        //Running our actual game
+        if (IS_PLAYING) {
             //Draw the enemies
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 if (!enemyVector[i]->isDead) { //The enemy is NOT dead...
@@ -441,6 +463,43 @@ int main()
             }
             //Display our game over text
             window.draw(gameOverText);
+
+            //Display our "click to restart" text
+            window.draw(clickToRestartText);
+
+            //Click to re-start
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                //Turn everything back on...
+                for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+                    shieldVector[i]->isShieldUp = true;
+                }
+
+                for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                    enemyVector[i]->isDead = false;
+                }
+                //Don't account for the bullets because they
+                //are off when the game first starts
+
+                //Re-position the enemies
+                resetEnemy(enemyVector, enemy.getMaxEnemies());
+
+                //Re-set the enemy health
+                for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                    enemyVector[i]->enemyHealth = enemy.maxEnemyHealth;
+                }
+
+                //Reset the player's health bar
+                playerHealthBar.setFillColor(sf::Color::Green);
+
+                //Reset the player health
+                playerHealth = playerMaxHealth;
+
+                //Shield don't have a health, don't account
+                //for them. Only turn then on (done up ^ there already)
+
+                //Start playing again
+                IS_PLAYING = true;
+            }
         }
         //Display our window regardless
         //of if we are playing the game or not
