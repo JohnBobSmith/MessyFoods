@@ -58,14 +58,14 @@ Mouse movement - Aim the main cannon
 
 -Laser damage model
 
+-The energy system to limit the laser
+
 ###Things that are being worked on: Completion > 35% but < 85%
 -Very early UI
 
 -Wave based asteroids system
 
 ###Things that have not been started or aren't actively being worked on: Completeion < 35%
--The energy system to limit the laser
-
 -Addional enemy types
 
 -Powerup system
