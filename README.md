@@ -74,7 +74,8 @@ Mouse movement - Aim the main cannon
 
 -Powerup system
 
--A state machine. This would be useful for implementing proper UI menus, among other things
+[s]-A state machine. This would be useful for implementing proper UI menus, among other things[/s]
+Turns out a few very simple booleans is all it took to get the UI working
 
 -Any form of audio less music. When I have most of the above items finished, I'll add sound then.
 
