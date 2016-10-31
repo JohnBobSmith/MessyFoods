@@ -256,7 +256,6 @@ int main()
                 mouseAngle = calculateMouseAngle(mouseX, mouseY,
                         (SCREEN_WIDTH / 2), (SCREEN_HEIGHT - playerTexture.getSize().y));
             }
-
             //If we release right mouse, turn off laser
             if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Right) {
@@ -264,6 +263,12 @@ int main()
                 }
             }
         } //End event loop
+
+        //Pressed escape, so
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            //Pause the game and return to main menu
+            ui.isMainMenu = true;
+        }
 
         //Mouse down and moved events
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -444,6 +449,9 @@ int main()
         if (ui.isMainMenu) {
             ui.isPlaying = false;
             ui.isWin = false;
+            //For testing's sake, draw all buttons
+            window.draw(ui.helpButton);
+            window.draw(ui.quitButton);
             window.draw(ui.startButton);
             //The start box collides with the mouse
             //We add a width/height to the mouse
@@ -482,6 +490,17 @@ int main()
                     //Start playing
                     ui.isMainMenu = false;
                     ui.isPlaying = true;
+                }
+            }
+            //If we press the quit button
+            if (collisionbox.checkAABBcollision(ui.quitButton.getPosition().x,
+                                    ui.quitButton.getPosition().y,
+                                    ui.getWidth(), ui.getHeight(),
+                                    mouseX, mouseY, mouseWidth, mouseHeight)) {
+
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                //Quit
+                window.close();
                 }
             }
         } // end ui.isMainMenu

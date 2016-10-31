@@ -22,4 +22,6 @@ UI::UI()
 
     //Set the positions
     startButton.setPosition(startButtonX, startButtonY);
+    quitButton.setPosition(quitButtonX, quitButtonY);
+    helpButton.setPosition(helpButtonX, helpButtonY);
 }

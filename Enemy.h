@@ -49,7 +49,7 @@ class Enemy
         sf::Texture enemyTexture;
 
         //How many we have on screen
-        const int maxEnemies = 90;
+        const int maxEnemies = 5;
 
         //Constant movement speed
         const float enemyVelocity = 40.0f;

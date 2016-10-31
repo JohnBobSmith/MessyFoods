@@ -19,12 +19,12 @@ class UI
         sf::Sprite quitButton;
 
         //X and Y values for each button
-        int startButtonX = 200;
-        int startButtonY = 300;
-        int helpButtonX = 0;
-        int helpButtonY = 0;
-        int quitButtonX = 0;
-        int quitButtonY = 0;
+        int startButtonX = 300;
+        int startButtonY = 75;
+        int helpButtonX = 300;
+        int helpButtonY = 250;
+        int quitButtonX = 300;
+        int quitButtonY = 450;
 
         //Allow for us to pause/unpause the game,
         //For example, if the player dies, game over
