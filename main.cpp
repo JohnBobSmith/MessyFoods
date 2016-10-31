@@ -458,10 +458,20 @@ int main()
         //our sprites
         if (ui.isMainMenu) {
             ui.isPlaying = false;
+            //Dont show our help unless in the correct
+            //menu to do so
+            static bool isHelpDisplayed = false;
+            //If we exit the help menu, actually exit from it.
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+                isHelpDisplayed = false;
+            }
             //For testing's sake, draw all buttons
             window.draw(ui.helpButton);
             window.draw(ui.quitButton);
             window.draw(ui.startButton);
+            if (isHelpDisplayed) {
+                window.draw(ui.helpPage);
+            }
             //The start box collides with the mouse
             //We add a width/height to the mouse
             //for the purpose of collision.
@@ -504,22 +514,14 @@ int main()
             }
 
             //We press the help button
-            static bool isHelpDisplayed = false;
-            if (collisionbox.checkAABBcollision(ui.helpPage.getPosition().x,
-                                    ui.helpPage.getPosition().y,
-                                    ui.getHelpPageWidth(), ui.getHelpPageHeight(),
+            if (collisionbox.checkAABBcollision(ui.helpButton.getPosition().x,
+                                    ui.helpButton.getPosition().y,
+                                    ui.getWidth(), ui.getHeight(),
                                     mouseX, mouseY, mouseWidth, mouseHeight)) {
 
+                //Turn the page on
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     isHelpDisplayed = true;
-                }
-
-                if (isHelpDisplayed) {
-                    window.draw(ui.helpPage);
-                }
-
-                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-                    isHelpDisplayed = false;
                 }
             }
 
