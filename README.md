@@ -62,10 +62,10 @@ Mouse movement - Aim the main cannon
 
 -The ability to re-play the game after win/loss.
 
-###Things that are being worked on: Completion > 35% but < 85%
--UI is being worked on
+-A full user interface including help page
 
--Wave based asteroids system
+###Things that are being worked on: Completion > 35% but < 85%
+-Wave based asteroids system - stuck on this one...
 
 -Main menu music only, other audio unchanged
 
