@@ -37,6 +37,7 @@ class Shield
     private:
         sf::Texture shieldTexture;
 
+        //Number of shield segments
         const int maxShieldBlocks = 60;
 };
 
