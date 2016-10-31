@@ -124,14 +124,14 @@ int main()
     gameOverText.setStyle(sf::Text::Regular);
     gameOverText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 3);
 
-    //Our click to start text
-    sf::Text clickTostartText;
-    clickTostartText.setFont(blockFont);
-    clickTostartText.setString("Left click to start");
-    clickTostartText.setCharacterSize(55);
-    clickTostartText.setColor(sf::Color::Yellow);
-    clickTostartText.setStyle(sf::Text::Regular);
-    clickTostartText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 2);
+    //Our space to start text
+    sf::Text spaceTostartText;
+    spaceTostartText.setFont(blockFont);
+    spaceTostartText.setString("space bar to start");
+    spaceTostartText.setCharacterSize(55);
+    spaceTostartText.setColor(sf::Color::Yellow);
+    spaceTostartText.setStyle(sf::Text::Regular);
+    spaceTostartText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 2);
 
     //Our victory text
     sf::Text winText;
@@ -515,7 +515,6 @@ int main()
             static int counter = enemy.getMaxEnemies();
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 if (enemyVector[i]->isDead && !enemyVector[i]->isCounted) {
-                    std::cout << counter << "\n";
                     enemyVector[i]->isCounted = true;
                     counter -= 1;
                 }
@@ -587,16 +586,16 @@ int main()
                 if (ui.isWin) {
                     //Game victory text
                     window.draw(winText);
-                    //Click to start prompt
-                    window.draw(clickTostartText);
+                    //Space to start prompt
+                    window.draw(spaceTostartText);
                 } else {
                     //Game over text and prompt
                     window.draw(gameOverText);
-                    window.draw(clickTostartText);
+                    window.draw(spaceTostartText);
                 }
 
-                //Click to re-start event
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                //Space bar to re-start event
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
                     //Turn everything back on...
                     for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
                         shieldVector[i]->isShieldUp = true;
