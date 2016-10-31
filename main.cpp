@@ -237,6 +237,12 @@ int main()
     //Our mouse angle used for bullet paths
     static float mouseAngle = 0.0f;
 
+    //Our mouse X and Y values
+    //Used in the main menu and when
+    //shooting bullets.
+    float mouseX;
+    float mouseY;
+
     /* * * * MAIN LOOP * * * */
     while(window.isOpen()) {
         while(window.pollEvent(event)) {
@@ -245,8 +251,8 @@ int main()
             }
             if (event.type == sf::Event::MouseMoved) {
                 //Calculate the mouse position first
-                float mouseX = event.mouseMove.x;
-                float mouseY = event.mouseMove.y;
+                mouseX = event.mouseMove.x;
+                mouseY = event.mouseMove.y;
                 mouseAngle = calculateMouseAngle(mouseX, mouseY,
                         (SCREEN_WIDTH / 2), (SCREEN_HEIGHT - playerTexture.getSize().y));
             }
@@ -386,19 +392,8 @@ int main()
 
         //If a bullet misses and goes off screen, kill it too
         for (int i = 0; i < bullet.getMaxBullets(); ++i) {
-            if (bulletVector[i]->positionX > SCREEN_WIDTH || bulletVector[i]->positionX < 0) {
-                bulletVector[i]->isActive = false;
-            }
             if (bulletVector[i]->positionY > SCREEN_HEIGHT || bulletVector[i]->positionY < 0) {
                 bulletVector[i]->isActive = false;
-            }
-        }
-
-        //If an enemy misses and goes off screen, kill it too
-        for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-            if (enemyVector[i]->positionY > SCREEN_HEIGHT) {
-                enemyVector[i]->isDead = true;
-                ui.isPlaying = false; //instant loss, colony destroyed!
             }
         }
 
@@ -409,6 +404,14 @@ int main()
                 //so they can be used again
                 bulletVector[i]->positionX = SCREEN_WIDTH / 2;
                 bulletVector[i]->positionY = SCREEN_HEIGHT - playerTexture.getSize().y;
+            }
+        }
+
+        //If an enemy misses and goes off screen, kill it too
+        for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+            if (enemyVector[i]->positionY > SCREEN_HEIGHT) {
+                enemyVector[i]->isDead = true;
+                ui.isPlaying = false; //instant loss, colony destroyed!
             }
         }
 
@@ -433,6 +436,55 @@ int main()
                 window.draw(square);
             }
         }
+
+        //START OF UI EVENTS
+        //Must be inside the draw loop,
+        //because we are drawing/manipulating
+        //our sprites
+        if (ui.isMainMenu) {
+            ui.isPlaying = false;
+            ui.isWin = false;
+            window.draw(ui.startButton);
+            //The start box collides with the mouse
+            //We add a width/height to the mouse
+            //for the purpose of collision.
+            int mouseWidth = 5;
+            int mouseHeight = 5;
+            if (collisionbox.checkAABBcollision(ui.startButton.getPosition().x,
+                                                ui.startButton.getPosition().y,
+                                                ui.getWidth(), ui.getHeight(),
+                                                mouseX, mouseY, mouseWidth, mouseHeight)) {
+                //We click on the start button...
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    //Turn everything on...
+                    for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+                        shieldVector[i]->isShieldUp = true;
+                    }
+
+                    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                        enemyVector[i]->isDead = false;
+                    }
+
+                    //Re-position the enemies
+                    resetEnemy(enemyVector, enemy.getMaxEnemies());
+
+                    //Re-set the enemy health
+                    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                        enemyVector[i]->enemyHealth = enemy.maxEnemyHealth;
+                    }
+
+                    //Reset the player's health bar
+                    playerHealthBar.setFillColor(sf::Color::Green);
+
+                    //Reset the player health
+                    playerHealth = playerMaxHealth;
+
+                    //Start playing
+                    ui.isMainMenu = false;
+                    ui.isPlaying = true;
+                }
+            }
+        } // end ui.isMainMenu
 
         //Running our actual game
         if (ui.isPlaying) {
@@ -504,48 +556,51 @@ int main()
                 bulletVector[i]->isActive = false;
             }
 
-            //If we won..
-            if (ui.isWin) {
-                //Game victory text
-                window.draw(winText);
-                //Click to start prompt
-                window.draw(clickTostartText);
-            } else {
-                //Game over text and prompt
-                window.draw(gameOverText);
-                window.draw(clickTostartText);
-            }
-
-            //Click to re-start event
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                //Turn everything back on...
-                for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-                    shieldVector[i]->isShieldUp = true;
+            //Ensure we are not in the main menu
+            if (!ui.isMainMenu) {
+                //If we won..
+                if (ui.isWin) {
+                    //Game victory text
+                    window.draw(winText);
+                    //Click to start prompt
+                    window.draw(clickTostartText);
+                } else {
+                    //Game over text and prompt
+                    window.draw(gameOverText);
+                    window.draw(clickTostartText);
                 }
 
-                for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                    enemyVector[i]->isDead = false;
+                //Click to re-start event
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    //Turn everything back on...
+                    for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+                        shieldVector[i]->isShieldUp = true;
+                    }
+
+                    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                        enemyVector[i]->isDead = false;
+                    }
+
+                    //Re-position the enemies
+                    resetEnemy(enemyVector, enemy.getMaxEnemies());
+
+                    //Re-set the enemy health
+                    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                        enemyVector[i]->enemyHealth = enemy.maxEnemyHealth;
+                    }
+
+                    //Reset the player's health bar
+                    playerHealthBar.setFillColor(sf::Color::Green);
+
+                    //Reset the player health
+                    playerHealth = playerMaxHealth;
+
+                    //Re-set the win
+                    ui.isWin = false;
+
+                    //Start playing again
+                    ui.isPlaying = true;
                 }
-
-                //Re-position the enemies
-                resetEnemy(enemyVector, enemy.getMaxEnemies());
-
-                //Re-set the enemy health
-                for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                    enemyVector[i]->enemyHealth = enemy.maxEnemyHealth;
-                }
-
-                //Reset the player's health bar
-                playerHealthBar.setFillColor(sf::Color::Green);
-
-                //Reset the player health
-                playerHealth = playerMaxHealth;
-
-                //Re-set the win
-                ui.isWin = false;
-
-                //Start playing again
-                ui.isPlaying = true;
             }
         }
         //Display our window regardless

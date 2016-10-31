@@ -19,4 +19,7 @@ UI::UI()
         std::cout << "Missing help button texture!\n";
     }
     helpButton.setTexture(helpButtonTexture);
+
+    //Set the positions
+    startButton.setPosition(startButtonX, startButtonY);
 }
