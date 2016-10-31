@@ -60,10 +60,14 @@ Mouse movement - Aim the main cannon
 
 -The energy system to limit the laser
 
+-The ability to re-play the game after win/loss.
+
 ###Things that are being worked on: Completion > 35% but < 85%
--Very early UI
+-UI is being worked on
 
 -Wave based asteroids system
+
+-Main menu music only, other audio unchanged
 
 ###Things that have not been started or aren't actively being worked on: Completeion < 35%
 -Addional enemy types
@@ -72,7 +76,7 @@ Mouse movement - Aim the main cannon
 
 -A state machine. This would be useful for implementing proper UI menus, among other things
 
--Any form of audio. When I have most of the above items finished, I'll add sound then.
+-Any form of audio less music. When I have most of the above items finished, I'll add sound then.
 
 ##Technical requirements
 ###I'm a hobby Linux developer, so Windows of any kind is unsupported. If you can make it work for Windows, great!
