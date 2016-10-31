@@ -44,12 +44,15 @@ class Enemy
         //Expose the max number of enemies
         int getMaxEnemies() { return maxEnemies; }
 
+        //Did we win?
+        bool checkForWin(std::vector<Enemy*> tempEnemyVector);
+
     private:
         //The enemies texture
         sf::Texture enemyTexture;
 
         //How many we have on screen
-        const int maxEnemies = 90;
+        const int maxEnemies = 91;
 
         //Constant movement speed
         const float enemyVelocity = 40.0f;

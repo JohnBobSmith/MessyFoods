@@ -136,7 +136,7 @@ int main()
     //Our victory text
     sf::Text winText;
     winText.setFont(blockFont);
-    winText.setString("You WIN!");
+    winText.setString("You WIN!!");
     winText.setCharacterSize(110);
     winText.setColor(sf::Color::Green);
     winText.setStyle(sf::Text::Regular);
@@ -423,6 +423,12 @@ int main()
             }
         }
 
+        //Check for a win.
+        if (enemy.checkForWin(enemyVector)) {
+            ui.isWin = true;
+            ui.isPlaying = false;
+        }
+
         //END OF GAME LOGIC, START OF DRAWING STUFF
 
         //Clear window always
@@ -510,25 +516,10 @@ int main()
 
         //Running our actual game
         if (ui.isPlaying) {
-            //If we win where a win is defined by
-            //no more enemies in play
-            static int counter = enemy.getMaxEnemies();
-            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                if (enemyVector[i]->isDead && !enemyVector[i]->isCounted) {
-                    enemyVector[i]->isCounted = true;
-                    counter -= 1;
-                }
-                if (counter <= 0) {
-                    for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
-                        enemyVector[j]->isCounted = false;
-                    }
-                    counter = enemy.getMaxEnemies();
-                    ui.isWin = true;
-                    ui.isPlaying = false;
-                }
-            }
-
-            //Draw the enemies
+            //Draw the enemies via a wave based system:
+            //Kill 1st wave, draw 2 waves. Kill 2 waves,
+            //draw 3 waves. etc etc.
+            static int waveCounter = 0;
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 if (!enemyVector[i]->isDead) { //The enemy is NOT dead...
                     enemyVector[i]->velocityY = 5.0; //Gravity on the Y axis
@@ -536,6 +527,9 @@ int main()
                     enemyVector[i]->positionY += enemyVector[i]->velocityY * timeStep;
                     enemyVector[i]->enemySprite.setPosition(enemyVector[i]->positionX, enemyVector[i]->positionY);
                     window.draw(enemyVector[i]->enemySprite);
+                    if (waveCounter == 0) {
+
+                    }
                 }
             }
 
