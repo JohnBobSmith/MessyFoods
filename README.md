@@ -74,9 +74,6 @@ Mouse movement - Aim the main cannon
 
 -Powerup system
 
-[s]-A state machine. This would be useful for implementing proper UI menus, among other things[/s]
-Turns out a few very simple booleans is all it took to get the UI working
-
 -Any form of audio less music. When I have most of the above items finished, I'll add sound then.
 
 ##Technical requirements
@@ -86,7 +83,6 @@ or your package manager. This project may run against older versions of SFML, ho
 building against. You will also  need a C++ compiler, with the C++11 standard enabled. I use the Code::Blocks IDE 
 for my development, and as such I'm awful with Makefiles ( yeah I know ;( ). If I can, I'll try and add one. 
 No guaruntees though. 
-
 
 ##NOTES:
 I made a point of making all the artwork myself, using gimp. If you believe there has been a copyright infringement,
