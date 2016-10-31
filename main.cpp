@@ -46,14 +46,14 @@ float calculateMouseAngle(float mouseX, float mouseY, float positionX, float pos
 void resetEnemy(std::vector<Enemy*> tempEnemyVector, int maxEnemies)
 {
     //Position our enemies on the X axis
+    int counterX = 0;
     for (int i = 0; i < maxEnemies; ++i) {
-        static int counterX = 0;
-        tempEnemyVector[i]->positionX = counterX * 90;
-        counterX += 1;
         if (counterX == 9) {
             counterX = 0;
             //Reset the width
         }
+        tempEnemyVector[i]->positionX = counterX * 90;
+        counterX += 1;
     }
 
     //Setup the y values properly
@@ -108,6 +108,8 @@ int main()
     sf::Music music;
     music.openFromFile("music/main_theme.wav");
     music.play(); //Start playing immediately
+    //Loop it
+    music.setLoop(true);
 
     //Our square font
     sf::Font blockFont;
@@ -413,10 +415,11 @@ int main()
         }
 
         //If an enemy misses and goes off screen, kill it too
+        //Instant loss, colony destroyed!
         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
             if (enemyVector[i]->positionY > SCREEN_HEIGHT) {
                 enemyVector[i]->isDead = true;
-                ui.isPlaying = false; //instant loss, colony destroyed!
+                ui.isPlaying = false;
             }
         }
 
@@ -448,7 +451,6 @@ int main()
         //our sprites
         if (ui.isMainMenu) {
             ui.isPlaying = false;
-            ui.isWin = false;
             //For testing's sake, draw all buttons
             window.draw(ui.helpButton);
             window.draw(ui.quitButton);
@@ -488,8 +490,9 @@ int main()
                     playerHealth = playerMaxHealth;
 
                     //Start playing
-                    ui.isMainMenu = false;
+                    ui.isWin = false;
                     ui.isPlaying = true;
+                    ui.isMainMenu = false;
                 }
             }
             //If we press the quit button
@@ -499,8 +502,8 @@ int main()
                                     mouseX, mouseY, mouseWidth, mouseHeight)) {
 
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                //Quit
-                window.close();
+                    //Quit
+                    window.close();
                 }
             }
         } // end ui.isMainMenu
@@ -509,17 +512,20 @@ int main()
         if (ui.isPlaying) {
             //If we win where a win is defined by
             //no more enemies in play
+            static int counter = enemy.getMaxEnemies();
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                static int counter = enemy.getMaxEnemies();
                 if (enemyVector[i]->isDead && !enemyVector[i]->isCounted) {
-                    counter -= 1;
+                    std::cout << counter << "\n";
                     enemyVector[i]->isCounted = true;
+                    counter -= 1;
                 }
                 if (counter <= 0) {
+                    for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
+                        enemyVector[j]->isCounted = false;
+                    }
+                    counter = enemy.getMaxEnemies();
                     ui.isWin = true;
                     ui.isPlaying = false;
-                    enemyVector[i]->isCounted = false;
-                    counter = enemy.getMaxEnemies();
                 }
             }
 
