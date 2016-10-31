@@ -107,9 +107,16 @@ int main()
     //Our audio files
     sf::Music music;
     music.openFromFile("music/main_theme.wav");
-    music.play(); //Start playing immediately
     //Loop it
     music.setLoop(true);
+    //Play immediately
+    music.play();
+
+    //Shoot sound
+    sf::SoundBuffer buffer;
+    buffer.loadFromFile("effects/shoot.wav");
+    sf::Sound bulletShoot;
+    bulletShoot.setBuffer(buffer);
 
     //Our square font
     sf::Font blockFont;
@@ -266,7 +273,12 @@ int main()
             }
         } //End event loop
 
-        //Pressed escape, so
+        //only play our music in the main menu
+        if (!ui.isMainMenu) {
+            music.stop();
+        }
+
+        //Pressed escape, so...
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             //Pause the game and return to main menu
             ui.isMainMenu = true;
@@ -293,6 +305,9 @@ int main()
                 bulletVector[currentBullet]->isActive = true;
                 bulletVector[currentBullet]->velocityX = bullet.getConstantVelocity() * (cos(mouseAngle * pi / 180));
                 bulletVector[currentBullet]->velocityY = bullet.getConstantVelocity() * (sin(mouseAngle * pi / 180));
+
+                //Play our shoot sound
+                bulletShoot.play();
 
                 //Re-set the rateOfFire counter
                 rateOfFire = 0.5;
@@ -465,7 +480,7 @@ int main()
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
                 isHelpDisplayed = false;
             }
-            //For testing's sake, draw all buttons
+            //Draw all buttons
             window.draw(ui.helpButton);
             window.draw(ui.quitButton);
             window.draw(ui.startButton);
@@ -477,6 +492,8 @@ int main()
             //for the purpose of collision.
             int mouseWidth = 5;
             int mouseHeight = 5;
+            //MouseX and mouseY are from way further up. This works but
+            //I don't like the idea of using global variables...
             if (collisionbox.checkAABBcollision(ui.startButton.getPosition().x,
                                                 ui.startButton.getPosition().y,
                                                 ui.getWidth(), ui.getHeight(),
