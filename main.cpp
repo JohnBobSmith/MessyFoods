@@ -414,19 +414,20 @@ int main()
             }
         }
 
+        //Check for a win.
+        if (enemy.checkForWin(enemyVector)) {
+            ui.isWin = true;
+            ui.isPlaying = false;
+        }
+
         //If an enemy misses and goes off screen, kill it too
         //Instant loss, colony destroyed!
         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
             if (enemyVector[i]->positionY > SCREEN_HEIGHT) {
                 enemyVector[i]->isDead = true;
+                ui.isWin = false;
                 ui.isPlaying = false;
             }
-        }
-
-        //Check for a win.
-        if (enemy.checkForWin(enemyVector)) {
-            ui.isWin = true;
-            ui.isPlaying = false;
         }
 
         //END OF GAME LOGIC, START OF DRAWING STUFF
@@ -501,6 +502,27 @@ int main()
                     ui.isMainMenu = false;
                 }
             }
+
+            //We press the help button
+            static bool isHelpDisplayed = false;
+            if (collisionbox.checkAABBcollision(ui.helpPage.getPosition().x,
+                                    ui.helpPage.getPosition().y,
+                                    ui.getHelpPageWidth(), ui.getHelpPageHeight(),
+                                    mouseX, mouseY, mouseWidth, mouseHeight)) {
+
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    isHelpDisplayed = true;
+                }
+
+                if (isHelpDisplayed) {
+                    window.draw(ui.helpPage);
+                }
+
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+                    isHelpDisplayed = false;
+                }
+            }
+
             //If we press the quit button
             if (collisionbox.checkAABBcollision(ui.quitButton.getPosition().x,
                                     ui.quitButton.getPosition().y,

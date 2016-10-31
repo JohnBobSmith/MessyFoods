@@ -15,6 +15,9 @@ class UI
         //Our help button
         sf::Sprite helpButton;
 
+        //Our help page
+        sf::Sprite helpPage;
+
         //Our quit button
         sf::Sprite quitButton;
 
@@ -23,6 +26,8 @@ class UI
         int startButtonY = 75;
         int helpButtonX = 300;
         int helpButtonY = 250;
+        int helpPageX = 0;
+        int helpPageY = 0;
         int quitButtonX = 300;
         int quitButtonY = 450;
 
@@ -44,10 +49,16 @@ class UI
         int getWidth() { return startButtonTexture.getSize().x; }
         int getHeight() { return startButtonTexture.getSize().y; }
 
+        //Width and height of our help page because
+        //this sprite here is significantly larger
+        int getHelpPageWidth() { return helpPageTexture.getSize().x; }
+        int getHelpPageHeight() { return helpPageTexture.getSize().y; }
+
     private:
         //Our textures
         sf::Texture startButtonTexture;
         sf::Texture helpButtonTexture;
+        sf::Texture helpPageTexture;
         sf::Texture quitButtonTexture;
 
 };

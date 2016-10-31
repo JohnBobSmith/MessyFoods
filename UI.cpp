@@ -20,8 +20,14 @@ UI::UI()
     }
     helpButton.setTexture(helpButtonTexture);
 
+    if (!helpPageTexture.loadFromFile("textures/ui/helppage.png")) {
+        std::cout << "Missing help page texture!\n";
+    }
+    helpPage.setTexture(helpPageTexture);
+
     //Set the positions
     startButton.setPosition(startButtonX, startButtonY);
     quitButton.setPosition(quitButtonX, quitButtonY);
     helpButton.setPosition(helpButtonX, helpButtonY);
+    helpPage.setPosition(helpPageX, helpPageY);
 }
