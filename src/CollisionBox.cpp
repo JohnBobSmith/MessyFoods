@@ -1,4 +1,4 @@
-#include "CollisionBox.h"
+#include "include/CollisionBox.h"
 
 bool CollisionBox::checkAABBcollision(float xA, float yA, float wA, float hA, float xB, float yB, float wB, float hB)
 {

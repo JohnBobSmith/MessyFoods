@@ -1,10 +1,10 @@
 #include <SFML/Graphics.hpp>
-#include "Enemy.h"
+#include "include/Enemy.h"
 #include <iostream>
 
 Enemy::Enemy()
 {
-    if (!enemyTexture.loadFromFile("textures/enemy.png")) {
+    if (!enemyTexture.loadFromFile("../textures/enemy.png")) {
         std::cout << "Error: Missing enemy texture";
     }
     enemySprite.setTexture(enemyTexture);

@@ -3,12 +3,11 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include <random>
-#include "Bullet.h"
-#include "Enemy.h"
-#include "Shield.h"
-#include "CollisionBox.h"
-#include "UI.h"
+#include "include/Bullet.h"
+#include "include/Enemy.h"
+#include "include/Shield.h"
+#include "include/CollisionBox.h"
+#include "include/UI.h"
 
 //Allow the the use of pi
 constexpr double pi_value() { return M_PI; }
@@ -112,13 +111,13 @@ int main()
 
     //Shoot sound
     sf::SoundBuffer buffer;
-    buffer.loadFromFile("effects/shoot.wav");
+    buffer.loadFromFile("../effects/shoot.wav");
     sf::Sound bulletShoot;
     bulletShoot.setBuffer(buffer);
 
     //Our music
     sf::Music music;
-    music.openFromFile("music/main_theme.wav");
+    music.openFromFile("../music/main_theme.wav");
     //Loop it
     music.setLoop(true);
     //Play it
@@ -126,7 +125,7 @@ int main()
 
     //Our square font
     sf::Font blockFont;
-    blockFont.loadFromFile("fonts/ehsmb.ttf");
+    blockFont.loadFromFile("../fonts/ehsmb.ttf");
 
     //Our game over text
     sf::Text gameOverText;
@@ -158,7 +157,7 @@ int main()
     //Our background image
     sf::Sprite background;
     sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("textures/bg.png");
+    backgroundTexture.loadFromFile("../textures/bg.png");
     background.setTexture(backgroundTexture);
 
     //Our player's "health bar"
@@ -174,7 +173,7 @@ int main()
     //Our stationary player
     sf::Sprite player;
     sf::Texture playerTexture;
-    playerTexture.loadFromFile("textures/moonbase.png");
+    playerTexture.loadFromFile("../textures/moonbase.png");
     player.setTexture(playerTexture);
     //Move the  to the bottom middle of the screen
     player.setOrigin(playerTexture.getSize().x / 2, playerTexture.getSize().y / 2);
@@ -188,7 +187,7 @@ int main()
     //Our laser sprite
     sf::Sprite laser;
     sf::Texture laserTexture;
-    laserTexture.loadFromFile("textures/laser.png");
+    laserTexture.loadFromFile("../textures/laser.png");
     laser.setTexture(laserTexture);
     //Position the laser at the bottom, because it shoots
     //from the sides of our moon hut
