@@ -162,8 +162,9 @@ int main()
     std::vector<Enemy*> enemyVector;
     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
         enemyVector.push_back(new Enemy());
-        //Enable the enemies
-        enemyVector[i]->isDead = false;
+        //Disable the enemies at start,
+        //because we now spawn them in.
+        //enemyVector[i]->isDead = true;
     }
 
     Shield shield;
@@ -272,6 +273,8 @@ int main()
         }
 
         //END OF EVENTS, START OF GAME LOGIC
+        //Spawn our enemies
+        enemy.spawnEnemyWave(enemyVector, enemy.enemySpawnCount);
 
         //If the laser is on, drain the player health
         if (isLaserOn) {
@@ -454,12 +457,11 @@ int main()
                         shieldVector[i]->isShieldUp = true;
                     }
 
-                    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                        enemyVector[i]->isDead = false;
-                    }
+                    //Spawn a wave
+                    enemy.spawnEnemyWave(enemyVector, enemy.enemySpawnCount);
 
                     //Re-position the enemies
-                    enemy.resetEnemy(enemyVector, enemy.getMaxEnemies());
+                    enemy.resetEnemy(enemyVector, enemy.enemySpawnCount);
 
                     //Re-set the enemy health
                     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
@@ -517,9 +519,6 @@ int main()
                     enemyVector[i]->positionY += enemyVector[i]->velocityY * timeStep;
                     enemyVector[i]->enemySprite.setPosition(enemyVector[i]->positionX, enemyVector[i]->positionY);
                     window.draw(enemyVector[i]->enemySprite);
-                    if (waveCounter == 0) {
-
-                    }
                 }
             }
 
@@ -555,10 +554,11 @@ int main()
             for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
                 shieldVector[i]->isShieldUp = false;
             }
-
+/*
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 enemyVector[i]->isDead = true;
             }
+*/
 
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
                 bulletVector[i]->isActive = false;
@@ -585,12 +585,11 @@ int main()
                         shieldVector[i]->isShieldUp = true;
                     }
 
-                    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                        enemyVector[i]->isDead = false;
-                    }
+                    //Spawn some enemies
+                    enemy.spawnEnemyWave(enemyVector, enemy.enemySpawnCount);
 
                     //Re-position the enemies
-                    enemy.resetEnemy(enemyVector, enemy.getMaxEnemies());
+                    enemy.resetEnemy(enemyVector, enemy.enemySpawnCount);
 
                     //Re-set the enemy health
                     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {

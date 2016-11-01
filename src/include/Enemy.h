@@ -18,6 +18,10 @@ class Enemy
         float positionX = 0;
         float positionY = 0;
 
+        //How many enemies are spawned?
+        //Default nine for the first wave
+        int enemySpawnCount = 9;
+
         //Is the enemy alive?
         bool isDead = true;
 
@@ -50,11 +54,9 @@ class Enemy
         //Spawn an enemy wave
         //Enable numEnemies worth of asteroids
         //And set their positions accordingly
-        void spawnEnemyWave(int numEnemies);
+        void spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int numEnemies);
 
         //Reset and respawn our enemies
-        //maximumEnemies should be the result of
-        //getMaxEnemies().
         void resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies);
 
 

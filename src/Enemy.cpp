@@ -95,3 +95,11 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies)
         }
     }
 }
+
+void Enemy::spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int numEnemies)
+{
+    //enable numEnemies worth of enemies
+    for (int i = 0; i < numEnemies; ++i) {
+        tempEnemyVector[i]->isDead = false;
+    }
+}
