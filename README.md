@@ -67,14 +67,12 @@ Mouse movement - Aim the main cannon
 ###Things that are being worked on: Completion > 35% but < 85%
 -Wave based asteroids system - stuck on this one...
 
--Main menu music only, other audio unchanged
+-Main menu music, basic SFX.
 
 ###Things that have not been started or aren't actively being worked on: Completeion < 35%
 -Addional enemy types
 
 -Powerup system
-
--Any form of audio less music. When I have most of the above items finished, I'll add sound then.
 
 ##Technical requirements
 ###I'm a hobby Linux developer, so Windows of any kind is unsupported. If you can make it work for Windows, great!
