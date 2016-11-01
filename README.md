@@ -95,5 +95,9 @@ http://www.dafont.com/theme.php?cat=302&page=2
 The font description says "100%" free so I hope that means I can include 
 it here. :)
 
+I've made a point of making some, but not all, of the audio myself. Some audio files have been taken from www.freesound.org
+Where this occured, I explicitly checked that the license was creative commons 0, thus (hopefully) allowing me to freely
+include the audio with my project. Again if you have any problems, email me.
+
 I've used space invaders as a reference and inspiration for this project, and as a reference and inspiration only. I take
 no credit for the original space invaders released by Taito in 1978.
