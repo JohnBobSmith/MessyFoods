@@ -273,8 +273,6 @@ int main()
         }
 
         //END OF EVENTS, START OF GAME LOGIC
-        //Spawn our enemies
-        enemy.spawnEnemyWave(enemyVector, enemy.enemySpawnCount);
 
         //If the laser is on, drain the player health
         if (isLaserOn) {
@@ -457,11 +455,8 @@ int main()
                         shieldVector[i]->isShieldUp = true;
                     }
 
-                    //Spawn a wave
+                    //Spawn the enemies
                     enemy.spawnEnemyWave(enemyVector, enemy.enemySpawnCount);
-
-                    //Re-position the enemies
-                    enemy.resetEnemy(enemyVector, enemy.enemySpawnCount);
 
                     //Re-set the enemy health
                     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
@@ -554,11 +549,11 @@ int main()
             for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
                 shieldVector[i]->isShieldUp = false;
             }
-/*
+
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 enemyVector[i]->isDead = true;
             }
-*/
+
 
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
                 bulletVector[i]->isActive = false;
@@ -585,11 +580,11 @@ int main()
                         shieldVector[i]->isShieldUp = true;
                     }
 
-                    //Spawn some enemies
-                    enemy.spawnEnemyWave(enemyVector, enemy.enemySpawnCount);
+                    //Update the counter
+                    enemy.enemySpawnCount = 20;
 
                     //Re-position the enemies
-                    enemy.resetEnemy(enemyVector, enemy.enemySpawnCount);
+                    enemy.resetEnemy(enemyVector, enemy.getMaxEnemies());
 
                     //Re-set the enemy health
                     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
