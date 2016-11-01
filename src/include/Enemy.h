@@ -47,6 +47,17 @@ class Enemy
         //Did we win?
         bool checkForWin(std::vector<Enemy*> tempEnemyVector);
 
+        //Spawn an enemy wave
+        //Enable numEnemies worth of asteroids
+        //And set their positions accordingly
+        void spawnEnemyWave(int numEnemies);
+
+        //Reset and respawn our enemies
+        //maximumEnemies should be the result of
+        //getMaxEnemies().
+        void resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies);
+
+
     private:
         //The enemies texture
         sf::Texture enemyTexture;

@@ -41,57 +41,6 @@ float calculateMouseAngle(float mouseX, float mouseY, float positionX, float pos
     return angle;
 }
 
-//Reset the asteroids positions, WIP wave-based system
-void resetEnemy(std::vector<Enemy*> tempEnemyVector, int maxEnemies)
-{
-    //Position our enemies on the X axis
-    int counterX = 0;
-    for (int i = 0; i < maxEnemies; ++i) {
-        if (counterX == 9) {
-            counterX = 0;
-            //Reset the width
-        }
-        tempEnemyVector[i]->positionX = counterX * 90;
-        counterX += 1;
-    }
-
-    //Setup the y values properly
-    for (int i = 0; i < maxEnemies; ++i) {
-        static int ammountToMove = 0;
-        tempEnemyVector[i]->positionY = ammountToMove;
-        if (i == (9)) {
-            ammountToMove = -100;
-        }
-        if (i == (18)) {
-            ammountToMove = -200;
-        }
-        if (i == (27)) {
-            ammountToMove = -300;
-        }
-        if (i == (36)) {
-            ammountToMove = -400;
-        }
-        if (i == (45)) {
-            ammountToMove = -500;
-        }
-        if (i == (54)) {
-            ammountToMove = -600;
-        }
-        if (i == (63)) {
-            ammountToMove = -700;
-        }
-        if (i == (72)) {
-            ammountToMove = -800;
-        }
-        if (i == (81)) {
-            ammountToMove = -900;
-        }
-        if (i == (90)) {
-            ammountToMove = -1000;
-        }
-    }
-}
-
 int main()
 {
     //Frame rate limiter
@@ -510,7 +459,7 @@ int main()
                     }
 
                     //Re-position the enemies
-                    resetEnemy(enemyVector, enemy.getMaxEnemies());
+                    enemy.resetEnemy(enemyVector, enemy.getMaxEnemies());
 
                     //Re-set the enemy health
                     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
@@ -641,7 +590,7 @@ int main()
                     }
 
                     //Re-position the enemies
-                    resetEnemy(enemyVector, enemy.getMaxEnemies());
+                    enemy.resetEnemy(enemyVector, enemy.getMaxEnemies());
 
                     //Re-set the enemy health
                     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
