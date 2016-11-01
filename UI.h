@@ -42,6 +42,9 @@ class UI
         //Are we in the main menu?
         //If so, display the various buttons.
         bool isMainMenu = true;
+        //Dont show our help unless in the correct
+        //menu to do so
+        bool isHelpDisplayed = false;
 
         //Get the height and width of
         //Our boxes. Assumes all boxes

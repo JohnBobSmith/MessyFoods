@@ -104,19 +104,25 @@ int main()
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Spacey Rocks");
     sf::Event event;
 
-    //Our audio files
-    sf::Music music;
-    music.openFromFile("music/main_theme.wav");
-    //Loop it
-    music.setLoop(true);
-    //Play immediately
-    music.play();
+    //Our collision detection object
+    CollisionBox collisionbox;
+
+    //Our user interface object
+    UI ui;
 
     //Shoot sound
     sf::SoundBuffer buffer;
     buffer.loadFromFile("effects/shoot.wav");
     sf::Sound bulletShoot;
     bulletShoot.setBuffer(buffer);
+
+    //Our music
+    sf::Music music;
+    music.openFromFile("music/main_theme.wav");
+    //Loop it
+    music.setLoop(true);
+    //Play it
+    music.play();
 
     //Our square font
     sf::Font blockFont;
@@ -189,12 +195,6 @@ int main()
     laser.setPosition(0, SCREEN_HEIGHT - 50);
     //a boolean value to determine when the lasers is in use or not
     bool isLaserOn = false;
-
-    //Our collision detection object
-    CollisionBox collisionbox;
-
-    //Our user interface object
-    UI ui;
 
     //Our bullet object, and Bullet pointers
     //Store our bullets in the vector
@@ -273,15 +273,19 @@ int main()
             }
         } //End event loop
 
-        //only play our music in the main menu
-        if (!ui.isMainMenu) {
-            music.stop();
-        }
-
         //Pressed escape, so...
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             //Pause the game and return to main menu
             ui.isMainMenu = true;
+        }
+
+        //Handle our music here as this seems
+        //to be the only place it works...
+        //Not in the main menu, mute music
+        if (!ui.isMainMenu) {
+            music.setVolume(0);
+        } else {
+            music.setVolume(100);
         }
 
         //Mouse down and moved events
@@ -473,18 +477,15 @@ int main()
         //our sprites
         if (ui.isMainMenu) {
             ui.isPlaying = false;
-            //Dont show our help unless in the correct
-            //menu to do so
-            static bool isHelpDisplayed = false;
             //If we exit the help menu, actually exit from it.
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-                isHelpDisplayed = false;
+                ui.isHelpDisplayed = false;
             }
             //Draw all buttons
             window.draw(ui.helpButton);
             window.draw(ui.quitButton);
             window.draw(ui.startButton);
-            if (isHelpDisplayed) {
+            if (ui.isHelpDisplayed) {
                 window.draw(ui.helpPage);
             }
             //The start box collides with the mouse
@@ -538,7 +539,7 @@ int main()
 
                 //Turn the page on
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    isHelpDisplayed = true;
+                    ui.isHelpDisplayed = true;
                 }
             }
 
