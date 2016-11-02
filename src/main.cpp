@@ -162,9 +162,6 @@ int main()
     std::vector<Enemy*> enemyVector;
     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
         enemyVector.push_back(new Enemy());
-        //Disable the enemies at start,
-        //because we now spawn them in.
-        //enemyVector[i]->isDead = true;
     }
 
     Shield shield;
@@ -455,12 +452,21 @@ int main()
                         shieldVector[i]->isShieldUp = true;
                     }
 
-                    //Spawn the enemies
-                    enemy.spawnEnemyWave(enemyVector, enemy.enemySpawnCount);
-
                     //Re-set the enemy health
                     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                         enemyVector[i]->enemyHealth = enemy.maxEnemyHealth;
+                    }
+
+                    //Spawn a wave
+                    enemy.spawnEnemyWave(enemyVector, 1);
+                    //Kill enemies that have not been explicitly spawn
+                    static int enemySpawnCount = 0;
+                    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                        if (!enemyVector[i]->isDead) {
+                            enemySpawnCount += 1;
+                        } else {
+                            enemyVector[enemySpawnCount]->isDead = true;
+                        }
                     }
 
                     //Reset the player's health bar
@@ -503,10 +509,7 @@ int main()
 
         //Running our actual game
         if (ui.isPlaying) {
-            //Draw the enemies via a wave based system:
-            //Kill 1st wave, draw 2 waves. Kill 2 waves,
-            //draw 3 waves. etc etc.
-            static int waveCounter = 0;
+            //Draw the enemies
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 if (!enemyVector[i]->isDead) { //The enemy is NOT dead...
                     enemyVector[i]->velocityY = 5.0; //Gravity on the Y axis
@@ -561,6 +564,8 @@ int main()
 
             //Ensure we are not in the main menu
             if (!ui.isMainMenu) {
+                //Prepare the next wave of enemies..
+                //enemy.getMaxEnemies() = 19;
                 //If we won..
                 if (ui.isWin) {
                     //Game victory text
@@ -580,10 +585,10 @@ int main()
                         shieldVector[i]->isShieldUp = true;
                     }
 
-                    //Update the counter
-                    enemy.enemySpawnCount = 20;
-
-                    //Re-position the enemies
+                    //Reset the enemies
+                    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                        enemyVector[i]->isDead = false;
+                    }
                     enemy.resetEnemy(enemyVector, enemy.getMaxEnemies());
 
                     //Re-set the enemy health
