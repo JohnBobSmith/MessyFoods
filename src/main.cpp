@@ -456,9 +456,9 @@ int main()
                         shieldVector[i]->isShieldUp = true;
                     }
 
-                    //Reset enemy parameters
+                    //Reset enemy health
                     for (int i = 0; i < enemy.getMaxEnemies(); ++i){
-                        enemyVector[i]->enemyHealth = enemy.maxEnemyHealth;
+                        enemyVector[i]->enemyHealth = enemy.getMaxEnemyHealth();
                     }
 
                     //Reset the player's health bar
@@ -503,20 +503,24 @@ int main()
         if (ui.isPlaying) {
             //Spawn a wave
             if (!isWaveSpawned) {
-                static int tempInt = 0;
-                tempInt += 1;
-
-                //Spawn enemies
-                enemy.spawnEnemyWave(enemyVector, 1);
-                isWaveSpawned = true;
-
-                std::cout << "TEST!!!!" << tempInt << "\n";
+                static int counter = 1;
+                //Spawn 1 wave at a time
+                if (counter == 1 && !isWaveSpawned) {
+                    enemy.spawnEnemyWave(enemyVector, 1);
+                    counter += 1;
+                    isWaveSpawned = true;
+                }
+                if (counter == 2 && !isWaveSpawned) {
+                    enemy.spawnEnemyWave(enemyVector, 2);
+                    counter = 1;
+                    isWaveSpawned = true;
+                }
             }
 
             //Draw the enemies
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 if (!enemyVector[i]->isDead) { //The enemy is NOT dead...
-                    enemyVector[i]->velocityY = 5.0; //Gravity on the Y axis
+                    enemyVector[i]->velocityY = enemyVector[i]->getVelocity(); //Gravity on the Y axis
                     enemyVector[i]->positionX += enemyVector[i]->velocityX * timeStep;
                     enemyVector[i]->positionY += enemyVector[i]->velocityY * timeStep;
                     enemyVector[i]->enemySprite.setPosition(enemyVector[i]->positionX, enemyVector[i]->positionY);
@@ -557,10 +561,6 @@ int main()
                 shieldVector[i]->isShieldUp = false;
             }
 
-            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                enemyVector[i]->isDead = true;
-            }
-
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
                 bulletVector[i]->isActive = false;
             }
@@ -591,7 +591,12 @@ int main()
 
                     //Re-set the enemy parameters
                     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                        enemyVector[i]->enemyHealth = enemy.maxEnemyHealth;
+                        enemyVector[i]->enemyHealth = enemy.getMaxEnemyHealth();
+                    }
+
+                    //only re-set enemies that need re-setting
+                    for (int i = 0; i < enemy.getAdjustedMaxEnemies(); ++i) {
+                        enemyVector[i]->isDead = false;
                     }
 
                     //Reset the player's health bar

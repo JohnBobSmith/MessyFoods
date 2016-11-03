@@ -35,6 +35,7 @@ bool Enemy::checkForWin(std::vector<Enemy*> tempEnemyVector)
             counter -= 1;
         }
         if (counter <= 0) {
+            //Re-set all counter bools
             for (int j = 0; j < maxEnemies; ++j) {
                 tempEnemyVector[j]->isCounted = false;
             }
@@ -50,7 +51,7 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies)
 {
     //Position our enemies on the X axis
     int counterX = 0;
-    for (int i = 0; i < maxEnemies; ++i) {
+    for (int i = 0; i < enemiesInPlay; ++i) {
         if (counterX == 9) {
             counterX = 0;
             //Reset the width
@@ -60,7 +61,7 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies)
     }
 
     //Setup the y values properly
-    for (int i = 0; i < maxEnemies; ++i) {
+    for (int i = 0; i < enemiesInPlay; ++i) {
         static int ammountToMove = 0;
         tempEnemyVector[i]->positionY = ammountToMove;
         if (i == (9)) {
@@ -98,6 +99,11 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies)
 
 void Enemy::spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber)
 {
+    //Disable all enemies to start
+    for (int i = 0; i < enemiesInPlay; ++i) {
+        tempEnemyVector[i]->isDead = true;
+    }
+
     //Count our waves and add enemies accordingly
     static int newWaveNumber;
     if (waveNumber <= 0) { //Error
@@ -113,11 +119,13 @@ void Enemy::spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber)
         newWaveNumber = 19;
     }
 
-    //Spawn newWaveNumber worth of enemies
-    for (int i = 0; i < newWaveNumber; ++i) {
+    enemiesInPlay = newWaveNumber;
+
+    //Spawn enemiesInPlay worth of enemies
+    for (int i = 0; i < enemiesInPlay; ++i) {
         tempEnemyVector[i]->isDead = false;
     }
 
     //position them
-    resetEnemy(tempEnemyVector, maxEnemies);
+    resetEnemy(tempEnemyVector, enemiesInPlay);
 }
