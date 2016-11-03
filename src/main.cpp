@@ -155,6 +155,8 @@ int main()
         bulletVector[i]->positionX = SCREEN_WIDTH / 2;
         bulletVector[i]->positionY = SCREEN_HEIGHT - playerTexture.getSize().y;
     }
+    //Did we spawn a wave?
+    bool isWaveSpawned = false;
 
     //SAME AS ABOVE BUT FOR OUR ENEMIES
     //REMEMBER TO CLEAN THIS UP
@@ -225,15 +227,6 @@ int main()
             ui.isMainMenu = true;
         }
 
-        //Handle our music here as this seems
-        //to be the only place it works...
-        //Not in the main menu, mute music
-        if (!ui.isMainMenu) {
-            music.setVolume(0);
-        } else {
-            music.setVolume(100);
-        }
-
         //Mouse down and moved events
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             //Shoot only one bullet at a time with mouse down
@@ -270,6 +263,15 @@ int main()
         }
 
         //END OF EVENTS, START OF GAME LOGIC
+
+        //Handle our music here as this seems
+        //to be the only place it works...
+        //Not in the main menu, mute music
+        if (!ui.isMainMenu) {
+            music.setVolume(0);
+        } else {
+            music.setVolume(100);
+        }
 
         //If the laser is on, drain the player health
         if (isLaserOn) {
@@ -379,18 +381,20 @@ int main()
             }
         }
 
-        //Check for a win.
-        if (enemy.checkForWin(enemyVector)) {
-            ui.isWin = true;
-            ui.isPlaying = false;
-        }
-
         //If an enemy misses and goes off screen, kill it too
         //Instant loss, colony destroyed!
         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
             if (enemyVector[i]->positionY > SCREEN_HEIGHT) {
                 enemyVector[i]->isDead = true;
                 ui.isWin = false;
+                ui.isPlaying = false;
+            }
+        }
+
+        //Win checking
+        if (isWaveSpawned) {
+            if (enemy.checkForWin(enemyVector)) {
+                ui.isWin = true;
                 ui.isPlaying = false;
             }
         }
@@ -452,21 +456,9 @@ int main()
                         shieldVector[i]->isShieldUp = true;
                     }
 
-                    //Re-set the enemy health
-                    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                    //Reset enemy parameters
+                    for (int i = 0; i < enemy.getMaxEnemies(); ++i){
                         enemyVector[i]->enemyHealth = enemy.maxEnemyHealth;
-                    }
-
-                    //Spawn a wave
-                    enemy.spawnEnemyWave(enemyVector, 1);
-                    //Kill enemies that have not been explicitly spawn
-                    static int enemySpawnCount = 0;
-                    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                        if (!enemyVector[i]->isDead) {
-                            enemySpawnCount += 1;
-                        } else {
-                            enemyVector[enemySpawnCount]->isDead = true;
-                        }
                     }
 
                     //Reset the player's health bar
@@ -509,6 +501,18 @@ int main()
 
         //Running our actual game
         if (ui.isPlaying) {
+            //Spawn a wave
+            if (!isWaveSpawned) {
+                static int tempInt = 0;
+                tempInt += 1;
+
+                //Spawn enemies
+                enemy.spawnEnemyWave(enemyVector, 1);
+                isWaveSpawned = true;
+
+                std::cout << "TEST!!!!" << tempInt << "\n";
+            }
+
             //Draw the enemies
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 if (!enemyVector[i]->isDead) { //The enemy is NOT dead...
@@ -557,15 +561,12 @@ int main()
                 enemyVector[i]->isDead = true;
             }
 
-
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
                 bulletVector[i]->isActive = false;
             }
 
             //Ensure we are not in the main menu
             if (!ui.isMainMenu) {
-                //Prepare the next wave of enemies..
-                //enemy.getMaxEnemies() = 19;
                 //If we won..
                 if (ui.isWin) {
                     //Game victory text
@@ -580,18 +581,15 @@ int main()
 
                 //Space bar to re-start event
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+                    //Spawn more enemies
+                    isWaveSpawned = false;
+
                     //Turn everything back on...
                     for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
                         shieldVector[i]->isShieldUp = true;
                     }
 
-                    //Reset the enemies
-                    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                        enemyVector[i]->isDead = false;
-                    }
-                    enemy.resetEnemy(enemyVector, enemy.getMaxEnemies());
-
-                    //Re-set the enemy health
+                    //Re-set the enemy parameters
                     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                         enemyVector[i]->enemyHealth = enemy.maxEnemyHealth;
                     }

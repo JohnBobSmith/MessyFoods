@@ -48,11 +48,6 @@ bool Enemy::checkForWin(std::vector<Enemy*> tempEnemyVector)
 //Reset the asteroids positions, WIP wave-based system
 void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies)
 {
-    //Kill all enemies
-    for (int i = 9; i < maxEnemies; ++i) {
-        tempEnemyVector[i]->isDead = true;
-    }
-
     //Position our enemies on the X axis
     int counterX = 0;
     for (int i = 0; i < maxEnemies; ++i) {
@@ -103,6 +98,7 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies)
 
 void Enemy::spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber)
 {
+    //Count our waves and add enemies accordingly
     static int newWaveNumber;
     if (waveNumber <= 0) { //Error
         newWaveNumber = 0;
@@ -121,6 +117,7 @@ void Enemy::spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber)
     for (int i = 0; i < newWaveNumber; ++i) {
         tempEnemyVector[i]->isDead = false;
     }
+
     //position them
     resetEnemy(tempEnemyVector, maxEnemies);
 }
