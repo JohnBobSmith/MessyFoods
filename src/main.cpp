@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include "include/Player.h"
 #include "include/Bullet.h"
 #include "include/Enemy.h"
 #include "include/Shield.h"
@@ -51,12 +52,6 @@ int main()
     const int SCREEN_WIDTH = 800;
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Spacey Rocks");
     sf::Event event;
-
-    //Our collision detection object
-    CollisionBox collisionbox;
-
-    //Our user interface object
-    UI ui;
 
     //Shoot sound
     sf::SoundBuffer buffer;
@@ -109,29 +104,14 @@ int main()
     backgroundTexture.loadFromFile("../textures/bg.png");
     background.setTexture(backgroundTexture);
 
-    //Our player's "health bar"
-    //Change the color of the bar to
-    //represent the players health
-    sf::RectangleShape playerHealthBar;
-    playerHealthBar.setSize(sf::Vector2f(20, 50));
-    //The player starts with a full (green) HP bar
-    playerHealthBar.setFillColor(sf::Color::Green);
-    //Position the bar on our player structure
-    playerHealthBar.setPosition(SCREEN_WIDTH / 2 - 10, SCREEN_HEIGHT - 75);
+    //Our collision detection object
+    CollisionBox collisionbox;
 
-    //Our stationary player
-    sf::Sprite player;
-    sf::Texture playerTexture;
-    playerTexture.loadFromFile("../textures/moonbase.png");
-    player.setTexture(playerTexture);
-    //Move the  to the bottom middle of the screen
-    player.setOrigin(playerTexture.getSize().x / 2, playerTexture.getSize().y / 2);
-    player.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT - playerTexture.getSize().y / 2);
-    //Our players constant max health,
-    //used to re-set the game
-    const float playerMaxHealth = 100.0f;
-    //Our modify-able player health
-    float playerHealth = playerMaxHealth;
+    //Our user interface object
+    UI ui;
+
+    //The player
+    Player player;
 
     //Our laser sprite
     sf::Sprite laser;
@@ -146,34 +126,34 @@ int main()
 
     //Our bullet object, and Bullet pointers
     //Store our bullets in the vector
+    //WE MUST ALSO REMEMBER TO CLEAN THIS UP
     Bullet bullet;
     std::vector<Bullet*> bulletVector;
-    //WE MUST ALSO REMEMBER TO CLEAN THIS UP
     for (int i = 0; i < bullet.getMaxBullets(); ++i) {
         bulletVector.push_back(new Bullet());
-        //Also set the initial positions to match the gun
+        //Set the initial positions to match the gun
         bulletVector[i]->positionX = SCREEN_WIDTH / 2;
-        bulletVector[i]->positionY = SCREEN_HEIGHT - playerTexture.getSize().y;
+        bulletVector[i]->positionY = SCREEN_HEIGHT - player.getHeight();
     }
-    //Did we spawn a wave?
+    //Did we spawn a wave of enemies?
     bool isWaveSpawned = false;
 
-    //SAME AS ABOVE BUT FOR OUR ENEMIES
-    //REMEMBER TO CLEAN THIS UP
+    //Enemy object and pointers
+    //CLEAN THIS UP
     Enemy enemy;
     std::vector<Enemy*> enemyVector;
     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
         enemyVector.push_back(new Enemy());
     }
 
+    //Shield object and pointers
+    //CLEAN THIS UP TOO!
     Shield shield;
-    //CLEAN THIS UP AS WELL
     std::vector<Shield*> shieldVector;
     for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
         shieldVector.push_back(new Shield());
         //Enable the shield
         shieldVector[i]->isShieldUp = true;
-        shieldVector[i]->shieldSprite.setPosition(shieldVector[i]->positionX, shieldVector[i]->positionY);
     }
 
     //Position the shield blocks
@@ -211,7 +191,7 @@ int main()
                 mouseX = event.mouseMove.x;
                 mouseY = event.mouseMove.y;
                 mouseAngle = calculateMouseAngle(mouseX, mouseY,
-                        (SCREEN_WIDTH / 2), (SCREEN_HEIGHT - playerTexture.getSize().y));
+                        (SCREEN_WIDTH / 2), (SCREEN_HEIGHT - player.getHeight()));
             }
             //If we release right mouse, turn off laser
             if (event.type == sf::Event::MouseButtonReleased) {
@@ -278,21 +258,21 @@ int main()
 
         //If the laser is on, drain the player health
         if (isLaserOn) {
-            playerHealth -= 0.025;
+            player.playerHealth -= 0.025;
         }
 
-        //As the player takes damage, change the health bar color
-        //Starts off by default as green, we don't account
-        //for that condition here.
-        if (playerHealth <= 70) {
+        //Check the status of our health bar
+        //Starts off as green by default, we
+        //don't need to check that here.
+        if (player.playerHealth <= 70) {
             //Yellow health
-            playerHealthBar.setFillColor(sf::Color::Yellow);
+            player.healthBar.setFillColor(sf::Color::Yellow);
         }
-        if (playerHealth <= 30) {
+        if (player.playerHealth <= 30) {
             //red health
-            playerHealthBar.setFillColor(sf::Color::Red);
+            player.healthBar.setFillColor(sf::Color::Red);
         }
-        if (playerHealth <= 0) {
+        if (player.playerHealth <= 0) {
             //Setting this to false completely
             //stops the game, but wont exit.
             //Game over, you died. ;(
@@ -302,14 +282,14 @@ int main()
         //Check for enemy collisions against the player
         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
             if (!enemyVector[i]->isDead) {
-                if (collisionbox.checkAABBcollision(player.getPosition().x - playerTexture.getSize().x / 2,
-                                                    player.getPosition().y - playerTexture.getSize().y / 2 + 30,
-                                                    playerTexture.getSize().x, playerTexture.getSize().y,
+                if (collisionbox.checkAABBcollision(player.playerSprite.getPosition().x - player.getWidth() / 2,
+                                                    player.playerSprite.getPosition().y - player.getHeight() / 2 + 30,
+                                                    player.getWidth(), player.getHeight(),
                                                     enemyVector[i]->positionX, enemyVector[i]->positionY,
                                                     enemy.getWidth(), enemy.getHeight())) {
                     //Kill the enemy, damage the player
                     enemyVector[i]->isDead = true;
-                    playerHealth -= 10;
+                    player.playerHealth -= 10;
                 }
             }
         }
@@ -380,7 +360,7 @@ int main()
                 //re-set their initial positions
                 //so they can be used again
                 bulletVector[i]->positionX = SCREEN_WIDTH / 2;
-                bulletVector[i]->positionY = SCREEN_HEIGHT - playerTexture.getSize().y;
+                bulletVector[i]->positionY = SCREEN_HEIGHT - player.getHeight();
             }
         }
 
@@ -465,10 +445,10 @@ int main()
                     }
 
                     //Reset the player's health bar
-                    playerHealthBar.setFillColor(sf::Color::Green);
+                    player.healthBar.setFillColor(sf::Color::Green);
 
                     //Reset the player health
-                    playerHealth = playerMaxHealth;
+                    player.playerHealth = player.playerMaxHealth;
 
                     //Start playing
                     ui.isWin = false;
@@ -595,10 +575,10 @@ int main()
             }
 
             //Draw our player
-            window.draw(player);
+            window.draw(player.playerSprite);
 
             //Draw our player's health bar
-            window.draw(playerHealthBar);
+            window.draw(player.healthBar);
         } else {
             //Kill everything because we are no longer playing
             for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
@@ -644,10 +624,10 @@ int main()
                     }
 
                     //Reset the player's health bar
-                    playerHealthBar.setFillColor(sf::Color::Green);
+                    player.healthBar.setFillColor(sf::Color::Green);
 
                     //Reset the player health
-                    playerHealth = playerMaxHealth;
+                    player.playerHealth = player.playerMaxHealth;
 
                     //Re-set the win
                     ui.isWin = false;
