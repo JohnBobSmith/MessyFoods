@@ -228,15 +228,18 @@ int main()
         }
 
         //Mouse down and moved events
+        //Shoot with left mouse
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            //Shoot only one bullet at a time with mouse down
-            static float rateOfFire = 0.5f;
-            rateOfFire -= 0.04f;
+            //Our rate of fire. Subtract 0.01f here always.
+            //Do not change this value. Instead, adjust
+            //bullet.maxRateOfFire to change fire rate
+            bullet.rateOfFire -= 0.01f;
+
             //Current bullet being shot.
             //Used to shoot exactly one bullet at a time.
             static int currentBullet = 0;
 
-            if (rateOfFire <= 0.0f) { //The rateOfFire is done, so...
+            if (bullet.rateOfFire <= 0.0f) { //The our counter expired, so...
                 //Fire our bullets one at a time
                 currentBullet += 1;
                 //If we run out of bullets, re-set to prevent a crash
@@ -252,8 +255,8 @@ int main()
                 //Play our shoot sound
                 bulletShoot.play();
 
-                //Re-set the rateOfFire counter
-                rateOfFire = 0.5;
+                //Re-set the counter
+                bullet.rateOfFire = bullet.maxRateOfFire;
             }
         }
 

@@ -9,4 +9,3 @@ Bullet::Bullet()
     }
     bulletSprite.setTexture(bulletTexture);
 }
-

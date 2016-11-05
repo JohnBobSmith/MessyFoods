@@ -24,6 +24,14 @@ class Bullet
         //Every bullet does damage
         const int bulletDamage = 12;
 
+        //Cap our rate of fire
+        //Change this to change the rate of fire
+        const float maxRateOfFire = 0.52;
+
+        //Our working rate of fire which we
+        //can do stuff to
+        float rateOfFire = maxRateOfFire;
+
         //Self explanatory. Allow us to grab the texture/sprite width and height
         int getWidth() { return bulletTexture.getSize().x; }
         int getHeight() { return bulletTexture.getSize().y; }
