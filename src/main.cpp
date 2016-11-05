@@ -231,7 +231,7 @@ int main()
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             //Shoot only one bullet at a time with mouse down
             static float rateOfFire = 0.5f;
-            rateOfFire -= 0.01f;
+            rateOfFire -= 0.04f;
             //Current bullet being shot.
             //Used to shoot exactly one bullet at a time.
             static int currentBullet = 0;
@@ -503,8 +503,12 @@ int main()
         if (ui.isPlaying) {
             //Spawn a wave
             if (!isWaveSpawned) {
-                static int counter = 1;
                 //Spawn 1 wave at a time
+                static int counter = 1;
+                //Because our counter variable is not
+                //A constant expression, we must use
+                //if statements instead of case, or
+                //we get a compiler error.
                 if (counter == 1 && !isWaveSpawned) {
                     enemy.spawnEnemyWave(enemyVector, 1);
                     counter += 1;
@@ -512,7 +516,44 @@ int main()
                 }
                 if (counter == 2 && !isWaveSpawned) {
                     enemy.spawnEnemyWave(enemyVector, 2);
-                    counter = 1;
+                    counter += 1;
+                    isWaveSpawned = true;
+                }
+                if (counter == 3 && !isWaveSpawned) {
+                    enemy.spawnEnemyWave(enemyVector, 3);
+                    counter += 1;
+                    isWaveSpawned = true;
+                }
+                if (counter == 4 && !isWaveSpawned) {
+                    enemy.spawnEnemyWave(enemyVector, 4);
+                    counter += 1;
+                    isWaveSpawned = true;
+                }
+                if (counter == 5 && !isWaveSpawned) {
+                    enemy.spawnEnemyWave(enemyVector, 5);
+                    counter += 1;
+                    isWaveSpawned = true;
+                }
+                if (counter == 6 && !isWaveSpawned) {
+                    enemy.spawnEnemyWave(enemyVector, 6);
+                    counter += 1;
+                    isWaveSpawned = true;
+                }
+                if (counter == 7 && !isWaveSpawned) {
+                    enemy.spawnEnemyWave(enemyVector, 7);
+                    counter += 1;
+                    isWaveSpawned = true;
+                }
+                if (counter == 8 && !isWaveSpawned) {
+                    enemy.spawnEnemyWave(enemyVector, 8);
+                    counter += 1;
+                    isWaveSpawned = true;
+                }
+                //This triggers the default case from our
+                //spawn enemy function, on purpose.
+                if (counter == 9 && !isWaveSpawned) {
+                    enemy.spawnEnemyWave(enemyVector, 9);
+                    counter = 9; //Do not increment the counter anymore
                     isWaveSpawned = true;
                 }
             }

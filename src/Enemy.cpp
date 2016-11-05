@@ -50,7 +50,7 @@ bool Enemy::checkForWin(std::vector<Enemy*> tempEnemyVector)
 void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies)
 {
     //Position our enemies on the X axis
-    int counterX = 0;
+    static int counterX = 0;
     for (int i = 0; i < enemiesInPlay; ++i) {
         if (counterX == 9) {
             counterX = 0;
@@ -106,19 +106,43 @@ void Enemy::spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber)
 
     //Count our waves and add enemies accordingly
     static int newWaveNumber;
-    if (waveNumber <= 0) { //Error
+    switch (waveNumber)
+    {
+    case 0:
         newWaveNumber = 0;
-        std::cout << "Invalid entry for argument waveNumber in function spawnEnemyWave...\n";
-    }
-
-    if (waveNumber == 1) {
-        newWaveNumber = 9;
-    }
-
-    if (waveNumber == 2) {
+        std::cout << "Warning! waveNumber in function Enemy::spawnEnemyWave must be >= 1!\n";
+        break;
+    case 1:
+        newWaveNumber =9;
+        break;
+    case 2:
         newWaveNumber = 19;
+        break;
+    case 3:
+        newWaveNumber = 37;
+        break;
+    case 4:
+        newWaveNumber = 46;
+        break;
+    case 5:
+        newWaveNumber = 55;
+        break;
+    case 6:
+        newWaveNumber = 64;
+        break;
+    case 7:
+        newWaveNumber = 73;
+        break;
+    case 8:
+        newWaveNumber = 82;
+        break;
+    default:
+        //You won the game!
+        //Loop maxEnemies worth of enemies.
+        newWaveNumber = maxEnemies;
     }
 
+    //Current amount of enemies in use
     enemiesInPlay = newWaveNumber;
 
     //Spawn enemiesInPlay worth of enemies

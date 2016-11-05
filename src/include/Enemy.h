@@ -64,12 +64,14 @@ class Enemy
         sf::Texture enemyTexture;
 
         //For initializing, collision, and
-        //drawing purposes only!
-        const int maxEnemies = 90;
+        //drawing purposes only! Required
+        //because said purposes require constant
+        //values.
+        const int maxEnemies = 91;
 
-        //How many enemies are in play?
-        //Default 9, intended to be changeable
-        //from our functions.
+        //How many enemies to render, manipulate,
+        //re-set or use? Default 9, intended to
+        //be changeable from our functions.
         int enemiesInPlay = 9;
 
         //Constant movement speed
