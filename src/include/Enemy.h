@@ -27,7 +27,16 @@ class Enemy
         //enemies on screen.
         bool isCounted = false;
 
-        //The enemies base, modify-able health
+        //Did we spawn a wave of enemies?
+        bool isWaveSpawned = false;
+
+        //Constant movement speed
+        const float enemyVelocity = 5.0f;
+
+        //Constant max health of our enemies
+        const float maxEnemyHealth = 40.0f;
+
+        //The enemies modify-able health
         float enemyHealth = maxEnemyHealth;
 
         //Damage our objects based on N damage applied.
@@ -42,10 +51,7 @@ class Enemy
         int getMaxEnemies() { return maxEnemies; }
 
         //Get a relative number of enemies, for more local stuff
-        int getAdjustedMaxEnemies() { return enemiesInPlay;}
-
-        //Expose our velocity
-        float getVelocity() { return enemyVelocity; }
+        int getAdjustedMaxEnemies() { return enemiesInPlay; }
 
         //Expose the enemy max health for re-set purposes
         float getMaxEnemyHealth() { return maxEnemyHealth; }
@@ -66,20 +72,14 @@ class Enemy
         //For initializing, collision, and
         //drawing purposes only! Required
         //because said purposes require constant
-        //values.
+        //values. Not intended to be changed.
         const int maxEnemies = 91;
 
         //How many enemies to render, manipulate,
-        //re-set or use? Default 9, intended to
-        //be changeable from our functions.
+        //re-set or use? Default 9. Intended to
+        //be changeable from our functions but
+        //not by accident.
         int enemiesInPlay = 9;
-
-        //Constant movement speed
-        const float enemyVelocity = 5.0f;
-
-        //constant max health, used to
-        //re-set the enemies to full health
-        const float maxEnemyHealth = 50.0f;
 };
 
 #endif // ENEMY_H

@@ -14,9 +14,6 @@
 constexpr double pi_value() { return M_PI; }
 double pi = pi_value();
 
-//Are we in "debug" mode
-bool IS_DEBUG = false;
-
 //Calculate a quadratic equation
 sf::Vector2f calculateQuadratic(float n)
 {
@@ -78,15 +75,17 @@ int main()
     gameOverText.setCharacterSize(110);
     gameOverText.setColor(sf::Color::Red);
     gameOverText.setStyle(sf::Text::Regular);
+    //Center this text
     gameOverText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 3);
 
-    //Our space to start text
+    //Our space to start text or prompt
     sf::Text spaceTostartText;
     spaceTostartText.setFont(blockFont);
     spaceTostartText.setString("space bar to start");
     spaceTostartText.setCharacterSize(55);
     spaceTostartText.setColor(sf::Color::Yellow);
     spaceTostartText.setStyle(sf::Text::Regular);
+    //Position this text just below our win/loss text
     spaceTostartText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 2);
 
     //Our victory text
@@ -96,6 +95,7 @@ int main()
     winText.setCharacterSize(110);
     winText.setColor(sf::Color::Green);
     winText.setStyle(sf::Text::Regular);
+    //Center our text
     winText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 3);
 
     //Our background image
@@ -121,12 +121,12 @@ int main()
     //Position the laser at the bottom, because it shoots
     //from the sides of our moon hut
     laser.setPosition(0, SCREEN_HEIGHT - 50);
-    //a boolean value to determine when the lasers is in use or not
+    //a boolean value to determine when the laser is in use
     bool isLaserOn = false;
 
     //Our bullet object, and Bullet pointers
-    //Store our bullets in the vector
-    //WE MUST ALSO REMEMBER TO CLEAN THIS UP
+    //Store our bullets in an std::vector
+    //WE MUST REMEMBER TO CLEAN THIS UP
     Bullet bullet;
     std::vector<Bullet*> bulletVector;
     for (int i = 0; i < bullet.getMaxBullets(); ++i) {
@@ -135,8 +135,6 @@ int main()
         bulletVector[i]->positionX = SCREEN_WIDTH / 2;
         bulletVector[i]->positionY = SCREEN_HEIGHT - player.getHeight();
     }
-    //Did we spawn a wave of enemies?
-    bool isWaveSpawned = false;
 
     //Enemy object and pointers
     //CLEAN THIS UP
@@ -165,6 +163,7 @@ int main()
         shieldVector[counter]->positionY = y;
         shieldVector[counter]->shieldSprite.setPosition(shieldVector[counter]->positionX,
                                                         shieldVector[counter]->positionY);
+        //Do not overflow, because that would crash our game
         if (counter == shield.getMaxShieldBlocks() - 1) {
             break;
         }
@@ -184,10 +183,12 @@ int main()
     while(window.isOpen()) {
         while(window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                window.close();
+                //We pressed the titlebar's X button
+                window.close(); //Quit.
             }
             if (event.type == sf::Event::MouseMoved) {
-                //Calculate the mouse position first
+                //Calculate the mouse position
+                //every frame
                 mouseX = event.mouseMove.x;
                 mouseY = event.mouseMove.y;
                 mouseAngle = calculateMouseAngle(mouseX, mouseY,
@@ -201,14 +202,12 @@ int main()
             }
         } //End event loop
 
-        //Pressed escape, so...
+        //Return to the main menu at any time when we press escape.
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-            //Pause the game and return to main menu
             ui.isMainMenu = true;
         }
 
-        //Mouse down and moved events
-        //Shoot with left mouse
+        //Mouse down event. Shoot with left mouse
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             //Our rate of fire. Subtract 0.01f here always.
             //Do not change this value. Instead, adjust
@@ -229,8 +228,8 @@ int main()
                 //Allow for our bullet to be rendered, and set the trajectory
                 //According to where the mouse was clicked.
                 bulletVector[currentBullet]->isActive = true;
-                bulletVector[currentBullet]->velocityX = bullet.getConstantVelocity() * (cos(mouseAngle * pi / 180));
-                bulletVector[currentBullet]->velocityY = bullet.getConstantVelocity() * (sin(mouseAngle * pi / 180));
+                bulletVector[currentBullet]->velocityX = bullet.bulletVelocity * (cos(mouseAngle * pi / 180));
+                bulletVector[currentBullet]->velocityY = bullet.bulletVelocity * (sin(mouseAngle * pi / 180));
 
                 //Play our shoot sound
                 bulletShoot.play();
@@ -240,7 +239,7 @@ int main()
             }
         }
 
-        //Mouse right event
+        //Mouse right event. Fire our laser.
         if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
             isLaserOn = true;
         }
@@ -249,7 +248,7 @@ int main()
 
         //Handle our music here as this seems
         //to be the only place it works...
-        //Not in the main menu, mute music
+        //If we are not in the main menu, mute music
         if (!ui.isMainMenu) {
             music.setVolume(0);
         } else {
@@ -281,12 +280,17 @@ int main()
 
         //Check for enemy collisions against the player
         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+            //The player is assumed to be alive or we
+            //would not be playing.
             if (!enemyVector[i]->isDead) {
+                //Slight offset on the Y collision to make it
+                //look like the enemy is actually hitting the player hard
                 if (collisionbox.checkAABBcollision(player.playerSprite.getPosition().x - player.getWidth() / 2,
                                                     player.playerSprite.getPosition().y - player.getHeight() / 2 + 30,
                                                     player.getWidth(), player.getHeight(),
                                                     enemyVector[i]->positionX, enemyVector[i]->positionY,
                                                     enemy.getWidth(), enemy.getHeight())) {
+
                     //Kill the enemy, damage the player
                     enemyVector[i]->isDead = true;
                     player.playerHealth -= 10;
@@ -305,25 +309,26 @@ int main()
                                                         enemy.getWidth(), enemy.getHeight())) {
 
                         //Take out a shield chunk and damage the enemy,
-                        //Thus allowing it to take out more shield
-                        //chunks thus destroying our shield in a cool way.
+                        //Thus allowing the enemy to take out more shield
+                        //chunks, ultimately destroying our shield in a cool way.
                         shieldVector[i]->applyDamage(999);
-                        enemyVector[j]->applyDamage(30.0);
+                        enemyVector[j]->applyDamage(enemy.enemyHealth / 2);
                     }
                 }
             }
         }
 
         //Check collision of enemies against laser
-        if (isLaserOn) {
-            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+        for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+            //Ensure we can damage our enemies with the laser
+            if (isLaserOn && !enemyVector[i]->isDead) {
                 if (collisionbox.checkAABBcollision(laser.getPosition().x, laser.getPosition().y,
                                                 laserTexture.getSize().x, laserTexture.getSize().y,
                                                 enemyVector[i]->positionX, enemyVector[i]->positionY,
                                                 enemy.getWidth(), enemy.getHeight())) {
 
                     //Slowly damage the enemy, for
-                    //a more realistic effect
+                    //a more realistic laser burn effect
                     enemyVector[i]->applyDamage(0.1);
                 }
             }
@@ -333,7 +338,7 @@ int main()
         //If so, damage the enemy and remove the bullet
         for (int i = 0; i < bullet.getMaxBullets(); ++i) {
             for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
-                //Ensure our bullet is actually capable of damaging our objects
+                //Ensure our bullet is actually capable of damaging our enemies
                 if (bulletVector[i]->isActive && !enemyVector[j]->isDead) {
                     if (collisionbox.checkAABBcollision(bulletVector[i]->positionX, bulletVector[i]->positionY,
                                                         bullet.getWidth(), bullet.getHeight(),
@@ -357,7 +362,7 @@ int main()
         //If the bullets are dead...
         for (int i = 0; i < bullet.getMaxBullets(); ++i) {
             if (!bulletVector[i]->isActive) {
-                //re-set their initial positions
+                //re-set their initial positions,
                 //so they can be used again
                 bulletVector[i]->positionX = SCREEN_WIDTH / 2;
                 bulletVector[i]->positionY = SCREEN_HEIGHT - player.getHeight();
@@ -365,7 +370,7 @@ int main()
         }
 
         //If an enemy misses and goes off screen, kill it too
-        //Instant loss, colony destroyed!
+        //This is an instant loss! Your colony was destroyed!
         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
             if (enemyVector[i]->positionY > SCREEN_HEIGHT) {
                 enemyVector[i]->isDead = true;
@@ -375,9 +380,15 @@ int main()
         }
 
         //Win checking
-        if (isWaveSpawned) {
+        //Check for a wave only if there are
+        //enemies/waves to check against. Fixes
+        //some weird bugs.
+        if (enemy.isWaveSpawned) {
             if (enemy.checkForWin(enemyVector)) {
+                //We won, :D
                 ui.isWin = true;
+                //Display our win text and what not.
+                //Therefore, we are not playing.
                 ui.isPlaying = false;
             }
         }
@@ -388,22 +399,6 @@ int main()
         window.clear(sf::Color::Black);
         //Always draw the background
         window.draw(background);
-        //Allways allow for the debug squares
-        //Draw our debug squares
-        if (IS_DEBUG) {
-            sf::RectangleShape square;
-            square.setFillColor(sf::Color::Yellow);
-            square.setSize(sf::Vector2f(50, 50));
-            sf::Vector2f squarePath;
-            for (float i = -800.0f; i <= 800.0f; i += 20.0f) {
-                squarePath.x = calculateQuadratic(i).x;
-                squarePath.y = calculateQuadratic(i).y;
-                square.setPosition(squarePath.x, squarePath.y);
-                //Draw our debug square
-                window.draw(square);
-            }
-        }
-
         //START OF UI EVENTS
         //Must be inside the draw loop,
         //because we are drawing/manipulating
@@ -457,13 +452,13 @@ int main()
                 }
             }
 
-            //We press the help button
+            //If we press the help button...
             if (collisionbox.checkAABBcollision(ui.helpButton.getPosition().x,
                                     ui.helpButton.getPosition().y,
                                     ui.getWidth(), ui.getHeight(),
                                     mouseX, mouseY, mouseWidth, mouseHeight)) {
 
-                //Turn the page on
+                //...turn the page on
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     ui.isHelpDisplayed = true;
                 }
@@ -484,67 +479,67 @@ int main()
 
         //Running our actual game
         if (ui.isPlaying) {
-            //Spawn a wave
-            if (!isWaveSpawned) {
+            //Enemy wave spawning logic
+            if (!enemy.isWaveSpawned) {
                 //Spawn 1 wave at a time
                 static int counter = 1;
                 //Because our counter variable is not
                 //A constant expression, we must use
                 //if statements instead of case, or
                 //we get a compiler error.
-                if (counter == 1 && !isWaveSpawned) {
+                if (counter == 1 && !enemy.isWaveSpawned) {
                     enemy.spawnEnemyWave(enemyVector, 1);
                     counter += 1;
-                    isWaveSpawned = true;
+                    enemy.isWaveSpawned = true;
                 }
-                if (counter == 2 && !isWaveSpawned) {
+                if (counter == 2 && !enemy.isWaveSpawned) {
                     enemy.spawnEnemyWave(enemyVector, 2);
                     counter += 1;
-                    isWaveSpawned = true;
+                    enemy.isWaveSpawned = true;
                 }
-                if (counter == 3 && !isWaveSpawned) {
+                if (counter == 3 && !enemy.isWaveSpawned) {
                     enemy.spawnEnemyWave(enemyVector, 3);
                     counter += 1;
-                    isWaveSpawned = true;
+                    enemy.isWaveSpawned = true;
                 }
-                if (counter == 4 && !isWaveSpawned) {
+                if (counter == 4 && !enemy.isWaveSpawned) {
                     enemy.spawnEnemyWave(enemyVector, 4);
                     counter += 1;
-                    isWaveSpawned = true;
+                    enemy.isWaveSpawned = true;
                 }
-                if (counter == 5 && !isWaveSpawned) {
+                if (counter == 5 && !enemy.isWaveSpawned) {
                     enemy.spawnEnemyWave(enemyVector, 5);
                     counter += 1;
-                    isWaveSpawned = true;
+                    enemy.isWaveSpawned = true;
                 }
-                if (counter == 6 && !isWaveSpawned) {
+                if (counter == 6 && !enemy.isWaveSpawned) {
                     enemy.spawnEnemyWave(enemyVector, 6);
                     counter += 1;
-                    isWaveSpawned = true;
+                    enemy.isWaveSpawned = true;
                 }
-                if (counter == 7 && !isWaveSpawned) {
+                if (counter == 7 && !enemy.isWaveSpawned) {
                     enemy.spawnEnemyWave(enemyVector, 7);
                     counter += 1;
-                    isWaveSpawned = true;
+                    enemy.isWaveSpawned = true;
                 }
-                if (counter == 8 && !isWaveSpawned) {
+                if (counter == 8 && !enemy.isWaveSpawned) {
                     enemy.spawnEnemyWave(enemyVector, 8);
                     counter += 1;
-                    isWaveSpawned = true;
+                    enemy.isWaveSpawned = true;
                 }
                 //This triggers the default case from our
                 //spawn enemy function, on purpose.
-                if (counter == 9 && !isWaveSpawned) {
+                if (counter == 9 && !enemy.isWaveSpawned) {
                     enemy.spawnEnemyWave(enemyVector, 9);
                     counter = 9; //Do not increment the counter anymore
-                    isWaveSpawned = true;
+                    enemy.isWaveSpawned = true;
                 }
             }
 
             //Draw the enemies
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 if (!enemyVector[i]->isDead) { //The enemy is NOT dead...
-                    enemyVector[i]->velocityY = enemyVector[i]->getVelocity(); //Gravity on the Y axis
+                    enemyVector[i]->velocityY = enemyVector[i]->enemyVelocity; //Gravity on the Y axis
                     enemyVector[i]->positionX += enemyVector[i]->velocityX * timeStep;
                     enemyVector[i]->positionY += enemyVector[i]->velocityY * timeStep;
                     enemyVector[i]->enemySprite.setPosition(enemyVector[i]->positionX, enemyVector[i]->positionY);
@@ -606,28 +601,23 @@ int main()
                 //Space bar to re-start event
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
                     //Spawn more enemies
-                    isWaveSpawned = false;
-
-                    //Turn everything back on...
-                    for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-                        shieldVector[i]->isShieldUp = true;
-                    }
+                    enemy.isWaveSpawned = false;
 
                     //Re-set the enemy parameters
                     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                         enemyVector[i]->enemyHealth = enemy.getMaxEnemyHealth();
                     }
 
-                    //only re-set enemies that need re-setting
+                    //Re-set only the dead enemies that need re-setting
+                    //Fixes bugs regarding how enemies are placed/spawned
                     for (int i = 0; i < enemy.getAdjustedMaxEnemies(); ++i) {
                         enemyVector[i]->isDead = false;
                     }
 
-                    //Reset the player's health bar
-                    player.healthBar.setFillColor(sf::Color::Green);
-
-                    //Reset the player health
-                    player.playerHealth = player.playerMaxHealth;
+                    //Enable the shields
+                    for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+                        shieldVector[i]->isShieldUp = true;
+                    }
 
                     //Re-set the win
                     ui.isWin = false;
