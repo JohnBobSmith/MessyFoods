@@ -35,7 +35,7 @@ bool Enemy::checkForWin(std::vector<Enemy*> tempEnemyVector)
             counter -= 1;
         }
         if (counter <= 0) {
-            //Re-set all counter bools
+            //Re-set all counter parameters
             for (int j = 0; j < maxEnemies; ++j) {
                 tempEnemyVector[j]->isCounted = false;
             }

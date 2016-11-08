@@ -260,6 +260,15 @@ int main()
             player.playerHealth -= 0.025;
         }
 
+        //Win checking
+        //This is done right away, so that if this
+        //returns false, checking for a loss still occurs
+        if (enemy.checkForWin(enemyVector)) {
+            //We won, :D
+            ui.isWin = true;
+            ui.isPlaying = false;
+        }
+
         //Check the status of our health bar
         //Starts off as green by default, we
         //don't need to check that here.
@@ -275,6 +284,7 @@ int main()
             //Setting this to false completely
             //stops the game, but wont exit.
             //Game over, you died. ;(
+            ui.isWin = false;
             ui.isPlaying = false;
         }
 
@@ -369,26 +379,11 @@ int main()
             }
         }
 
-        //If an enemy misses and goes off screen, kill it too
-        //This is an instant loss! Your colony was destroyed!
+        //If an enemy goes off screen, instant loss. Colony destroyed!
         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
             if (enemyVector[i]->positionY > SCREEN_HEIGHT) {
-                enemyVector[i]->isDead = true;
+                enemyVector[i]->isDead = false;
                 ui.isWin = false;
-                ui.isPlaying = false;
-            }
-        }
-
-        //Win checking
-        //Check for a wave only if there are
-        //enemies/waves to check against. Fixes
-        //some weird bugs.
-        if (enemy.isWaveSpawned) {
-            if (enemy.checkForWin(enemyVector)) {
-                //We won, :D
-                ui.isWin = true;
-                //Display our win text and what not.
-                //Therefore, we are not playing.
                 ui.isPlaying = false;
             }
         }
@@ -574,10 +569,14 @@ int main()
 
             //Draw our player's health bar
             window.draw(player.healthBar);
-        } else {
+        } else { //ui.isPlaying is now FALSE
             //Kill everything because we are no longer playing
             for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
                 shieldVector[i]->isShieldUp = false;
+            }
+
+            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                enemyVector[i]->isDead = true;
             }
 
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
@@ -588,42 +587,47 @@ int main()
             if (!ui.isMainMenu) {
                 //If we won..
                 if (ui.isWin) {
-                    //Game victory text
+                    //Game victory text and prompt
                     window.draw(winText);
-                    //Space to start prompt
                     window.draw(spaceTostartText);
-                } else {
+                } else { //We have lost
                     //Game over text and prompt
+                    spaceTostartText.setString("spacebar to quit");
                     window.draw(gameOverText);
                     window.draw(spaceTostartText);
                 }
 
                 //Space bar to re-start event
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-                    //Spawn more enemies
-                    enemy.isWaveSpawned = false;
+                    //Do the things that every win would require
+                    if (ui.isWin) {
+                        //Spawn more enemies
+                        enemy.isWaveSpawned = false;
 
-                    //Re-set the enemy parameters
-                    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                        enemyVector[i]->enemyHealth = enemy.getMaxEnemyHealth();
+                        //Re-set the enemy parameters
+                        for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                            enemyVector[i]->enemyHealth = enemy.getMaxEnemyHealth();
+                        }
+
+                        //Re-set our enemies
+                        for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                            enemyVector[i]->isDead = false;
+                        }
+
+                        //Enable the shields
+                        for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+                            shieldVector[i]->isShieldUp = true;
+                        }
+
+                        //Start playing again
+                        ui.isPlaying = true;
+
+                        //Always re-set the win variable
+                        ui.isWin = false;
+                    } else { //We didnt win, must have lost
+                        //Pressing spacebar should cause an exit
+                        window.close();
                     }
-
-                    //Re-set only the dead enemies that need re-setting
-                    //Fixes bugs regarding how enemies are placed/spawned
-                    for (int i = 0; i < enemy.getAdjustedMaxEnemies(); ++i) {
-                        enemyVector[i]->isDead = false;
-                    }
-
-                    //Enable the shields
-                    for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-                        shieldVector[i]->isShieldUp = true;
-                    }
-
-                    //Re-set the win
-                    ui.isWin = false;
-
-                    //Start playing again
-                    ui.isPlaying = true;
                 }
             }
         }
