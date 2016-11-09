@@ -51,7 +51,7 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies)
 {
     //Position our enemies on the X axis
     static int counterX = 0;
-    for (int i = 0; i < enemiesInPlay; ++i) {
+    for (int i = 0; i < maximumEnemies; ++i) {
         if (counterX == 9) {
             counterX = 0;
             //Reset the width
@@ -61,7 +61,7 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies)
     }
 
     //Setup the y values properly
-    for (int i = 0; i < enemiesInPlay; ++i) {
+    for (int i = 0; i < maximumEnemies; ++i) {
         static int ammountToMove = 0;
         tempEnemyVector[i]->positionY = ammountToMove;
         if (i == (9)) {
@@ -113,28 +113,28 @@ void Enemy::spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber)
         std::cout << "Warning! waveNumber in function Enemy::spawnEnemyWave must be >= 1!\n";
         break;
     case 1:
-        newWaveNumber =9;
+        newWaveNumber = 9;
         break;
     case 2:
-        newWaveNumber = 19;
+        newWaveNumber = 18;
         break;
     case 3:
-        newWaveNumber = 37;
+        newWaveNumber = 27;
         break;
     case 4:
-        newWaveNumber = 46;
+        newWaveNumber = 36;
         break;
     case 5:
-        newWaveNumber = 55;
+        newWaveNumber = 45;
         break;
     case 6:
-        newWaveNumber = 64;
+        newWaveNumber = 54;
         break;
     case 7:
-        newWaveNumber = 73;
+        newWaveNumber = 63;
         break;
     case 8:
-        newWaveNumber = 82;
+        newWaveNumber = 72;
         break;
     default:
         //You won the game!

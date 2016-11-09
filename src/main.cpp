@@ -382,7 +382,6 @@ int main()
         //If an enemy goes off screen, instant loss. Colony destroyed!
         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
             if (enemyVector[i]->positionY > SCREEN_HEIGHT) {
-                enemyVector[i]->isDead = false;
                 ui.isWin = false;
                 ui.isPlaying = false;
             }
@@ -604,13 +603,13 @@ int main()
                         //Spawn more enemies
                         enemy.isWaveSpawned = false;
 
-                        //Re-set the enemy parameters
+                        //Reset the enemy parameters
                         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                             enemyVector[i]->enemyHealth = enemy.getMaxEnemyHealth();
                         }
 
-                        //Re-set our enemies
-                        for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+                        //only reset enemies that need re-setting
+                        for (int i = 0; i < enemy.getAdjustedMaxEnemies(); ++i) {
                             enemyVector[i]->isDead = false;
                         }
 
