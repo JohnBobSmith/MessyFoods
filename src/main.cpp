@@ -609,7 +609,7 @@ int main()
                         }
 
                         //only reset enemies that need re-setting
-                        for (int i = 0; i < enemy.getAdjustedMaxEnemies(); ++i) {
+                        for (int i = 0; i < enemy.getLocalMaxEnemies(); ++i) {
                             enemyVector[i]->isDead = false;
                         }
 

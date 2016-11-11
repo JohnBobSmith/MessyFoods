@@ -28,18 +28,18 @@ bool Enemy::checkForWin(std::vector<Enemy*> tempEnemyVector)
 {
     //If we win where a win is defined by
     //no more enemies in play
-    static int counter = maxEnemies;
-    for (int i = 0; i < maxEnemies; ++i) {
+    static int counter = localEnemyCount;
+    for (int i = 0; i < localEnemyCount; ++i) {
         if (tempEnemyVector[i]->isDead && !tempEnemyVector[i]->isCounted) {
             tempEnemyVector[i]->isCounted = true;
             counter -= 1;
         }
         if (counter <= 0) {
             //Re-set all counter parameters
-            for (int j = 0; j < maxEnemies; ++j) {
+            for (int j = 0; j < localEnemyCount; ++j) {
                 tempEnemyVector[j]->isCounted = false;
             }
-            counter = maxEnemies;
+            counter = localEnemyCount;
             return true;
         }
     }
@@ -47,21 +47,21 @@ bool Enemy::checkForWin(std::vector<Enemy*> tempEnemyVector)
 }
 
 //Reset the asteroids positions, WIP wave-based system
-void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies)
+void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector)
 {
     //Position our enemies on the X axis
-    static int counterX = 0;
-    for (int i = 0; i < maximumEnemies; ++i) {
-        if (counterX == 9) {
-            counterX = 0;
-            //Reset the width
+    for (int i = 0; i < localEnemyCount; ++i) {
+        static int counter = 0;
+        tempEnemyVector[i]->positionX = counter * 90;
+        counter += 1;
+        if (counter >= 9) {
+            counter = 0;
         }
-        tempEnemyVector[i]->positionX = counterX * 90;
-        counterX += 1;
+        std::cout << "X: " << tempEnemyVector[i]->positionX << "\n";
     }
 
     //Setup the y values properly
-    for (int i = 0; i < maximumEnemies; ++i) {
+    for (int i = 0; i < localEnemyCount; ++i) {
         static int ammountToMove = 0;
         tempEnemyVector[i]->positionY = ammountToMove;
         if (i == (9)) {
@@ -88,68 +88,55 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies)
         if (i == (72)) {
             ammountToMove = -800;
         }
-        if (i == (81)) {
-            ammountToMove = -900;
-        }
-        if (i == (90)) {
-            ammountToMove = -1000;
-        }
+        std::cout << "Y: " << tempEnemyVector[i]->positionY << "\n";
     }
 }
 
 void Enemy::spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber)
 {
-    //Disable all enemies to start
-    for (int i = 0; i < enemiesInPlay; ++i) {
-        tempEnemyVector[i]->isDead = true;
-    }
-
     //Count our waves and add enemies accordingly
-    static int newWaveNumber;
     switch (waveNumber)
     {
     case 0:
-        newWaveNumber = 0;
+        localEnemyCount = 0;
         std::cout << "Warning! waveNumber in function Enemy::spawnEnemyWave must be >= 1!\n";
         break;
     case 1:
-        newWaveNumber = 9;
+        localEnemyCount = 9;
         break;
     case 2:
-        newWaveNumber = 18;
+        localEnemyCount = 18;
         break;
     case 3:
-        newWaveNumber = 27;
+        localEnemyCount = 27;
         break;
     case 4:
-        newWaveNumber = 36;
+        localEnemyCount = 36;
         break;
     case 5:
-        newWaveNumber = 45;
+        localEnemyCount = 45;
         break;
     case 6:
-        newWaveNumber = 54;
+        localEnemyCount = 54;
         break;
     case 7:
-        newWaveNumber = 63;
+        localEnemyCount = 63;
         break;
     case 8:
-        newWaveNumber = 72;
+        localEnemyCount = 72;
         break;
     default:
-        //You won the game!
         //Loop maxEnemies worth of enemies.
-        newWaveNumber = maxEnemies;
+        localEnemyCount = maxEnemies;
     }
 
-    //Current amount of enemies in use
-    enemiesInPlay = newWaveNumber;
-
-    //Spawn enemiesInPlay worth of enemies
-    for (int i = 0; i < enemiesInPlay; ++i) {
+    //Spawn our enemies
+    for (int i = 0; i < localEnemyCount; ++i) {
         tempEnemyVector[i]->isDead = false;
     }
 
     //position them
-    resetEnemy(tempEnemyVector, enemiesInPlay);
+    resetEnemy(tempEnemyVector);
+
+    std::cout << "WAVE NUMBER: " << waveNumber << "\n";
 }

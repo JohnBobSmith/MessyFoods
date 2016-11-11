@@ -50,11 +50,11 @@ class Enemy
         //for initialization, collision, drawing only!
         int getMaxEnemies() { return maxEnemies; }
 
-        //Get a relative number of enemies, for more local stuff
-        int getAdjustedMaxEnemies() { return enemiesInPlay; }
-
         //Expose the enemy max health for re-set purposes
         float getMaxEnemyHealth() { return maxEnemyHealth; }
+
+        //A relative enemy remaining count, for spawning waves
+        int getLocalMaxEnemies() { return localEnemyCount; }
 
         //Did we win?
         bool checkForWin(std::vector<Enemy*> tempEnemyVector);
@@ -63,7 +63,7 @@ class Enemy
         void spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber);
 
         //Reset and respawn our enemies
-        void resetEnemy(std::vector<Enemy*> tempEnemyVector, int maximumEnemies);
+        void resetEnemy(std::vector<Enemy*> tempEnemyVector);
 
     private:
         //The enemies texture
@@ -75,11 +75,9 @@ class Enemy
         //values. Not intended to be changed.
         const int maxEnemies = 91;
 
-        //How many enemies to render, manipulate,
-        //re-set or use? Default 9. Intended to
-        //be changeable from our functions but
-        //not by accident.
-        int enemiesInPlay = 9;
+        //How many enemies are playing/spawned
+        //or should be spawn, those type of things.
+        int localEnemyCount = 9;
 };
 
 #endif // ENEMY_H
