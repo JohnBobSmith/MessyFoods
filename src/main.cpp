@@ -260,15 +260,6 @@ int main()
             player.playerHealth -= 0.025;
         }
 
-        //Win checking
-        //This is done right away, so that if this
-        //returns false, checking for a loss still occurs
-        if (enemy.checkForWin(enemyVector)) {
-            //We won, :D
-            ui.isWin = true;
-            ui.isPlaying = false;
-        }
-
         //Check the status of our health bar
         //Starts off as green by default, we
         //don't need to check that here.
@@ -528,6 +519,15 @@ int main()
                     counter = 9; //Do not increment the counter anymore
                     enemy.isWaveSpawned = true;
                 }
+            }
+
+            //Win checking
+            //This is done right away, so that if this
+            //returns false, checking for a loss still occurs
+            if (enemy.checkForWin(enemyVector)) {
+                //We won, :D
+                ui.isWin = true;
+                ui.isPlaying = false;
             }
 
             //Draw the enemies

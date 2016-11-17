@@ -28,18 +28,15 @@ bool Enemy::checkForWin(std::vector<Enemy*> tempEnemyVector)
 {
     //If we win where a win is defined by
     //no more enemies in play
-    static int counter = localEnemyCount;
+    static int enemyCount = localEnemyCount;
     for (int i = 0; i < localEnemyCount; ++i) {
         if (tempEnemyVector[i]->isDead && !tempEnemyVector[i]->isCounted) {
+            std::cout << "Enemy " << tempEnemyVector[i]->isDead << " and is not counted " << tempEnemyVector[i]->isCounted << "\n";
             tempEnemyVector[i]->isCounted = true;
-            counter -= 1;
+            enemyCount -= 1;
         }
-        if (counter <= 0) {
-            //Re-set all counter parameters
-            for (int j = 0; j < localEnemyCount; ++j) {
-                tempEnemyVector[j]->isCounted = false;
-            }
-            counter = localEnemyCount;
+        if (enemyCount <= 0) {
+            enemyCount = localEnemyCount;
             return true;
         }
     }
@@ -52,42 +49,42 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector)
     //Position our enemies on the X axis
     for (int i = 0; i < localEnemyCount; ++i) {
         static int counter = 0;
-        tempEnemyVector[i]->positionX = counter * 90;
-        counter += 1;
-        if (counter >= 9) {
+        if (counter == 9) {
             counter = 0;
         }
-        std::cout << "X: " << tempEnemyVector[i]->positionX << "\n";
+        tempEnemyVector[i]->positionX = counter * 90;
+        counter += 1;
     }
 
     //Setup the y values properly
     for (int i = 0; i < localEnemyCount; ++i) {
+        std::cout << "The value of i: " << i << "\n";
         static int ammountToMove = 0;
-        tempEnemyVector[i]->positionY = ammountToMove;
-        if (i == (9)) {
+        if (i == 9) {
             ammountToMove = -100;
         }
-        if (i == (18)) {
+        if (i == 18) {
             ammountToMove = -200;
         }
-        if (i == (27)) {
+        if (i == 27) {
             ammountToMove = -300;
         }
-        if (i == (36)) {
+        if (i == 36) {
             ammountToMove = -400;
         }
-        if (i == (45)) {
+        if (i == 45) {
             ammountToMove = -500;
         }
-        if (i == (54)) {
+        if (i == 54) {
             ammountToMove = -600;
         }
-        if (i == (63)) {
+        if (i == 63) {
             ammountToMove = -700;
         }
-        if (i == (72)) {
+        if (i == 72) {
             ammountToMove = -800;
         }
+        tempEnemyVector[i]->positionY = ammountToMove;
         std::cout << "Y: " << tempEnemyVector[i]->positionY << "\n";
     }
 }
