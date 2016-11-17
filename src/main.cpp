@@ -52,13 +52,13 @@ int main()
 
     //Shoot sound
     sf::SoundBuffer buffer;
-    buffer.loadFromFile("../effects/shoot.wav");
+    buffer.loadFromFile("../audio/sfx/shoot.wav");
     sf::Sound bulletShoot;
     bulletShoot.setBuffer(buffer);
 
     //Our music
     sf::Music music;
-    music.openFromFile("../music/main_theme.wav");
+    music.openFromFile("../audio/music/main_theme.wav");
     //Loop it
     music.setLoop(true);
     //Play it
