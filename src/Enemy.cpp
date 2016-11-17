@@ -45,10 +45,12 @@ bool Enemy::checkForWin(std::vector<Enemy*> tempEnemyVector, int enemyCount)
                 numberOfLiveEnemies -= 1;
                 //Count the enemy only once
                 tempEnemyVector[i]->isCounted = true;
-                std::cout << numberOfLiveEnemies << "\n";
             }
             if (numberOfLiveEnemies <= 0) {
-                //Re-set the counters
+                //Re-set the counter. A value of nine
+                //is added because of the offset
+                //between getting a new value and
+                //actually being able to use it.
                 numberOfLiveEnemies = enemyCount + 9;
                 for (int j = 0; j < maxEnemies; ++j) {
                     //No longer counted
@@ -80,8 +82,10 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector)
 
     //Setup the y values properly
     for (int i = 0; i < localEnemyCount; ++i) {
-        std::cout << "The value of i: " << i << "\n";
         static int ammountToMove = 0;
+        if (i == 0) {
+            ammountToMove = 0;
+        }
         if (i == 9) {
             ammountToMove = -100;
         }
@@ -107,7 +111,7 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector)
             ammountToMove = -800;
         }
         tempEnemyVector[i]->positionY = ammountToMove;
-        std::cout << "Y: " << tempEnemyVector[i]->positionY << "\n";
+        std::cout << "i = " << i << " Y = " << tempEnemyVector[i]->positionY << "\n";
     }
 }
 
