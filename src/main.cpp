@@ -51,10 +51,17 @@ int main()
     sf::Event event;
 
     //Shoot sound
-    sf::SoundBuffer buffer;
-    buffer.loadFromFile("../audio/sfx/shoot.wav");
+    sf::SoundBuffer shootBuffer;
+    shootBuffer.loadFromFile("../audio/sfx/shoot.wav");
     sf::Sound bulletShoot;
-    bulletShoot.setBuffer(buffer);
+    bulletShoot.setBuffer(shootBuffer);
+
+    //Laser sound
+    sf::SoundBuffer laserBuffer;
+    laserBuffer.loadFromFile("../audio/sfx/laser.wav");
+    sf::Sound laserSound;
+    laserSound.setBuffer(laserBuffer);
+
 
     //Our music
     sf::Music music;
@@ -256,8 +263,10 @@ int main()
         }
 
         //If the laser is on, drain the player health
+        //Also play the sound
         if (isLaserOn) {
             player.playerHealth -= 0.025;
+            laserSound.play();
         }
 
         //Check the status of our health bar
