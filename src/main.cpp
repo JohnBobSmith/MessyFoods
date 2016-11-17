@@ -524,7 +524,7 @@ int main()
             //Win checking
             //This is done right away, so that if this
             //returns false, checking for a loss still occurs
-            if (enemy.checkForWin(enemyVector)) {
+            if (enemy.checkForWin(enemyVector, enemy.localEnemyCount)) {
                 //We won, :D
                 ui.isWin = true;
                 ui.isPlaying = false;
@@ -609,7 +609,7 @@ int main()
                         }
 
                         //only reset enemies that need re-setting
-                        for (int i = 0; i < enemy.getLocalMaxEnemies(); ++i) {
+                        for (int i = 0; i < enemy.localEnemyCount; ++i) {
                             enemyVector[i]->isDead = false;
                         }
 

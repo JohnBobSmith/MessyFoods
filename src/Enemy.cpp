@@ -24,22 +24,44 @@ void Enemy::applyDamage(float damage)
     }
 }
 
-bool Enemy::checkForWin(std::vector<Enemy*> tempEnemyVector)
+bool Enemy::checkForWin(std::vector<Enemy*> tempEnemyVector, int enemyCount)
 {
-    //If we win where a win is defined by
-    //no more enemies in play
-    static int enemyCount = localEnemyCount;
-    for (int i = 0; i < localEnemyCount; ++i) {
-        if (tempEnemyVector[i]->isDead && !tempEnemyVector[i]->isCounted) {
-            std::cout << "Enemy " << tempEnemyVector[i]->isDead << " and is not counted " << tempEnemyVector[i]->isCounted << "\n";
-            tempEnemyVector[i]->isCounted = true;
-            enemyCount -= 1;
-        }
-        if (enemyCount <= 0) {
-            enemyCount = localEnemyCount;
-            return true;
+    //Check for a win, where a win is defined as:
+    //1) The enemy is not in play (dead)
+    //2) There are no more living enemies remaining
+    //      (did we kill ALL the enemies?)
+    //3) The enemy was once in play, otherwise all idle enemies
+    //      would be falsely counted
+
+    //How many enemies are living?
+    static int numberOfLiveEnemies = enemyCount;
+    //For all possible enemies in play...
+    for (int i = 0; i < maxEnemies; ++i) {
+        //If the enemy is spawned...
+        if (tempEnemyVector[i]->isSpawned) {
+            //If the enemy is dead and not counted...
+            if (tempEnemyVector[i]->isDead && !tempEnemyVector[i]->isCounted) {
+                //Update the counter
+                numberOfLiveEnemies -= 1;
+                //Count the enemy only once
+                tempEnemyVector[i]->isCounted = true;
+                std::cout << numberOfLiveEnemies << "\n";
+            }
+            if (numberOfLiveEnemies <= 0) {
+                //Re-set the counters
+                numberOfLiveEnemies = enemyCount + 9;
+                for (int j = 0; j < maxEnemies; ++j) {
+                    //No longer counted
+                    tempEnemyVector[j]->isCounted = false;
+                    //No longer spawned
+                    tempEnemyVector[j]->isSpawned = false;
+                }
+                //We won, return true
+                return true;
+            }
         }
     }
+    //We did not win, for any reason. Return false
     return false;
 }
 
@@ -130,6 +152,7 @@ void Enemy::spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber)
     //Spawn our enemies
     for (int i = 0; i < localEnemyCount; ++i) {
         tempEnemyVector[i]->isDead = false;
+        tempEnemyVector[i]->isSpawned = true;
     }
 
     //position them

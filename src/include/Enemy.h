@@ -21,10 +21,11 @@ class Enemy
         //Is the enemy alive?
         bool isDead = true;
 
-        //Is the enemy counted?
-        //Used to assist with win checking,
-        //where a win is defined as no more
-        //enemies on screen.
+        //Is an individual enemy spawned?
+        bool isSpawned = false;
+
+        //Is the enemy counted,
+        //in regards to win checking?
         bool isCounted = false;
 
         //Did we spawn a wave of enemies?
@@ -35,6 +36,10 @@ class Enemy
 
         //Constant max health of our enemies
         const float maxEnemyHealth = 40.0f;
+
+        //How many enemies are playing/spawned
+        //or should be spawn, those type of things.
+        int localEnemyCount;
 
         //The enemies modify-able health
         float enemyHealth = maxEnemyHealth;
@@ -53,11 +58,8 @@ class Enemy
         //Expose the enemy max health for re-set purposes
         float getMaxEnemyHealth() { return maxEnemyHealth; }
 
-        //A relative enemy remaining count, for spawning waves
-        int getLocalMaxEnemies() { return localEnemyCount; }
-
         //Did we win?
-        bool checkForWin(std::vector<Enemy*> tempEnemyVector);
+        bool checkForWin(std::vector<Enemy*> tempEnemyVector, int enemyCount);
 
         //Spawn an enemy wave
         void spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber);
@@ -74,10 +76,6 @@ class Enemy
         //because said purposes require constant
         //values. Not intended to be changed.
         const int maxEnemies = 91;
-
-        //How many enemies are playing/spawned
-        //or should be spawn, those type of things.
-        int localEnemyCount = 9;
 };
 
 #endif // ENEMY_H
