@@ -62,6 +62,17 @@ int main()
     sf::Sound laserSound;
     laserSound.setBuffer(laserBuffer);
 
+    //Explosion sound
+    sf::SoundBuffer explosionBuffer;
+    explosionBuffer.loadFromFile("../audio/sfx/explosion.wav");
+    sf::Sound explosionSound;
+    explosionSound.setBuffer(explosionBuffer);
+
+    //Zap sound, for the shield
+    sf::SoundBuffer zapBuffer;
+    zapBuffer.loadFromFile("../audio/sfx/zap.wav");
+    sf::Sound zapSound;
+    zapSound.setBuffer(zapBuffer);
 
     //Our music
     sf::Music music;
@@ -257,9 +268,9 @@ int main()
         //to be the only place it works...
         //If we are not in the main menu, mute music
         if (!ui.isMainMenu) {
-            music.setVolume(0);
+            music.setVolume(50);
         } else {
-            music.setVolume(100);
+            music.setVolume(75);
         }
 
         //If the laser is on, drain the player health
@@ -302,6 +313,7 @@ int main()
                                                     enemy.getWidth(), enemy.getHeight())) {
 
                     //Kill the enemy, damage the player
+                    explosionSound.play();
                     enemyVector[i]->isDead = true;
                     player.playerHealth -= 10;
                 }
@@ -323,6 +335,9 @@ int main()
                         //chunks, ultimately destroying our shield in a cool way.
                         shieldVector[i]->applyDamage(999);
                         enemyVector[j]->applyDamage(enemy.enemyHealth / 2);
+                        if (enemyVector[j]->isDead) {
+                            zapSound.play();
+                        }
                     }
                 }
             }
@@ -340,6 +355,9 @@ int main()
                     //Slowly damage the enemy, for
                     //a more realistic laser burn effect
                     enemyVector[i]->applyDamage(0.1);
+                    if (enemyVector[i]->isDead) {
+                        explosionSound.play();
+                    }
                 }
             }
         }
@@ -357,6 +375,9 @@ int main()
                         //Collision detected.
                         bulletVector[i]->isActive = false; //No longer rendered
                         enemyVector[j]->applyDamage(bullet.bulletDamage);
+                        if (enemyVector[j]->isDead) {
+                            explosionSound.play();
+                        }
                     }
                 }
             }
@@ -421,7 +442,7 @@ int main()
                                                 ui.startButton.getPosition().y,
                                                 ui.getWidth(), ui.getHeight(),
                                                 mouseX, mouseY, mouseWidth, mouseHeight)) {
-                //We click on the start button...
+                //We press the start button...
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     //Turn everything on...
                     for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
@@ -603,6 +624,8 @@ int main()
                     spaceTostartText.setString("spacebar to quit");
                     window.draw(gameOverText);
                     window.draw(spaceTostartText);
+                    //Stop the music
+                    music.stop();
                 }
 
                 //Space bar to re-start event
