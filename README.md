@@ -64,13 +64,15 @@ Mouse movement - Aim the main cannon
 
 -A full user interface including help page
 
-###Things that are being worked on: Completion > 35% but < 85%
--Wave based asteroids system - stuck on this one...
+-The wave based system! YAY!
 
--Main menu music, basic SFX.
+###Things that are being worked on: Completion > 35% but < 85%
+-Audio. Effects, music, impacts, hits, being shot, getting laser'ed, dying, etc etc. The sounds for those types of things.
 
 ###Things that have not been started or aren't actively being worked on: Completeion < 35%
 -Addional enemy types
+
+-Graphical effects IE particles/shrapnel when an asteroid explodes or hits something
 
 -Powerup system
 
