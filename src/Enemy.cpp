@@ -47,11 +47,20 @@ bool Enemy::checkForWin(std::vector<Enemy*> tempEnemyVector, int enemyCount)
                 tempEnemyVector[i]->isCounted = true;
             }
             if (numberOfLiveEnemies <= 0) {
-                //Re-set the counter. A value of nine
-                //is added because of the offset
-                //between getting a new value and
-                //actually being able to use it.
-                numberOfLiveEnemies = enemyCount + 9;
+                //Reset numberOfLiveEnemies.
+                //If we are at the maximum amount of enemies,
+                //do not add any further waves. Otherwise,
+                //add an offset of 9 to the counter to
+                //counter an otherwise impossible bug to fix
+                // (adding 9 fixes it). This lets us win correctly.
+                //MANUALLY LOOPING THROUGH THE WAVES IS UNSUPPORTED
+                //AT THIS TIME...
+                if (enemyCount == maxEnemies) {
+                    numberOfLiveEnemies = enemyCount;
+                } else {
+                    numberOfLiveEnemies = enemyCount + 9;
+                }
+
                 for (int j = 0; j < maxEnemies; ++j) {
                     //No longer counted
                     tempEnemyVector[j]->isCounted = false;
@@ -146,11 +155,15 @@ void Enemy::spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber)
         localEnemyCount = 63;
         break;
     case 8:
-        localEnemyCount = 72;
+        //After the last wave, slowly increase
+        //The speed of all enemies until the player
+        //loses or gains the world record for waves
+        //successfully completed.
+        additionalEnemyVelocity += 1;
+        localEnemyCount = maxEnemies;
         break;
     default:
-        //Loop maxEnemies worth of enemies.
-        localEnemyCount = maxEnemies;
+        std::cout << "Error: Default case triggered in function Enemy::spawnEnemyWave...\n";
     }
 
     //Spawn our enemies

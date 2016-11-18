@@ -34,12 +34,12 @@ class Enemy
         //Constant movement speed
         const float enemyVelocity = 5.0f;
 
+        //Additional movement speed, added for
+        //some reason IE reaching the end of the game
+        float additionalEnemyVelocity = 0.0f;
+
         //Constant max health of our enemies
         const float maxEnemyHealth = 40.0f;
-
-        //How many enemies are playing/spawned
-        //or should be spawn, those type of things.
-        int localEnemyCount;
 
         //The enemies modify-able health
         float enemyHealth = maxEnemyHealth;
@@ -54,6 +54,9 @@ class Enemy
         //Expose the max number of enemies,
         //for initialization, collision, drawing only!
         int getMaxEnemies() { return maxEnemies; }
+
+        //Get the local amount of enemies
+        int getLocalEnemyCount() { return localEnemyCount; }
 
         //Expose the enemy max health for re-set purposes
         float getMaxEnemyHealth() { return maxEnemyHealth; }
@@ -75,7 +78,11 @@ class Enemy
         //drawing purposes only! Required
         //because said purposes require constant
         //values. Not intended to be changed.
-        const int maxEnemies = 91;
+        const int maxEnemies = 72;
+
+        //How many enemies are playing/spawned
+        //or should be spawn, those type of things.
+        int localEnemyCount = 9;
 };
 
 #endif // ENEMY_H

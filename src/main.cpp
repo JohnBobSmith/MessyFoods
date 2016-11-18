@@ -539,31 +539,23 @@ int main()
                 }
                 if (counter == 8 && !enemy.isWaveSpawned) {
                     enemy.spawnEnemyWave(enemyVector, 8);
-                    counter += 1;
-                    enemy.isWaveSpawned = true;
-                }
-                //This triggers the default case from our
-                //spawn enemy function, on purpose.
-                if (counter == 9 && !enemy.isWaveSpawned) {
-                    enemy.spawnEnemyWave(enemyVector, 9);
-                    counter = 9; //Do not increment the counter anymore
+                    counter = 8; //Do not add any more waves
                     enemy.isWaveSpawned = true;
                 }
             }
-
             //Win checking
             //This is done right away, so that if this
             //returns false, checking for a loss still occurs
-            if (enemy.checkForWin(enemyVector, enemy.localEnemyCount)) {
+            if (enemy.checkForWin(enemyVector, enemy.getLocalEnemyCount())) {
                 //We won, :D
                 ui.isWin = true;
                 ui.isPlaying = false;
             }
-
             //Draw the enemies
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 if (!enemyVector[i]->isDead) { //The enemy is NOT dead...
-                    enemyVector[i]->velocityY = enemyVector[i]->enemyVelocity; //Gravity on the Y axis
+                    //Apply gravity AKA make our enemies move down and towards player
+                    enemyVector[i]->velocityY = enemyVector[i]->enemyVelocity + enemy.additionalEnemyVelocity;
                     enemyVector[i]->positionX += enemyVector[i]->velocityX * timeStep;
                     enemyVector[i]->positionY += enemyVector[i]->velocityY * timeStep;
                     enemyVector[i]->enemySprite.setPosition(enemyVector[i]->positionX, enemyVector[i]->positionY);
@@ -641,7 +633,7 @@ int main()
                         }
 
                         //only reset enemies that need re-setting
-                        for (int i = 0; i < enemy.localEnemyCount; ++i) {
+                        for (int i = 0; i < enemy.getLocalEnemyCount(); ++i) {
                             enemyVector[i]->isDead = false;
                         }
 
