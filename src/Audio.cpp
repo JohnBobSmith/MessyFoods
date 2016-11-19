@@ -16,4 +16,5 @@ Audio::Audio()
     enemyDeath.setBuffer(enemyDeathBuffer);
 
     mainMenuTheme.openFromFile("../audio/music/mainMenuTheme.wav");
+    mainMenuTheme.setLoop(true);
 }
