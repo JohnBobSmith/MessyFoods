@@ -10,6 +10,7 @@
 #include "include/CollisionBox.h"
 #include "include/UI.h"
 #include "include/Audio.h"
+#include "include/Laser.h"
 
 //Allow the the use of pi
 constexpr double pi_value() { return M_PI; }
@@ -91,6 +92,9 @@ int main()
     backgroundTexture.loadFromFile("../textures/bg.png");
     background.setTexture(backgroundTexture);
 
+    //The laser
+    Laser laser;
+
     //Our collision detection object
     CollisionBox collisionbox;
 
@@ -104,17 +108,6 @@ int main()
     Audio audio;
     //Play music immediately
     audio.mainMenuTheme.play();
-
-    //Our laser sprite
-    sf::Sprite laser;
-    sf::Texture laserTexture;
-    laserTexture.loadFromFile("../textures/laser.png");
-    laser.setTexture(laserTexture);
-    //Position the laser at the bottom, because it shoots
-    //from the sides of our moon hut
-    laser.setPosition(0, SCREEN_HEIGHT - 50);
-    //a boolean value to determine when the laser is in use
-    bool isLaserOn = false;
 
     //Our bullet object, and Bullet pointers
     //Store our bullets in an std::vector
@@ -189,7 +182,7 @@ int main()
             //If we release right mouse, turn off laser
             if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Right) {
-                    isLaserOn = false;
+                    laser.isLaserOn = false;
                 }
             }
         } //End event loop
@@ -233,7 +226,7 @@ int main()
 
         //Mouse right event. Fire our laser.
         if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-            isLaserOn = true;
+            laser.isLaserOn = true;
         }
 
         //END OF EVENTS, START OF GAME LOGIC
@@ -249,8 +242,8 @@ int main()
 
         //If the laser is on, drain the player health
         //Also play the sound
-        if (isLaserOn) {
-            player.playerHealth -= 0.025;
+        if (laser.isLaserOn) {
+            player.playerHealth -= laser.laserDamage;
             audio.laserFire.play();
         }
 
@@ -320,9 +313,10 @@ int main()
         //Check collision of enemies against laser
         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
             //Ensure we can damage our enemies with the laser
-            if (isLaserOn && !enemyVector[i]->isDead) {
-                if (collisionbox.checkAABBcollision(laser.getPosition().x, laser.getPosition().y,
-                                                laserTexture.getSize().x, laserTexture.getSize().y,
+            if (laser.isLaserOn && !enemyVector[i]->isDead) {
+                if (collisionbox.checkAABBcollision(laser.laserSprite.getPosition().x,
+                                                laser.laserSprite.getPosition().y,
+                                                laser.getWidth(), laser.getHeight(),
                                                 enemyVector[i]->positionX, enemyVector[i]->positionY,
                                                 enemy.getWidth(), enemy.getHeight())) {
 
@@ -548,8 +542,8 @@ int main()
             }
 
             //Draw our laser
-            if (isLaserOn) {
-                window.draw(laser);
+            if (laser.isLaserOn) {
+                window.draw(laser.laserSprite);
             }
 
             //Draw our shield
