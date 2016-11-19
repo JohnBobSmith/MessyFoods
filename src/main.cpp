@@ -9,6 +9,7 @@
 #include "include/Shield.h"
 #include "include/CollisionBox.h"
 #include "include/UI.h"
+#include "include/Audio.h"
 
 //Allow the the use of pi
 constexpr double pi_value() { return M_PI; }
@@ -49,38 +50,6 @@ int main()
     const int SCREEN_WIDTH = 800;
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Spacey Rocks");
     sf::Event event;
-
-    //Shoot sound
-    sf::SoundBuffer shootBuffer;
-    shootBuffer.loadFromFile("../audio/sfx/shoot.wav");
-    sf::Sound bulletShoot;
-    bulletShoot.setBuffer(shootBuffer);
-
-    //Laser sound
-    sf::SoundBuffer laserBuffer;
-    laserBuffer.loadFromFile("../audio/sfx/laser.wav");
-    sf::Sound laserSound;
-    laserSound.setBuffer(laserBuffer);
-
-    //Explosion sound
-    sf::SoundBuffer explosionBuffer;
-    explosionBuffer.loadFromFile("../audio/sfx/explosion.wav");
-    sf::Sound explosionSound;
-    explosionSound.setBuffer(explosionBuffer);
-
-    //Zap sound, for the shield
-    sf::SoundBuffer zapBuffer;
-    zapBuffer.loadFromFile("../audio/sfx/zap.wav");
-    sf::Sound zapSound;
-    zapSound.setBuffer(zapBuffer);
-
-    //Our music
-    sf::Music music;
-    music.openFromFile("../audio/music/main_theme.wav");
-    //Loop it
-    music.setLoop(true);
-    //Play it
-    music.play();
 
     //Our square font
     sf::Font blockFont;
@@ -130,6 +99,11 @@ int main()
 
     //The player
     Player player;
+
+    //Audio
+    Audio audio;
+    //Play music immediately
+    audio.mainMenuTheme.play();
 
     //Our laser sprite
     sf::Sprite laser;
@@ -249,8 +223,8 @@ int main()
                 bulletVector[currentBullet]->velocityX = bullet.bulletVelocity * (cos(mouseAngle * pi / 180));
                 bulletVector[currentBullet]->velocityY = bullet.bulletVelocity * (sin(mouseAngle * pi / 180));
 
-                //Play our shoot sound
-                bulletShoot.play();
+                //Play our firing sound
+                audio.bulletFire.play();
 
                 //Re-set the counter
                 bullet.rateOfFire = bullet.maxRateOfFire;
@@ -268,16 +242,16 @@ int main()
         //to be the only place it works...
         //If we are not in the main menu, mute music
         if (!ui.isMainMenu) {
-            music.setVolume(50);
+            audio.mainMenuTheme.setVolume(50);
         } else {
-            music.setVolume(75);
+            audio.mainMenuTheme.setVolume(75);
         }
 
         //If the laser is on, drain the player health
         //Also play the sound
         if (isLaserOn) {
             player.playerHealth -= 0.025;
-            laserSound.play();
+            audio.laserFire.play();
         }
 
         //Check the status of our health bar
@@ -313,7 +287,7 @@ int main()
                                                     enemy.getWidth(), enemy.getHeight())) {
 
                     //Kill the enemy, damage the player
-                    explosionSound.play();
+                    audio.enemyDeath.play();
                     enemyVector[i]->isDead = true;
                     player.playerHealth -= 10;
                 }
@@ -336,7 +310,7 @@ int main()
                         shieldVector[i]->applyDamage(999);
                         enemyVector[j]->applyDamage(enemy.enemyHealth / 2);
                         if (enemyVector[j]->isDead) {
-                            zapSound.play();
+                            audio.shieldImpact.play();
                         }
                     }
                 }
@@ -356,7 +330,7 @@ int main()
                     //a more realistic laser burn effect
                     enemyVector[i]->applyDamage(0.1);
                     if (enemyVector[i]->isDead) {
-                        explosionSound.play();
+                        audio.enemyDeath.play();
                     }
                 }
             }
@@ -376,7 +350,7 @@ int main()
                         bulletVector[i]->isActive = false; //No longer rendered
                         enemyVector[j]->applyDamage(bullet.bulletDamage);
                         if (enemyVector[j]->isDead) {
-                            explosionSound.play();
+                            audio.enemyDeath.play();
                         }
                     }
                 }
@@ -617,7 +591,7 @@ int main()
                     window.draw(gameOverText);
                     window.draw(spaceTostartText);
                     //Stop the music
-                    music.stop();
+                    audio.mainMenuTheme.stop();
                 }
 
                 //Space bar to re-start event
