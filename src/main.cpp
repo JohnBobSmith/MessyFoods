@@ -533,8 +533,10 @@ int main()
                     enemyVector[i]->velocityY = enemyVector[i]->enemyVelocity + enemy.additionalEnemyVelocity;
                     enemyVector[i]->positionX += enemyVector[i]->velocityX * timeStep;
                     enemyVector[i]->positionY += enemyVector[i]->velocityY * timeStep;
-                    enemyVector[i]->enemySprite.setPosition(enemyVector[i]->positionX, enemyVector[i]->positionY);
-                    window.draw(enemyVector[i]->enemySprite);
+                    enemyVector[i]->easyAsteroid.setPosition(enemyVector[i]->positionX, enemyVector[i]->positionY);
+                    enemyVector[i]->mediumAsteroid.setPosition(enemyVector[i]->positionX, enemyVector[i]->positionY);
+                    window.draw(enemyVector[i]->easyAsteroid);
+                    window.draw(enemyVector[i]->mediumAsteroid);
                 }
             }
 

@@ -9,8 +9,11 @@ class Enemy
         //Setup our textures automatically
         Enemy();
 
-        //The enemy sprite to draw on screen
-        sf::Sprite enemySprite;
+        //The enemy sprites to be
+        //drawn on screen
+        sf::Sprite easyAsteroid;
+        sf::Sprite mediumAsteroid;
+        sf::Sprite hardAsteroid;
 
         //The enemies position and velocity
         float velocityX = 0;
@@ -47,9 +50,11 @@ class Enemy
         //Damage our objects based on N damage applied.
         void applyDamage(float damage);
 
-        //Get the width and height of the enemy texture/sprite
-        int getWidth() { return enemyTexture.getSize().x; }
-        int getHeight() { return enemyTexture.getSize().y; }
+        //Get the width and height of the enemy texture
+        //This assumes all enemies are the same size as
+        //our easyAsteroidTexture
+        int getWidth() { return easyAsteroidTexture.getSize().x; }
+        int getHeight() { return easyAsteroidTexture.getSize().y; }
 
         //Expose the max number of enemies,
         //for initialization, collision, drawing only!
@@ -71,8 +76,10 @@ class Enemy
         void resetEnemy(std::vector<Enemy*> tempEnemyVector);
 
     private:
-        //The enemies texture
-        sf::Texture enemyTexture;
+        //The enemy textures
+        sf::Texture easyAsteroidTexture;
+        sf::Texture mediumAsteroidTexture;
+        sf::Texture hardAsteroidTexture;
 
         //For initializing, collision, and
         //drawing purposes only! Required
