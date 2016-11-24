@@ -4,10 +4,10 @@
 
 Enemy::Enemy()
 {
-    if (!easyAsteroidTexture.loadFromFile("../textures/easyAsteroid.png")) {
+    if (!asteroidTexture.loadFromFile("../textures/asteroid.png")) {
         std::cout << "Error: Missing enemy texture";
     }
-    easyAsteroid.setTexture(easyAsteroidTexture);
+    asteroid.setTexture(asteroidTexture);
 }
 
 void Enemy::applyDamage(float damage)
@@ -174,6 +174,4 @@ void Enemy::spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber)
 
     //position them
     resetEnemy(tempEnemyVector);
-
-    std::cout << "WAVE NUMBER: " << waveNumber << "\n";
 }
