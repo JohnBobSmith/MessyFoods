@@ -8,11 +8,6 @@ Enemy::Enemy()
         std::cout << "Error: Missing enemy texture";
     }
     easyAsteroid.setTexture(easyAsteroidTexture);
-
-    if (!mediumAsteroidTexture.loadFromFile("../textures/mediumAsteroid.png")) {
-        std::cout << "Error: Missing enemy texture";
-    }
-    mediumAsteroid.setTexture(mediumAsteroidTexture);
 }
 
 void Enemy::applyDamage(float damage)

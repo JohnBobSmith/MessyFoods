@@ -9,11 +9,8 @@ class Enemy
         //Setup our textures automatically
         Enemy();
 
-        //The enemy sprites to be
-        //drawn on screen
+        //The enemy sprites to be drawn on screen
         sf::Sprite easyAsteroid;
-        sf::Sprite mediumAsteroid;
-        sf::Sprite hardAsteroid;
 
         //The enemies position and velocity
         float velocityX = 0;
@@ -78,8 +75,6 @@ class Enemy
     private:
         //The enemy textures
         sf::Texture easyAsteroidTexture;
-        sf::Texture mediumAsteroidTexture;
-        sf::Texture hardAsteroidTexture;
 
         //For initializing, collision, and
         //drawing purposes only! Required

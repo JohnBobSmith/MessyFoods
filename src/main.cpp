@@ -534,10 +534,7 @@ int main()
                     enemyVector[i]->positionX += enemyVector[i]->velocityX * timeStep;
                     enemyVector[i]->positionY += enemyVector[i]->velocityY * timeStep;
                     enemyVector[i]->easyAsteroid.setPosition(enemyVector[i]->positionX, enemyVector[i]->positionY);
-                    enemyVector[i]->mediumAsteroid.setPosition(enemyVector[i]->positionX, enemyVector[i]->positionY);
-                    window.draw(enemyVector[i]->easyAsteroid);
-                    window.draw(enemyVector[i]->mediumAsteroid);
-                }
+                    window.draw(enemyVector[i]->easyAsteroid);                }
             }
 
             //Draw the bullets
