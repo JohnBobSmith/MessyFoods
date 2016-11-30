@@ -1,18 +1,20 @@
 #include "include/Mouse.h"
 #include "include/Player.h"
+#include "include/G_Miscfuncandvar.h"
 #include <cmath>
 
-//Unfortunately, this must be in the
+//Unfortunately, these must be in the
 //global namespace for this file.
 //It is still heavily localized and thus
 //it should not a problem.
 Player player;
+G_Miscfuncandvar gmiscfuncandvar;
 
 
 float Mouse::calculateMouseAngle(float mouseX, float mouseY, float positionX, float positionY)
 {
     float angle = std::atan2(mouseY - positionY, mouseX - positionX);
-    angle = angle * 180 / M_PI;
+    angle = angle * 180 / gmiscfuncandvar.pi;
     if (angle < 0) {
         angle = 360 -(-angle);
     }
@@ -25,7 +27,7 @@ void Mouse::handleMouseEvents(sf::Event &event) {
         mouseX = event.mouseMove.x;
         mouseY = event.mouseMove.y;
         //Set the angle relative to the player
-        mouseAngle = calculateMouseAngle(mouseX, mouseY, (800 / 2),
-                                        (600 - player.getHeight()));
+        mouseAngle = calculateMouseAngle(mouseX, mouseY, (gmiscfuncandvar.screenWidth / 2),
+                                        (gmiscfuncandvar.screenHeight - player.getHeight()));
     }
 }

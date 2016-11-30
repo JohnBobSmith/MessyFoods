@@ -12,31 +12,19 @@
 #include "include/Audio.h"
 #include "include/Laser.h"
 #include "include/Mouse.h"
-
-//Allow the the use of pi
-constexpr double pi_value() { return M_PI; }
-double pi = pi_value();
-
-//Calculate a quadratic equation
-sf::Vector2f calculateQuadratic(float n)
-{
-    sf::Vector2f tempVector;
-    float y = 370 + (2.2 * (std::pow(n, 2)) / 800);
-    float x = 390 + n;
-    tempVector.x = x;
-    tempVector.y = y;
-    return tempVector;
-}
+#include "include/G_Miscfuncandvar.h"
 
 int main()
 {
+    //Initialize or global functions and variables
+    //This must be done immediately
+    G_Miscfuncandvar gmiscfuncandvar;
+
     //Frame rate limiter
     const float timeStep = 1/60.0f;
 
     //Our window and event union
-    const int SCREEN_HEIGHT = 600;
-    const int SCREEN_WIDTH = 800;
-    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Spacey Rocks");
+    sf::RenderWindow window(sf::VideoMode(gmiscfuncandvar.screenWidth, gmiscfuncandvar.screenHeight), "Spacey Rocks");
     sf::Event event;
 
     //Our square font
@@ -51,7 +39,7 @@ int main()
     gameOverText.setColor(sf::Color::Red);
     gameOverText.setStyle(sf::Text::Regular);
     //Center this text
-    gameOverText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 3);
+    gameOverText.setPosition(gmiscfuncandvar.screenWidth/ 8, gmiscfuncandvar.screenHeight / 3);
 
     //Our space to start text or prompt
     sf::Text spaceTostartText;
@@ -61,7 +49,7 @@ int main()
     spaceTostartText.setColor(sf::Color::Yellow);
     spaceTostartText.setStyle(sf::Text::Regular);
     //Position this text just below our win/loss text
-    spaceTostartText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 2);
+    spaceTostartText.setPosition(gmiscfuncandvar.screenWidth/ 8, gmiscfuncandvar.screenHeight / 2);
 
     //Our victory text
     sf::Text winText;
@@ -71,7 +59,7 @@ int main()
     winText.setColor(sf::Color::Green);
     winText.setStyle(sf::Text::Regular);
     //Center our text
-    winText.setPosition(SCREEN_WIDTH / 8, SCREEN_HEIGHT / 3);
+    winText.setPosition(gmiscfuncandvar.screenWidth/ 8, gmiscfuncandvar.screenHeight / 3);
 
     //Our background image
     sf::Sprite background;
@@ -107,8 +95,8 @@ int main()
     for (int i = 0; i < bullet.getMaxBullets(); ++i) {
         bulletVector.push_back(new Bullet());
         //Set the initial positions to match the gun
-        bulletVector[i]->positionX = SCREEN_WIDTH / 2;
-        bulletVector[i]->positionY = SCREEN_HEIGHT - player.getHeight();
+        bulletVector[i]->positionX = gmiscfuncandvar.screenWidth/ 2;
+        bulletVector[i]->positionY = gmiscfuncandvar.screenHeight - player.getHeight();
     }
 
     //Enemy object and pointers
@@ -130,8 +118,8 @@ int main()
     //Position the shield blocks
     static int counter = 0;
     for (float i = -300; i <= 300; i += 10) {
-        float x = calculateQuadratic(i).x;
-        float y = calculateQuadratic(i).y;
+        float x = gmiscfuncandvar.calculateQuadratic(i).x;
+        float y = gmiscfuncandvar.calculateQuadratic(i).y;
         shieldVector[counter]->positionX = x;
         shieldVector[counter]->positionY = y;
         shieldVector[counter]->shieldSprite.setPosition(shieldVector[counter]->positionX,
@@ -189,8 +177,10 @@ int main()
                     //Allow for our bullet to be rendered, and set the trajectory
                     //According to where the mouse was clicked.
                     bulletVector[currentBullet]->isActive = true;
-                    bulletVector[currentBullet]->velocityX = bullet.bulletVelocity * (cos(mouse.getMouseAngle() * pi / 180));
-                    bulletVector[currentBullet]->velocityY = bullet.bulletVelocity * (sin(mouse.getMouseAngle() * pi / 180));
+                    bulletVector[currentBullet]->velocityX = bullet.bulletVelocity *
+                            (cos(mouse.getMouseAngle() * gmiscfuncandvar.pi / 180));
+                    bulletVector[currentBullet]->velocityY = bullet.bulletVelocity *
+                            (sin(mouse.getMouseAngle() * gmiscfuncandvar.pi / 180));
 
                     //Play our firing sound
                     audio.bulletFire.play();
@@ -390,7 +380,7 @@ int main()
 
             //If a bullet misses and goes off screen, kill it too
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
-                if (bulletVector[i]->positionY > SCREEN_HEIGHT || bulletVector[i]->positionY < 0) {
+                if (bulletVector[i]->positionY > gmiscfuncandvar.screenHeight || bulletVector[i]->positionY < 0) {
                     bulletVector[i]->isActive = false;
                 }
             }
@@ -400,14 +390,14 @@ int main()
                 if (!bulletVector[i]->isActive) {
                     //re-set their initial positions,
                     //so they can be used again
-                    bulletVector[i]->positionX = SCREEN_WIDTH / 2;
-                    bulletVector[i]->positionY = SCREEN_HEIGHT - player.getHeight();
+                    bulletVector[i]->positionX = gmiscfuncandvar.screenWidth/ 2;
+                    bulletVector[i]->positionY = gmiscfuncandvar.screenHeight - player.getHeight();
                 }
             }
 
             //If an enemy goes off screen, instant loss. Colony destroyed!
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                if (enemyVector[i]->positionY > SCREEN_HEIGHT) {
+                if (enemyVector[i]->positionY > gmiscfuncandvar.screenHeight) {
                     ui.isWin = false;
                     ui.isPlaying = false;
                 }
@@ -536,15 +526,7 @@ int main()
             //Draw our player's health bar
             window.draw(player.healthBar);
         } else { //ui.isPlaying is now FALSE
-            //Kill everything because we are no longer playing
-            for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-                shieldVector[i]->isShieldUp = false;
-            }
-
-            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                enemyVector[i]->isDead = true;
-            }
-
+            //Remove any stray bullets
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
                 bulletVector[i]->isActive = false;
             }
@@ -572,19 +554,9 @@ int main()
                         //Spawn more enemies
                         enemy.isWaveSpawned = false;
 
-                        //Reset the enemy parameters
+                        //Reset the enemies health
                         for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                             enemyVector[i]->enemyHealth = enemy.getMaxEnemyHealth();
-                        }
-
-                        //only reset enemies that need re-setting
-                        for (int i = 0; i < enemy.getLocalEnemyCount(); ++i) {
-                            enemyVector[i]->isDead = false;
-                        }
-
-                        //Enable the shields
-                        for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-                            shieldVector[i]->isShieldUp = true;
                         }
 
                         //Start playing again
