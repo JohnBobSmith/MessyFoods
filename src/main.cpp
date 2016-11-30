@@ -11,6 +11,7 @@
 #include "include/UI.h"
 #include "include/Audio.h"
 #include "include/Laser.h"
+#include "include/Mouse.h"
 
 //Allow the the use of pi
 constexpr double pi_value() { return M_PI; }
@@ -25,20 +26,6 @@ sf::Vector2f calculateQuadratic(float n)
     tempVector.x = x;
     tempVector.y = y;
     return tempVector;
-}
-
-//Calculate the mouse angle, in degrees
-float calculateMouseAngle(float mouseX, float mouseY, float positionX, float positionY)
-{
-    float angle = std::atan2(mouseY - positionY, mouseX - positionX);
-    angle = angle * 180 / pi;
-
-    if (angle < 0)
-    {
-        angle = 360 -(-angle);
-    }
-
-    return angle;
 }
 
 int main()
@@ -92,6 +79,9 @@ int main()
     backgroundTexture.loadFromFile("../textures/bg.png");
     background.setTexture(backgroundTexture);
 
+    //Our mouse
+    Mouse mouse;
+
     //The laser
     Laser laser;
 
@@ -109,7 +99,6 @@ int main()
     //Play music immediately
     audio.mainMenuTheme.play();
 
-    //Our bullet object, and Bullet pointers
     //Store our bullets in an std::vector
     //WE MUST REMEMBER TO CLEAN UP ANYTHING
     //CREATED WITH NEW...
@@ -154,15 +143,6 @@ int main()
         counter += 1;
     }
 
-    //Our mouse angle used for bullet paths
-    static float mouseAngle = 0.0f;
-
-    //Our mouse X and Y values
-    //Used in the main menu and when
-    //shooting bullets.
-    float mouseX;
-    float mouseY;
-
     /* * * * MAIN LOOP * * * */
     while(window.isOpen()) {
         while(window.pollEvent(event)) {
@@ -170,14 +150,9 @@ int main()
                 //We pressed the titlebar's X button
                 window.close(); //Quit.
             }
-            if (event.type == sf::Event::MouseMoved) {
-                //Calculate the mouse position
-                //every frame
-                mouseX = event.mouseMove.x;
-                mouseY = event.mouseMove.y;
-                mouseAngle = calculateMouseAngle(mouseX, mouseY,
-                        (SCREEN_WIDTH / 2), (SCREEN_HEIGHT - player.getHeight()));
-            }
+            //Handle mouse events
+            mouse.handleMouseEvents(event);
+
             //If we release right mouse, turn off laser
             if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Right) {
@@ -214,8 +189,8 @@ int main()
                     //Allow for our bullet to be rendered, and set the trajectory
                     //According to where the mouse was clicked.
                     bulletVector[currentBullet]->isActive = true;
-                    bulletVector[currentBullet]->velocityX = bullet.bulletVelocity * (cos(mouseAngle * pi / 180));
-                    bulletVector[currentBullet]->velocityY = bullet.bulletVelocity * (sin(mouseAngle * pi / 180));
+                    bulletVector[currentBullet]->velocityX = bullet.bulletVelocity * (cos(mouse.getMouseAngle() * pi / 180));
+                    bulletVector[currentBullet]->velocityY = bullet.bulletVelocity * (sin(mouse.getMouseAngle() * pi / 180));
 
                     //Play our firing sound
                     audio.bulletFire.play();
@@ -461,18 +436,13 @@ int main()
             if (ui.isHelpDisplayed) {
                 window.draw(ui.helpPage);
             }
-            //The start box collides with the mouse
-            //We add a width/height to the mouse
-            //for the purpose of collision.
-            int mouseWidth = 5;
-            int mouseHeight = 5;
-            //MouseX and mouseY are from way further up. This works but
-            //I don't like the idea of using global variables...
+            //If we collide with our start button...
             if (collisionbox.checkAABBcollision(ui.startButton.getPosition().x,
                                                 ui.startButton.getPosition().y,
                                                 ui.getWidth(), ui.getHeight(),
-                                                mouseX, mouseY, mouseWidth, mouseHeight)) {
-                //We press the start button...
+                                                mouse.getMouseX(), mouse.getMouseY(),
+                                                mouse.getWidth(), mouse.getHeight())) {
+                //If we press the start button...
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     //Turn everything on...
                     for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
@@ -501,7 +471,8 @@ int main()
             if (collisionbox.checkAABBcollision(ui.helpButton.getPosition().x,
                                     ui.helpButton.getPosition().y,
                                     ui.getWidth(), ui.getHeight(),
-                                    mouseX, mouseY, mouseWidth, mouseHeight)) {
+                                    mouse.getMouseX(), mouse.getMouseY(),
+                                    mouse.getWidth(), mouse.getHeight())) {
 
                 //...turn the page on
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -509,14 +480,15 @@ int main()
                 }
             }
 
-            //If we press the quit button
+            //If we press the quit button...
             if (collisionbox.checkAABBcollision(ui.quitButton.getPosition().x,
                                     ui.quitButton.getPosition().y,
                                     ui.getWidth(), ui.getHeight(),
-                                    mouseX, mouseY, mouseWidth, mouseHeight)) {
+                                    mouse.getMouseX(), mouse.getMouseY(),
+                                    mouse.getWidth(), mouse.getHeight())) {
 
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    //Quit
+                    //...Quit
                     window.close();
                 }
             }
