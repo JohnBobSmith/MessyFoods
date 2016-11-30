@@ -111,7 +111,8 @@ int main()
 
     //Our bullet object, and Bullet pointers
     //Store our bullets in an std::vector
-    //WE MUST REMEMBER TO CLEAN THIS UP
+    //WE MUST REMEMBER TO CLEAN UP ANYTHING
+    //CREATED WITH NEW...
     Bullet bullet;
     std::vector<Bullet*> bulletVector;
     for (int i = 0; i < bullet.getMaxBullets(); ++i) {
@@ -122,7 +123,6 @@ int main()
     }
 
     //Enemy object and pointers
-    //CLEAN THIS UP
     Enemy enemy;
     std::vector<Enemy*> enemyVector;
     for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
@@ -130,7 +130,6 @@ int main()
     }
 
     //Shield object and pointers
-    //CLEAN THIS UP TOO!
     Shield shield;
     std::vector<Shield*> shieldVector;
     for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
@@ -633,17 +632,17 @@ int main()
         window.display();
     } //End game loop
 
-    std::cout << "Cleaning up shields... Done\n";
+    std::cout << "Cleaning up shield chunks... Done\n";
     for (std::vector<Shield*>::iterator it = shieldVector.begin(); it != shieldVector.end(); it++){
         delete *it;
     }
 
-    std::cout << "Cleaning up bullets... Done\n";
+    std::cout << "Cleaning up bullet objects... Done\n";
     for (std::vector<Bullet*>::iterator it = bulletVector.begin(); it != bulletVector.end(); it++){
         delete *it;
     }
 
-    std::cout << "Cleaning up enemies... Done\n";
+    std::cout << "Cleaning up enemy objects... Done\n";
     for (std::vector<Enemy*>::iterator it = enemyVector.begin(); it != enemyVector.end(); it++){
         delete *it;
     }

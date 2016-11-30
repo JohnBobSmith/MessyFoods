@@ -120,7 +120,6 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector)
             ammountToMove = -800;
         }
         tempEnemyVector[i]->positionY = ammountToMove;
-        std::cout << "i = " << i << " Y = " << tempEnemyVector[i]->positionY << "\n";
     }
 }
 
