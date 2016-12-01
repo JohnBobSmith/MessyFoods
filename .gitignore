@@ -33,7 +33,30 @@ bin/
 obj/
 src/obj/
 
-#Code blocks files
+# Code blocks files
 *.cbp
 *.depend
 *.layout
+
+# Additional files to ignore (may be duplicates)
+*~
+*.o
+*.Po
+*.swp
+*.tar.gz
+Makefile
+Makefile.in
+aclocal.m4
+compile
+config.h
+config.h.in
+config.log
+config.status
+configure
+depcomp
+install-sh
+missing
+stamp-h1
+autom4te.cache
+src/.deps
+src/spaceyrocks

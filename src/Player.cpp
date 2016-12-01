@@ -1,10 +1,10 @@
-#include "include/Player.h"
+#include "Player.h"
 #include <iostream>
 
 Player::Player()
 {
-    if(!playerTexture.loadFromFile("../textures/moonbase.png")) {
-        std::cout << "Error: Missing ../textures/moonbase.png!";
+    if(!playerTexture.loadFromFile( PKGDATADIR "/textures/moonbase.png")) {
+        std::cout << "Error: Missing /textures/moonbase.png!";
     }
     playerSprite.setTexture(playerTexture);
 

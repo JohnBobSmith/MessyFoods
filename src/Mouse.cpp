@@ -1,6 +1,6 @@
-#include "include/Mouse.h"
-#include "include/Player.h"
-#include "include/G_Miscfuncandvar.h"
+#include "Mouse.h"
+#include "Player.h"
+#include "G_Miscfuncandvar.h"
 #include <cmath>
 
 //Unfortunately, these must be in the

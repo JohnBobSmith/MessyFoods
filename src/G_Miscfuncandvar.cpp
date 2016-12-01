@@ -1,4 +1,4 @@
-#include "include/G_Miscfuncandvar.h"
+#include "G_Miscfuncandvar.h"
 
 //Calculate a quadratic equation
 sf::Vector2f G_Miscfuncandvar::calculateQuadratic(float n)

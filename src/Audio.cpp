@@ -1,20 +1,20 @@
-#include "include/Audio.h"
+#include "Audio.h"
 #include <string>
 
 Audio::Audio()
 {
-    bulletFireBuffer.loadFromFile("../audio/sfx/bulletFire.wav");
+    bulletFireBuffer.loadFromFile( PKGDATADIR "/sfx/bulletFire.wav");
     bulletFire.setBuffer(bulletFireBuffer);
 
-    shieldImpactBuffer.loadFromFile("../audio/sfx/shieldImpact.wav");
+    shieldImpactBuffer.loadFromFile( PKGDATADIR "/sfx/shieldImpact.wav");
     shieldImpact.setBuffer(shieldImpactBuffer);
 
-    laserFireBuffer.loadFromFile("../audio/sfx/laserFire.wav");
+    laserFireBuffer.loadFromFile( PKGDATADIR "/sfx/laserFire.wav");
     laserFire.setBuffer(laserFireBuffer);
 
-    enemyDeathBuffer.loadFromFile("../audio/sfx/enemyDeath.wav");
+    enemyDeathBuffer.loadFromFile( PKGDATADIR "/sfx/enemyDeath.wav");
     enemyDeath.setBuffer(enemyDeathBuffer);
 
-    mainMenuTheme.openFromFile("../audio/music/mainMenuTheme.wav");
+    mainMenuTheme.openFromFile( PKGDATADIR "/music/mainMenuTheme.wav");
     mainMenuTheme.setLoop(true);
 }

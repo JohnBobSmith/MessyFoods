@@ -3,16 +3,16 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include "include/Player.h"
-#include "include/Bullet.h"
-#include "include/Enemy.h"
-#include "include/Shield.h"
-#include "include/CollisionBox.h"
-#include "include/UI.h"
-#include "include/Audio.h"
-#include "include/Laser.h"
-#include "include/Mouse.h"
-#include "include/G_Miscfuncandvar.h"
+#include "Player.h"
+#include "Bullet.h"
+#include "Enemy.h"
+#include "Shield.h"
+#include "CollisionBox.h"
+#include "UI.h"
+#include "Audio.h"
+#include "Laser.h"
+#include "Mouse.h"
+#include "G_Miscfuncandvar.h"
 
 int main()
 {
@@ -29,7 +29,7 @@ int main()
 
     //Our square font
     sf::Font blockFont;
-    blockFont.loadFromFile("../fonts/ehsmb.ttf");
+    blockFont.loadFromFile( PKGDATADIR "/fonts/ehsmb.ttf");
 
     //Our game over text
     sf::Text gameOverText;
@@ -64,7 +64,7 @@ int main()
     //Our background image
     sf::Sprite background;
     sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("../textures/bg.png");
+    backgroundTexture.loadFromFile( PKGDATADIR "/textures/bg.png");
     background.setTexture(backgroundTexture);
 
     //Our mouse

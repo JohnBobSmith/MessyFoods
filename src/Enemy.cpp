@@ -1,10 +1,10 @@
 #include <SFML/Graphics.hpp>
-#include "include/Enemy.h"
+#include "Enemy.h"
 #include <iostream>
 
 Enemy::Enemy()
 {
-    if (!asteroidTexture.loadFromFile("../textures/asteroid.png")) {
+    if (!asteroidTexture.loadFromFile( PKGDATADIR "/textures/asteroid.png")) {
         std::cout << "Error: Missing enemy texture";
     }
     asteroid.setTexture(asteroidTexture);

@@ -1,9 +1,9 @@
-#include "include/Laser.h"
+#include "Laser.h"
 #include <iostream>
 
 Laser::Laser()
 {
-    if (!laserTexture.loadFromFile("../textures/laser.png")) {
+    if (!laserTexture.loadFromFile( PKGDATADIR "/textures/laser.png")) {
         std::cout << "Error: Missing laserSprite texture";
     }
     laserSprite.setTexture(laserTexture);
