@@ -37,3 +37,6 @@ src/obj/
 *.cbp
 *.depend
 *.layout
+
+#When merging experimental to master, ignore any of the following:
+EXPERIMENTAL.md
