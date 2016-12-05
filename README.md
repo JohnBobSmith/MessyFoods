@@ -101,3 +101,7 @@ include the audio with my project. Again if you have any problems, email me.
 
 I've used space invaders as a reference and inspiration for this project, and as a reference and inspiration only. I take
 no credit for the original space invaders released by Taito in 1978.
+
+####Contributors to this project:
+David "JohnBobSmith" Bogner - Lead developer | myrunescapeemail609[AT]gmail[DOT]com
+David "drcouzelis" Couzelis - GNU autotools support | drcouzelis[AT]gmail[DOT]com
