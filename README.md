@@ -104,4 +104,5 @@ no credit for the original space invaders released by Taito in 1978.
 
 ####Contributors to this project:
 David "JohnBobSmith" Bogner - Lead developer | myrunescapeemail609[AT]gmail[DOT]com
+
 David "drcouzelis" Couzelis - GNU autotools support | drcouzelis[AT]gmail[DOT]com
