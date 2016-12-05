@@ -60,3 +60,4 @@ stamp-h1
 autom4te.cache
 src/.deps
 src/spaceyrocks
+EXPERIMENTAL.md
