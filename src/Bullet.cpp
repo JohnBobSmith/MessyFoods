@@ -4,7 +4,7 @@
 
 Bullet::Bullet()
 {
-    if (!bulletTexture.loadFromFile( PKGDATADIR "/textures/bullet.png")) {
+    if (!bulletTexture.loadFromFile("../data/textures/bullet.png")) {
         std::cout << "Error, missing bullet texture...\n";
     }
     bulletSprite.setTexture(bulletTexture);

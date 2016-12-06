@@ -29,7 +29,7 @@ int main()
 
     //Our square font
     sf::Font blockFont;
-    blockFont.loadFromFile( PKGDATADIR "/fonts/ehsmb.ttf");
+    blockFont.loadFromFile("../data//fonts/ehsmb.ttf");
 
     //Our game over text
     sf::Text gameOverText;
@@ -64,7 +64,7 @@ int main()
     //Our background image
     sf::Sprite background;
     sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile( PKGDATADIR "/textures/bg.png");
+    backgroundTexture.loadFromFile("../data//textures/bg.png");
     background.setTexture(backgroundTexture);
 
     //Our mouse

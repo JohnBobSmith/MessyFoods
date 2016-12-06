@@ -4,7 +4,7 @@
 
 Enemy::Enemy()
 {
-    if (!asteroidTexture.loadFromFile( PKGDATADIR "/textures/asteroid.png")) {
+    if (!asteroidTexture.loadFromFile("../data/textures/asteroid.png")) {
         std::cout << "Error: Missing enemy texture";
     }
     asteroid.setTexture(asteroidTexture);

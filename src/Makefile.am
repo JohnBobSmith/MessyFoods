@@ -32,10 +32,7 @@ spaceyrocks_SOURCES = \
   UI.h \
   main.cpp
 
-# The "-D" option provides the compiler with a variable
-# that points to the location of the data files.
-#
 # NOTE: "CPP" stands for "C Pre-Processor".
 #
 # https://www.gnu.org/software/automake/manual/html_node/Program-and-Library-Variables.html
-spaceyrocks_CPPFLAGS = -Wall -std=c++11 -DPKGDATADIR='"$(pkgdatadir)"'
+spaceyrocks_CPPFLAGS = -Wall -std=c++11

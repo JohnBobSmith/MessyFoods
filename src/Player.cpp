@@ -3,7 +3,7 @@
 
 Player::Player()
 {
-    if(!playerTexture.loadFromFile( PKGDATADIR "/textures/moonbase.png")) {
+    if(!playerTexture.loadFromFile("../data/textures/moonbase.png")) {
         std::cout << "Error: Missing /textures/moonbase.png!";
     }
     playerSprite.setTexture(playerTexture);

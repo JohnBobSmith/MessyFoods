@@ -4,7 +4,7 @@
 
 Shield::Shield()
 {
-    if (!shieldTexture.loadFromFile( PKGDATADIR "/textures/shield.png")) {
+    if (!shieldTexture.loadFromFile("../data//textures/shield.png")) {
         std::cout << "Error, missing shield texture...\n";
     }
     shieldSprite.setTexture(shieldTexture);

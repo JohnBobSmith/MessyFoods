@@ -3,7 +3,7 @@
 
 Laser::Laser()
 {
-    if (!laserTexture.loadFromFile( PKGDATADIR "/textures/laser.png")) {
+    if (!laserTexture.loadFromFile("../data/textures/laser.png")) {
         std::cout << "Error: Missing laserSprite texture";
     }
     laserSprite.setTexture(laserTexture);

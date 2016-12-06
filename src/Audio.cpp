@@ -3,18 +3,18 @@
 
 Audio::Audio()
 {
-    bulletFireBuffer.loadFromFile( PKGDATADIR "/sfx/bulletFire.wav");
+    bulletFireBuffer.loadFromFile("../data/sfx/bulletFire.wav");
     bulletFire.setBuffer(bulletFireBuffer);
 
-    shieldImpactBuffer.loadFromFile( PKGDATADIR "/sfx/shieldImpact.wav");
+    shieldImpactBuffer.loadFromFile("../data/sfx/shieldImpact.wav");
     shieldImpact.setBuffer(shieldImpactBuffer);
 
-    laserFireBuffer.loadFromFile( PKGDATADIR "/sfx/laserFire.wav");
+    laserFireBuffer.loadFromFile("../data/sfx/laserFire.wav");
     laserFire.setBuffer(laserFireBuffer);
 
-    enemyDeathBuffer.loadFromFile( PKGDATADIR "/sfx/enemyDeath.wav");
+    enemyDeathBuffer.loadFromFile("../data/sfx/enemyDeath.wav");
     enemyDeath.setBuffer(enemyDeathBuffer);
 
-    mainMenuTheme.openFromFile( PKGDATADIR "/music/mainMenuTheme.wav");
+    mainMenuTheme.openFromFile("../data/music/mainMenuTheme.wav");
     mainMenuTheme.setLoop(true);
 }
