@@ -1,11 +1,11 @@
 # SpaceyRocks
 A space invaders inspired game. Pop the waves of asteroids with your main cannon,
 roast them with the laser if they try to get past you, and protect yourself
-with a destructible bubble shield! Be careful though! The laser has a limitted ammount
-energy. Collect powerups to replenish health, energy, shield, or unlock temporary 
+with a destructible bubble shield! Be careful though! The laser damages you when
+in use! Collect powerups to replenish health, energy, shield, or unlock temporary 
 upgrades like a rate of fire booster. Beware of things far worse than asteroids...
 
-##Basic "storyline":
+##Basic storyline:
 You are at a research facility on the moon, investigating strange radio signals.
 A well established moon colony lay behind you. Your faciliity is positioned at the
 very edge of colony, for the best signal. Suddenly, a great deal of space debris
@@ -24,57 +24,27 @@ Right mouse - Laser
 
 Mouse movement - Aim the main cannon
 
-##What works, what doesn't, what has yet to be implented:
-###Things that work: Completion > 85%
--Shooting the main cannon
+##Features:
+-Full GNU autotools support. This should make compiling/installing a breeze
 
--Cannon damage model
+-Destructible, non-regnerative bubble shield
 
--Bullet "physics" ie velocity, rate of fire, etc
+-Laser, health, shield, and shooting mechanics
 
--Using the laser
+-Wave based gameplay
 
--The space texture
+-Basic player health bar or "HUD" if you can call it that
 
--The moonbase texture
+-Reasonably accurate collision models
 
--Laser texture
+###Upcoming features:
+-Additional enemies
 
--Large ammounts falling asteroids, less waves (being worked on)
-  
--Collision between bullet and asteroid
+-Powerups
 
--Collision between laser and asteroid
+-Improved audio
 
--Collision between player and asteroid
-
--Player health bar and health
-
--A very simple game over screen
-
--Destructible bubble shield and mechanics
-
--Core game mechanics less powerups
-
--Laser damage model
-
--The energy system to limit the laser
-
--The ability to re-play the game after win/loss.
-
--A full user interface including help page
-
--The wave based system! YAY!
-
-###Things that are being worked on: Completion > 35% but < 85%
--Audio. Effects, music, impacts, hits, being shot, getting laser'ed, dying, etc etc. The sounds for those types of things.
-
-###Things that have not been started or aren't actively being worked on: Completeion < 35%
--Addional enemy types
-
--Graphical effects IE particles/shrapnel when an asteroid explodes or hits something
-
--Powerup system
+-Miscellaneous graphical enhancments. I hope to learn how to use shaders, but this is not a very high priority.
 
 ##Technical requirements
 ###I'm a hobby Linux developer, so Windows of any kind is unsupported. If you can make it work for Windows, great!
@@ -86,14 +56,11 @@ normally use one.
 
 ##NOTES:
 I made a point of making all the artwork myself, using gimp. If you believe there has been a copyright infringement,
-please contact me and we will settle it right away. I don't check my emails very often, so it might take me a bit
-to get back to you. This also means you are free to use all of my art, subject to the MIT license. I'll try
-to include .xcf (open source image) whenever it makes sense to do so.
+please contact me and we will settle it right away. This also means you are free to use all of my art, subject to the MIT license. I'll try to include .xcf (open source image) whenever it makes sense to do so.
 
 Included is the electronic highway sign font from: 
 http://www.dafont.com/theme.php?cat=302&page=2
-The font description says "100%" free so I hope that means I can include 
-it here. :)
+The font description says "100%" free so I hope that means I can include it here. :)
 
 I've made a point of making some, but not all, of the audio myself. Some audio files have been taken from www.freesound.org
 Where this occured, I explicitly checked that the license was creative commons 0, thus (hopefully) allowing me to freely
