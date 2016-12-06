@@ -2,7 +2,7 @@
 A space invaders inspired game. Pop the waves of asteroids with your main cannon,
 roast them with the laser if they try to get past you, and protect yourself
 with a destructible bubble shield! Be careful though! The laser damages you when
-in use! Collect powerups to replenish health, energy, shield, or unlock temporary 
+in use! Collect powerups to replenish health. Alternatively, you can unlock temporary 
 upgrades like a rate of fire booster. Beware of things far worse than asteroids...
 
 ##Basic storyline:
