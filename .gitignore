@@ -62,3 +62,5 @@ src/.deps
 src/spaceyrocks
 EXPERIMENTAL.md
 build/
+spaceyrocks
+*.Tpo
