@@ -28,6 +28,9 @@ class BaseEnemy
         //An X and Y position
         sf::Vector2f position;
 
+        //A velocity
+        sf::Vector2f velocity;
+
         //A width and a height
         sf::Vector2f size;
 

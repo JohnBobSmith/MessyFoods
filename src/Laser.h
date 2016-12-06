@@ -6,11 +6,12 @@
 class Laser
 {
     public:
+        //Automatic textures
         Laser();
 
         //A boolean value to determine
         //when the laser is in use
-        bool isLaserOn = false;
+        bool isActive = false;
 
         //Damage the laser should do
         float laserDamage = 0.025;

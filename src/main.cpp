@@ -114,7 +114,7 @@ int main()
             //If we release right mouse, turn off laser
             if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Right) {
-                    laser.isLaserOn = false;
+                    laser.isActive = false;
                 }
             }
         } //End event loop
@@ -162,7 +162,7 @@ int main()
 
             //Mouse right event. Fire our laser.
             if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-                laser.isLaserOn = true;
+                laser.isActive = true;
             }
         }
 
@@ -239,7 +239,7 @@ int main()
 
             //If the laser is on, drain the player health
             //Also play the sound
-            if (laser.isLaserOn) {
+            if (laser.isActive) {
                 player.playerHealth -= laser.laserDamage;
                 audio.laserFire.play();
             }
@@ -310,7 +310,7 @@ int main()
             //Check collision of enemies against laser
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 //Ensure we can damage our enemies with the laser
-                if (laser.isLaserOn && !enemyVector[i]->isActive) {
+                if (laser.isActive && !enemyVector[i]->isActive) {
                     if (collisionbox.checkAABBcollision(laser.laserSprite.getPosition().x,
                                                     laser.laserSprite.getPosition().y,
                                                     laser.getWidth(), laser.getHeight(),
@@ -480,7 +480,7 @@ int main()
             }
 
             //Draw our laser
-            if (laser.isLaserOn) {
+            if (laser.isActive) {
                 window.draw(laser.laserSprite);
             }
 

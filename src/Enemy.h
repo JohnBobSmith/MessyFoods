@@ -7,7 +7,8 @@
 class Enemy : public BaseEnemy
 {
     public:
-        //Setup our textures automatically
+        //Setup our textures and
+        //variables automatically
         Enemy();
 
         //Is an individual enemy spawned?
@@ -22,9 +23,6 @@ class Enemy : public BaseEnemy
 
         //Constant movement speed
         const float enemyVelocity = 5.0f;
-
-        //Our velocity
-        sf::Vector2f velocity;
 
         //Additional movement speed, added for
         //for reaching the end of the game

@@ -18,6 +18,10 @@ BaseEnemy::BaseEnemy()
     size.x = 0;
     size.y = 0;
 
+    //And velocity
+    velocity.x = 0;
+    velocity.y = 0;
+
     //Enemies are assumed to start with 100 health
     health = 100.0f;
 }
