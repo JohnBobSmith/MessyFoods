@@ -13,6 +13,7 @@
 #include "Laser.h"
 #include "Mouse.h"
 #include "G_Miscfuncandvar.h"
+#include "Text.h"
 
 int main()
 {
@@ -27,45 +28,14 @@ int main()
     sf::RenderWindow window(sf::VideoMode(gmiscfuncandvar.screenWidth, gmiscfuncandvar.screenHeight), "Spacey Rocks");
     sf::Event event;
 
-    //Our square font
-    sf::Font blockFont;
-    blockFont.loadFromFile("../data//fonts/ehsmb.ttf");
-
-    //Our game over text
-    sf::Text gameOverText;
-    gameOverText.setFont(blockFont);
-    gameOverText.setString("Game Over");
-    gameOverText.setCharacterSize(110);
-    gameOverText.setColor(sf::Color::Red);
-    gameOverText.setStyle(sf::Text::Regular);
-    //Center this text
-    gameOverText.setPosition(gmiscfuncandvar.screenWidth/ 8, gmiscfuncandvar.screenHeight / 3);
-
-    //Our space to start text or prompt
-    sf::Text spaceTostartText;
-    spaceTostartText.setFont(blockFont);
-    spaceTostartText.setString("space bar to start");
-    spaceTostartText.setCharacterSize(55);
-    spaceTostartText.setColor(sf::Color::Yellow);
-    spaceTostartText.setStyle(sf::Text::Regular);
-    //Position this text just below our win/loss text
-    spaceTostartText.setPosition(gmiscfuncandvar.screenWidth/ 8, gmiscfuncandvar.screenHeight / 2);
-
-    //Our victory text
-    sf::Text winText;
-    winText.setFont(blockFont);
-    winText.setString("You WIN!!");
-    winText.setCharacterSize(110);
-    winText.setColor(sf::Color::Green);
-    winText.setStyle(sf::Text::Regular);
-    //Center our text
-    winText.setPosition(gmiscfuncandvar.screenWidth/ 8, gmiscfuncandvar.screenHeight / 3);
-
     //Our background image
     sf::Sprite background;
     sf::Texture backgroundTexture;
     backgroundTexture.loadFromFile("../data//textures/bg.png");
     background.setTexture(backgroundTexture);
+
+    //Our texts
+    Text text;
 
     //Our mouse
     Mouse mouse;
@@ -536,13 +506,13 @@ int main()
                 //If we won..
                 if (ui.isWin) {
                     //Game victory text and prompt
-                    window.draw(winText);
-                    window.draw(spaceTostartText);
+                    window.draw(text.winText);
+                    window.draw(text.spaceTostartText);
                 } else { //We have lost
                     //Game over text and prompt
-                    spaceTostartText.setString("spacebar to quit");
-                    window.draw(gameOverText);
-                    window.draw(spaceTostartText);
+                    text.spaceTostartText.setString("spacebar to quit");
+                    window.draw(text.gameOverText);
+                    window.draw(text.spaceTostartText);
                     //Stop the music
                     audio.mainMenuTheme.stop();
                 }
