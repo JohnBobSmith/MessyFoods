@@ -310,7 +310,7 @@ int main()
             //Check collision of enemies against laser
             for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
                 //Ensure we can damage our enemies with the laser
-                if (laser.isActive && !enemyVector[i]->isActive) {
+                if (laser.isActive && enemyVector[i]->isActive) {
                     if (collisionbox.checkAABBcollision(laser.laserSprite.getPosition().x,
                                                     laser.laserSprite.getPosition().y,
                                                     laser.getWidth(), laser.getHeight(),
