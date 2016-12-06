@@ -82,7 +82,7 @@ int main()
     for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
         shieldVector.push_back(new Shield());
         //Enable the shield
-        shieldVector[i]->isShieldUp = true;
+        shieldVector[i]->isChunkActive= true;
     }
 
     //Position the shield blocks
@@ -288,7 +288,7 @@ int main()
             for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
                 for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
                     //Shield is up and enemy isnt dead
-                    if (shieldVector[i]->isShieldUp && enemyVector[j]->isActive) {
+                    if (shieldVector[i]->isChunkActive&& enemyVector[j]->isActive) {
                         if (collisionbox.checkAABBcollision(shieldVector[i]->positionX, shieldVector[i]->positionY,
                                                             shield.getWidth(), shield.getHeight(),
                                                             enemyVector[j]->position.x, enemyVector[j]->position.y,
@@ -406,7 +406,7 @@ int main()
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     //Turn everything on...
                     for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-                        shieldVector[i]->isShieldUp = true;
+                        shieldVector[i]->isChunkActive= true;
                     }
 
                     //Reset enemy health
@@ -486,7 +486,7 @@ int main()
 
             //Draw our shield
             for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-                if (shieldVector[i]->isShieldUp) {
+                if (shieldVector[i]->isChunkActive) {
                     window.draw(shieldVector[i]->shieldSprite);
                 }
             }

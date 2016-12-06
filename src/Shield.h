@@ -15,14 +15,12 @@ class Shield
         //The shields energy on a per-block basis
         float shieldEnergy = 100.0f;
 
-        //Velocities and positions
-        float velocityX = 0;
-        float velocityY = 0;
+        //Shields position
         float positionX = 0;
         float positionY = 0;
 
         //Is an individual shield block running?
-        bool isShieldUp = false;
+        bool isChunkActive = false;
 
         //Drain our shields on a per-block basis
         void applyDamage(float damage);

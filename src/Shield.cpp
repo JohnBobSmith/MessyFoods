@@ -20,6 +20,6 @@ void Shield::applyDamage(float damage)
 
     //If the shield block has no energy...
     if (shieldEnergy <= 0.0f) {
-        isShieldUp = false; //Kill it.
+        isChunkActive = false; //Kill it.
     }
 }
