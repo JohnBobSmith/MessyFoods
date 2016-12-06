@@ -2,24 +2,13 @@
 #define ENEMY_H
 
 #include <SFML/Graphics.hpp>
+#include "BaseEnemy.h"
 
-class Enemy
+class Enemy : public BaseEnemy
 {
     public:
         //Setup our textures automatically
         Enemy();
-
-        //The enemy sprites to be drawn on screen
-        sf::Sprite asteroid;
-
-        //The enemies position and velocity
-        float velocityX = 0;
-        float velocityY = 0;
-        float positionX = 0;
-        float positionY = 0;
-
-        //Is the enemy alive?
-        bool isDead = true;
 
         //Is an individual enemy spawned?
         bool isSpawned = false;
@@ -34,24 +23,18 @@ class Enemy
         //Constant movement speed
         const float enemyVelocity = 5.0f;
 
+        //Our velocity
+        sf::Vector2f velocity;
+
         //Additional movement speed, added for
-        //some reason IE reaching the end of the game
+        //for reaching the end of the game
         float additionalEnemyVelocity = 0.0f;
 
         //Constant max health of our enemies
         const float maxEnemyHealth = 40.0f;
 
-        //The enemies modify-able health
-        float enemyHealth = maxEnemyHealth;
-
         //Damage our objects based on N damage applied.
         void applyDamage(float damage);
-
-        //Get the width and height of the enemy texture
-        //This assumes all enemies are the same size as
-        //our asteroidTexture
-        int getWidth() { return asteroidTexture.getSize().x; }
-        int getHeight() { return asteroidTexture.getSize().y; }
 
         //Expose the max number of enemies,
         //for initialization, collision, drawing only!
@@ -63,7 +46,8 @@ class Enemy
         //Expose the enemy max health for re-set purposes
         float getMaxEnemyHealth() { return maxEnemyHealth; }
 
-        //Did we win?
+        //Did we win? Because this relates so heavily the the enemies,
+        //it is present in the enemy class.
         bool checkForWin(std::vector<Enemy*> tempEnemyVector, int enemyCount);
 
         //Spawn an enemy wave
@@ -73,9 +57,6 @@ class Enemy
         void resetEnemy(std::vector<Enemy*> tempEnemyVector);
 
     private:
-        //The enemy textures
-        sf::Texture asteroidTexture;
-
         //For initializing, collision, and
         //drawing purposes only! Required
         //because said purposes require constant

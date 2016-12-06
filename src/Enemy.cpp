@@ -4,23 +4,33 @@
 
 Enemy::Enemy()
 {
-    if (!asteroidTexture.loadFromFile("../data/textures/asteroid.png")) {
-        std::cout << "Error: Missing enemy texture";
-    }
-    asteroid.setTexture(asteroidTexture);
+    //Set the texture. Inherited from BaseEnemy
+    setTexture("../data/textures/asteroid.png");
+
+    //The enemies modify-able health
+    health = maxEnemyHealth;
+
+    //Zero-init our velocity
+    velocity.x = 0;
+    velocity.y = 0;
+
+    //Our enemy size
+    size.x = texture.getSize().x;
+    size.y = texture.getSize().y;
 }
 
 void Enemy::applyDamage(float damage)
 {
     //If they have even a smidgen of health
-    if (enemyHealth >= 0.0f) {
+    if (health >= 0.0f) {
         //Subtract the damage from the health
-        enemyHealth -= damage;
+        health -= damage;
     }
 
     //If the enemy died...
-    if (enemyHealth <= 0.0f) {
-        isDead = true; //Kill it.
+    if (health <= 0.0f) {
+        //Disable it
+        isActive = false;
     }
 }
 
@@ -40,7 +50,7 @@ bool Enemy::checkForWin(std::vector<Enemy*> tempEnemyVector, int enemyCount)
         //If the enemy is spawned...
         if (tempEnemyVector[i]->isSpawned) {
             //If the enemy is dead and not counted...
-            if (tempEnemyVector[i]->isDead && !tempEnemyVector[i]->isCounted) {
+            if (!tempEnemyVector[i]->isActive && !tempEnemyVector[i]->isCounted) {
                 //Update the counter
                 numberOfLiveEnemies -= 1;
                 //Count the enemy only once
@@ -85,7 +95,7 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector)
         if (counter == 9) {
             counter = 0;
         }
-        tempEnemyVector[i]->positionX = counter * 90;
+        tempEnemyVector[i]->position.x = counter * 90;
         counter += 1;
     }
 
@@ -119,7 +129,7 @@ void Enemy::resetEnemy(std::vector<Enemy*> tempEnemyVector)
         if (i == 72) {
             ammountToMove = -800;
         }
-        tempEnemyVector[i]->positionY = ammountToMove;
+        tempEnemyVector[i]->position.y = ammountToMove;
     }
 }
 
@@ -162,12 +172,12 @@ void Enemy::spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber)
         localEnemyCount = maxEnemies;
         break;
     default:
-        std::cout << "Error: Default case triggered in function Enemy::spawnEnemyWave...\n";
+        std::cerr << "Error: Default case triggered in function Enemy::spawnEnemyWave...\n";
     }
 
     //Spawn our enemies
     for (int i = 0; i < localEnemyCount; ++i) {
-        tempEnemyVector[i]->isDead = false;
+        tempEnemyVector[i]->isActive = true;
         tempEnemyVector[i]->isSpawned = true;
     }
 

@@ -34,6 +34,8 @@ spaceyrocks_SOURCES = \
   UI.h \
   Text.cpp \
   Text.h \
+  BaseEnemy.cpp \
+  BaseEnemy.h \
   main.cpp
 
 # NOTE: "CPP" stands for "C Pre-Processor".
