@@ -5,7 +5,7 @@
 #include <vector>
 #include "Player.h"
 #include "Bullet.h"
-#include "Enemy.h"
+#include "WhiteAsteroid.h"
 #include "Shield.h"
 #include "CollisionBox.h"
 #include "UI.h"
@@ -69,11 +69,11 @@ int main()
         bulletVector[i]->positionY = gmiscfuncandvar.screenHeight - player.getHeight();
     }
 
-    //Enemy object and pointers
-    Enemy enemy;
-    std::vector<Enemy*> enemyVector;
-    for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-        enemyVector.push_back(new Enemy());
+    //White asteroid/easiest enemy object and pointers
+    WhiteAsteroid whiteasteroid;
+    std::vector<WhiteAsteroid*> whiteAsteroidVector;
+    for (int i = 0; i < whiteasteroid.getMaxEnemies(); ++i) {
+        whiteAsteroidVector.push_back(new WhiteAsteroid());
     }
 
     //Shield object and pointers
@@ -180,58 +180,58 @@ int main()
         //Running our actual game
         if (ui.isPlaying) {
             //Enemy wave spawning logic
-            if (!enemy.isWaveSpawned) {
+            if (!whiteasteroid.isWaveSpawned) {
                 //Spawn 1 wave at a time
                 static int counter = 1;
                 //Because our counter variable is not
                 //A constant expression, we must use
                 //if statements instead of case, or
                 //we get a compiler error.
-                if (counter == 1 && !enemy.isWaveSpawned) {
-                    enemy.spawnEnemyWave(enemyVector, 1);
+                if (counter == 1 && !whiteasteroid.isWaveSpawned) {
+                    whiteasteroid.spawnEnemyWave(whiteAsteroidVector, 1);
                     counter += 1;
-                    enemy.isWaveSpawned = true;
+                    whiteasteroid.isWaveSpawned = true;
                 }
-                if (counter == 2 && !enemy.isWaveSpawned) {
-                    enemy.spawnEnemyWave(enemyVector, 2);
+                if (counter == 2 && !whiteasteroid.isWaveSpawned) {
+                    whiteasteroid.spawnEnemyWave(whiteAsteroidVector, 2);
                     counter += 1;
-                    enemy.isWaveSpawned = true;
+                    whiteasteroid.isWaveSpawned = true;
                 }
-                if (counter == 3 && !enemy.isWaveSpawned) {
-                    enemy.spawnEnemyWave(enemyVector, 3);
+                if (counter == 3 && !whiteasteroid.isWaveSpawned) {
+                    whiteasteroid.spawnEnemyWave(whiteAsteroidVector, 3);
                     counter += 1;
-                    enemy.isWaveSpawned = true;
+                    whiteasteroid.isWaveSpawned = true;
                 }
-                if (counter == 4 && !enemy.isWaveSpawned) {
-                    enemy.spawnEnemyWave(enemyVector, 4);
+                if (counter == 4 && !whiteasteroid.isWaveSpawned) {
+                    whiteasteroid.spawnEnemyWave(whiteAsteroidVector, 4);
                     counter += 1;
-                    enemy.isWaveSpawned = true;
+                    whiteasteroid.isWaveSpawned = true;
                 }
-                if (counter == 5 && !enemy.isWaveSpawned) {
-                    enemy.spawnEnemyWave(enemyVector, 5);
+                if (counter == 5 && !whiteasteroid.isWaveSpawned) {
+                    whiteasteroid.spawnEnemyWave(whiteAsteroidVector, 5);
                     counter += 1;
-                    enemy.isWaveSpawned = true;
+                    whiteasteroid.isWaveSpawned = true;
                 }
-                if (counter == 6 && !enemy.isWaveSpawned) {
-                    enemy.spawnEnemyWave(enemyVector, 6);
+                if (counter == 6 && !whiteasteroid.isWaveSpawned) {
+                    whiteasteroid.spawnEnemyWave(whiteAsteroidVector, 6);
                     counter += 1;
-                    enemy.isWaveSpawned = true;
+                    whiteasteroid.isWaveSpawned = true;
                 }
-                if (counter == 7 && !enemy.isWaveSpawned) {
-                    enemy.spawnEnemyWave(enemyVector, 7);
+                if (counter == 7 && !whiteasteroid.isWaveSpawned) {
+                    whiteasteroid.spawnEnemyWave(whiteAsteroidVector, 7);
                     counter += 1;
-                    enemy.isWaveSpawned = true;
+                    whiteasteroid.isWaveSpawned = true;
                 }
-                if (counter == 8 && !enemy.isWaveSpawned) {
-                    enemy.spawnEnemyWave(enemyVector, 8);
+                if (counter == 8 && !whiteasteroid.isWaveSpawned) {
+                    whiteasteroid.spawnEnemyWave(whiteAsteroidVector, 8);
                     counter = 8; //Do not add any more waves
-                    enemy.isWaveSpawned = true;
+                    whiteasteroid.isWaveSpawned = true;
                 }
             }
             //Win checking
             //This is done right away, so that if this
             //returns false, checking for a loss still occurs
-            if (enemy.checkForWin(enemyVector, enemy.getLocalEnemyCount())) {
+            if (whiteasteroid.checkForWin(whiteAsteroidVector, whiteasteroid.getLocalEnemyCount())) {
                 //We won, :D
                 ui.isWin = true;
                 ui.isPlaying = false;
@@ -264,21 +264,21 @@ int main()
             }
 
             //Check for enemy collisions against the player
-            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+            for (int i = 0; i < whiteasteroid.getMaxEnemies(); ++i) {
                 //The player is assumed to be alive or we
                 //would not be playing.
-                if (enemyVector[i]->isActive) {
+                if (whiteAsteroidVector[i]->isActive) {
                     //Slight offset on the Y collision to make it
                     //look like the enemy is actually hitting the player hard
                     if (collisionbox.checkAABBcollision(player.playerSprite.getPosition().x - player.getWidth() / 2,
                                                         player.playerSprite.getPosition().y - player.getHeight() / 2 + 30,
                                                         player.getWidth(), player.getHeight(),
-                                                        enemyVector[i]->position.x, enemyVector[i]->position.y,
-                                                        enemy.size.x, enemy.size.y)) {
+                                                        whiteAsteroidVector[i]->position.x, whiteAsteroidVector[i]->position.y,
+                                                        whiteasteroid.size.x, whiteasteroid.size.y)) {
 
                         //Kill the enemy, damage the player
                         audio.enemyDeath.play();
-                        enemyVector[i]->isActive = false;
+                        whiteAsteroidVector[i]->isActive = false;
                         player.playerHealth -= 10;
                     }
                 }
@@ -286,20 +286,20 @@ int main()
 
             //Check for collision of enemies against shield
             for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-                for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
+                for (int j = 0; j < whiteasteroid.getMaxEnemies(); ++j) {
                     //Shield is up and enemy isnt dead
-                    if (shieldVector[i]->isChunkActive&& enemyVector[j]->isActive) {
+                    if (shieldVector[i]->isChunkActive&& whiteAsteroidVector[j]->isActive) {
                         if (collisionbox.checkAABBcollision(shieldVector[i]->positionX, shieldVector[i]->positionY,
                                                             shield.getWidth(), shield.getHeight(),
-                                                            enemyVector[j]->position.x, enemyVector[j]->position.y,
-                                                            enemy.size.x, enemy.size.y)) {
+                                                            whiteAsteroidVector[j]->position.x, whiteAsteroidVector[j]->position.y,
+                                                            whiteasteroid.size.x, whiteasteroid.size.y)) {
 
                             //Take out a shield chunk and damage the enemy,
                             //Thus allowing the enemy to take out more shield
                             //chunks, ultimately destroying our shield in a cool way.
                             shieldVector[i]->applyDamage(999);
-                            enemyVector[j]->applyDamage(enemy.health / 2);
-                            if (!enemyVector[j]->isActive) {
+                            whiteAsteroidVector[j]->applyDamage(whiteasteroid.health / 2);
+                            if (!whiteAsteroidVector[j]->isActive) {
                                 audio.shieldImpact.play();
                             }
                         }
@@ -308,19 +308,19 @@ int main()
             }
 
             //Check collision of enemies against laser
-            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
+            for (int i = 0; i < whiteasteroid.getMaxEnemies(); ++i) {
                 //Ensure we can damage our enemies with the laser
-                if (laser.isActive && enemyVector[i]->isActive) {
+                if (laser.isActive && whiteAsteroidVector[i]->isActive) {
                     if (collisionbox.checkAABBcollision(laser.laserSprite.getPosition().x,
                                                     laser.laserSprite.getPosition().y,
                                                     laser.getWidth(), laser.getHeight(),
-                                                    enemyVector[i]->position.x, enemyVector[i]->position.y,
-                                                    enemy.size.x, enemy.size.y)) {
+                                                    whiteAsteroidVector[i]->position.x, whiteAsteroidVector[i]->position.y,
+                                                    whiteasteroid.size.x, whiteasteroid.size.y)) {
 
                         //Slowly damage the enemy, for
                         //a more realistic laser burn effect
-                        enemyVector[i]->applyDamage(0.1);
-                        if (!enemyVector[i]->isActive) {
+                        whiteAsteroidVector[i]->applyDamage(0.1);
+                        if (!whiteAsteroidVector[i]->isActive) {
                             audio.enemyDeath.play();
                         }
                     }
@@ -330,17 +330,17 @@ int main()
             //Did any of our bullets collide with the enemies?
             //If so, damage the enemy and remove the bullet
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
-                for (int j = 0; j < enemy.getMaxEnemies(); ++j) {
+                for (int j = 0; j < whiteasteroid.getMaxEnemies(); ++j) {
                     //Ensure our bullet is actually capable of damaging our enemies
-                    if (bulletVector[i]->isActive && enemyVector[j]->isActive) {
+                    if (bulletVector[i]->isActive && whiteAsteroidVector[j]->isActive) {
                         if (collisionbox.checkAABBcollision(bulletVector[i]->positionX, bulletVector[i]->positionY,
                                                             bullet.getWidth(), bullet.getHeight(),
-                                                            enemyVector[j]->position.x, enemyVector[j]->position.y,
-                                                            enemy.size.x, enemy.size.y)) {
+                                                            whiteAsteroidVector[j]->position.x, whiteAsteroidVector[j]->position.y,
+                                                            whiteasteroid.size.x, whiteasteroid.size.y)) {
                             //Collision detected.
                             bulletVector[i]->isActive = false; //No longer rendered
-                            enemyVector[j]->applyDamage(bullet.bulletDamage);
-                            if (!enemyVector[j]->isActive) {
+                            whiteAsteroidVector[j]->applyDamage(bullet.bulletDamage);
+                            if (!whiteAsteroidVector[j]->isActive) {
                                 audio.enemyDeath.play();
                             }
                         }
@@ -366,8 +366,8 @@ int main()
             }
 
             //If an enemy goes off screen, instant loss. Colony destroyed!
-            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                if (enemyVector[i]->position.y > gmiscfuncandvar.screenHeight) {
+            for (int i = 0; i < whiteasteroid.getMaxEnemies(); ++i) {
+                if (whiteAsteroidVector[i]->position.y > gmiscfuncandvar.screenHeight) {
                     ui.isWin = false;
                     ui.isPlaying = false;
                 }
@@ -410,8 +410,8 @@ int main()
                     }
 
                     //Reset enemy health
-                    for (int i = 0; i < enemy.getMaxEnemies(); ++i){
-                        enemyVector[i]->health = enemy.getMaxEnemyHealth();
+                    for (int i = 0; i < whiteasteroid.getMaxEnemies(); ++i){
+                        whiteAsteroidVector[i]->health = whiteasteroid.getMaxEnemyHealth();
                     }
 
                     //Reset the player's health bar
@@ -458,14 +458,14 @@ int main()
         //we are playing
         if (ui.isPlaying) {
             //Draw the enemies
-            for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                if (enemyVector[i]->isActive) { //The enemy is NOT dead...
+            for (int i = 0; i < whiteasteroid.getMaxEnemies(); ++i) {
+                if (whiteAsteroidVector[i]->isActive) { //The enemy is NOT dead...
                     //Apply gravity AKA make our enemies move down and towards player
-                    enemyVector[i]->velocity.y = enemyVector[i]->enemyVelocity + enemy.additionalEnemyVelocity;
-                    enemyVector[i]->position.x += enemyVector[i]->velocity.x * timeStep;
-                    enemyVector[i]->position.y += enemyVector[i]->velocity.y * timeStep;
-                    enemyVector[i]->sprite.setPosition(enemyVector[i]->position.x, enemyVector[i]->position.y);
-                    window.draw(enemyVector[i]->sprite);
+                    whiteAsteroidVector[i]->velocity.y = whiteAsteroidVector[i]->enemyVelocity + whiteasteroid.additionalEnemyVelocity;
+                    whiteAsteroidVector[i]->position.x += whiteAsteroidVector[i]->velocity.x * timeStep;
+                    whiteAsteroidVector[i]->position.y += whiteAsteroidVector[i]->velocity.y * timeStep;
+                    whiteAsteroidVector[i]->sprite.setPosition(whiteAsteroidVector[i]->position.x, whiteAsteroidVector[i]->position.y);
+                    window.draw(whiteAsteroidVector[i]->sprite);
                 }
             }
 
@@ -522,11 +522,11 @@ int main()
                     //Do the things that every win would require
                     if (ui.isWin) {
                         //Spawn more enemies
-                        enemy.isWaveSpawned = false;
+                        whiteasteroid.isWaveSpawned = false;
 
                         //Reset the enemies health
-                        for (int i = 0; i < enemy.getMaxEnemies(); ++i) {
-                            enemyVector[i]->health = enemy.getMaxEnemyHealth();
+                        for (int i = 0; i < whiteasteroid.getMaxEnemies(); ++i) {
+                            whiteAsteroidVector[i]->health = whiteasteroid.getMaxEnemyHealth();
                         }
 
                         //Start playing again
@@ -557,7 +557,7 @@ int main()
     }
 
     std::cout << "Cleaning up enemy objects... Done\n";
-    for (std::vector<Enemy*>::iterator it = enemyVector.begin(); it != enemyVector.end(); it++){
+    for (std::vector<WhiteAsteroid*>::iterator it = whiteAsteroidVector.begin(); it != whiteAsteroidVector.end(); it++){
         delete *it;
     }
 } //End main

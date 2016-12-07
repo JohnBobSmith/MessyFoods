@@ -1,15 +1,25 @@
-#ifndef ENEMY_H
-#define ENEMY_H
+#ifndef WHITEASTEROID_H
+#define WHITEASTEROID_H
 
 #include <SFML/Graphics.hpp>
 #include "BaseEnemy.h"
 
-class Enemy : public BaseEnemy
+/*
+    Our easiest enemy, the white asteroid.
+    THIS IS THE ONLY ENEMY TYPE THAT COUNTS TOWARDS A WIN!
+    This enemy is:
+    -Very plentiful
+    -Easy to kill
+    -Does relatively low damage to the shields
+    -Increases in numbers (wave based) as time goes by
+*/
+
+class WhiteAsteroid : public BaseEnemy
 {
     public:
         //Setup our textures and
         //variables automatically
-        Enemy();
+        WhiteAsteroid();
 
         //Is an individual enemy spawned?
         bool isSpawned = false;
@@ -46,13 +56,13 @@ class Enemy : public BaseEnemy
 
         //Did we win? Because this relates so heavily the the enemies,
         //it is present in the enemy class.
-        bool checkForWin(std::vector<Enemy*> tempEnemyVector, int enemyCount);
+        bool checkForWin(std::vector<WhiteAsteroid*> tempEnemyVector, int enemyCount);
 
         //Spawn an enemy wave
-        void spawnEnemyWave(std::vector<Enemy*> tempEnemyVector, int waveNumber);
+        void spawnEnemyWave(std::vector<WhiteAsteroid*> tempEnemyVector, int waveNumber);
 
         //Reset and respawn our enemies
-        void resetEnemy(std::vector<Enemy*> tempEnemyVector);
+        void resetEnemy(std::vector<WhiteAsteroid*> tempEnemyVector);
 
     private:
         //For initializing, collision, and
@@ -66,4 +76,4 @@ class Enemy : public BaseEnemy
         int localEnemyCount = 9;
 };
 
-#endif // ENEMY_H
+#endif // WHITEASTEROID_H
