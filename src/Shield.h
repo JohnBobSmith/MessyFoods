@@ -19,7 +19,7 @@ class Shield
         float positionX = 0;
         float positionY = 0;
 
-        //Is an individual shield block running?
+        //Is an individual shield block/chunk running?
         bool isChunkActive = false;
 
         //Drain our shields on a per-block basis
