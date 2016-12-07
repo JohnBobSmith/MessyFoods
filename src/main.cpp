@@ -4,7 +4,7 @@
 #include <cmath>
 #include <vector>
 #include "Player.h"
-#include "Bullet.h"
+#include "Cereal.h"
 #include "Egg.h"
 #include "BrownAsteroid.h"
 #include "BlackAsteroid.h"
@@ -59,16 +59,16 @@ int main()
     //Play music immediately
     audio.mainMenuTheme.play();
 
-    //Store our bullets in an std::vector
+    //Store our cereal pieces in an std::vector
     //WE MUST REMEMBER TO CLEAN UP ANYTHING
     //CREATED WITH NEW...
-    Bullet bullet;
-    std::vector<Bullet*> bulletVector;
-    for (int i = 0; i < bullet.getMaxBullets(); ++i) {
-        bulletVector.push_back(new Bullet());
+    Cereal cereal;
+    std::vector<Cereal*> cerealVector;
+    for (int i = 0; i < cereal.getMaxCereals(); ++i) {
+        cerealVector.push_back(new Cereal());
         //Set the initial positions to match the gun
-        bulletVector[i]->positionX = gmiscfuncandvar.screenWidth/ 2;
-        bulletVector[i]->positionY = gmiscfuncandvar.screenHeight - player.getHeight();
+        cerealVector[i]->positionX = gmiscfuncandvar.screenWidth/ 2;
+        cerealVector[i]->positionY = gmiscfuncandvar.screenHeight - player.getHeight();
     }
 
     //White asteroid/easiest enemy object and pointers
@@ -146,33 +146,33 @@ int main()
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 //Our rate of fire. Subtract 0.01f here always.
                 //Do not change this value. Instead, adjust
-                //bullet.maxRateOfFire to change fire rate
-                bullet.rateOfFire -= 0.01f;
+                //cereal.maxRateOfFire to change fire rate
+                cereal.rateOfFire -= 0.01f;
 
-                //Current bullet being shot.
-                //Used to shoot exactly one bullet at a time.
-                static int currentBullet = 0;
+                //Current cereal being shot.
+                //Used to shoot exactly one cereal at a time.
+                static int currentCereal = 0;
 
-                if (bullet.rateOfFire <= 0.0f) { //The our counter expired, so...
-                    //Fire our bullets one at a time
-                    currentBullet += 1;
-                    //If we run out of bullets, re-set to prevent a crash
-                    if (currentBullet >= bullet.getMaxBullets()) {
-                        currentBullet = 0;
+                if (cereal.rateOfFire <= 0.0f) { //The our counter expired, so...
+                    //Fire our cereals one at a time
+                    currentCereal += 1;
+                    //If we run out of cereals, re-set to prevent a crash
+                    if (currentCereal >= cereal.getMaxCereals()) {
+                        currentCereal = 0;
                     }
-                    //Allow for our bullet to be rendered, and set the trajectory
+                    //Allow for our cereal to be rendered, and set the trajectory
                     //According to where the mouse was clicked.
-                    bulletVector[currentBullet]->isActive = true;
-                    bulletVector[currentBullet]->velocityX = bullet.bulletVelocity *
+                    cerealVector[currentCereal]->isActive = true;
+                    cerealVector[currentCereal]->velocityX = cereal.cerealVelocity *
                             (cos(mouse.getMouseAngle() * gmiscfuncandvar.pi / 180));
-                    bulletVector[currentBullet]->velocityY = bullet.bulletVelocity *
+                    cerealVector[currentCereal]->velocityY = cereal.cerealVelocity *
                             (sin(mouse.getMouseAngle() * gmiscfuncandvar.pi / 180));
 
                     //Play our firing sound
                     audio.bulletFire.play();
 
                     //Re-set the counter
-                    bullet.rateOfFire = bullet.maxRateOfFire;
+                    cereal.rateOfFire = cereal.maxRateOfFire;
                 }
             }
 
@@ -437,18 +437,18 @@ int main()
                 }
             }
 
-            //Did any of our bullets collide with the white asteroid?
-            for (int i = 0; i < bullet.getMaxBullets(); ++i) {
+            //Did any of our cereals collide with the white asteroid?
+            for (int i = 0; i < cereal.getMaxCereals(); ++i) {
                 for (int j = 0; j < whiteasteroid.getMaxEnemies(); ++j) {
-                    //Ensure our bullet is actually capable of damaging our enemies
-                    if (bulletVector[i]->isActive && eggVector[j]->isActive) {
-                        if (collisionbox.checkAABBcollision(bulletVector[i]->positionX, bulletVector[i]->positionY,
-                                                            bullet.getWidth(), bullet.getHeight(),
+                    //Ensure our cereal is actually capable of damaging our enemies
+                    if (cerealVector[i]->isActive && eggVector[j]->isActive) {
+                        if (collisionbox.checkAABBcollision(cerealVector[i]->positionX, cerealVector[i]->positionY,
+                                                            cereal.getWidth(), cereal.getHeight(),
                                                             eggVector[j]->position.x, eggVector[j]->position.y,
                                                             whiteasteroid.size.x, whiteasteroid.size.y)) {
                             //Collision detected.
-                            bulletVector[i]->isActive = false; //No longer rendered
-                            eggVector[j]->applyDamage(bullet.bulletDamage);
+                            cerealVector[i]->isActive = false; //No longer rendered
+                            eggVector[j]->applyDamage(cereal.cerealDamage);
                             if (!eggVector[j]->isActive) {
                                 audio.enemyDeath.play();
                             }
@@ -457,18 +457,18 @@ int main()
                 }
             }
 
-            //Did any of our bullets collide with the brown asteroid?
-            for (int i = 0; i < bullet.getMaxBullets(); ++i) {
+            //Did any of our cereals collide with the brown asteroid?
+            for (int i = 0; i < cereal.getMaxCereals(); ++i) {
                 for (int j = 0; j < brownasteroid.getMaxEnemies(); ++j) {
-                    //Ensure our bullet is actually capable of damaging our enemies
-                    if (bulletVector[i]->isActive && brownAsteroidVector[j]->isActive) {
-                        if (collisionbox.checkAABBcollision(bulletVector[i]->positionX, bulletVector[i]->positionY,
-                                                            bullet.getWidth(), bullet.getHeight(),
+                    //Ensure our cereal is actually capable of damaging our enemies
+                    if (cerealVector[i]->isActive && brownAsteroidVector[j]->isActive) {
+                        if (collisionbox.checkAABBcollision(cerealVector[i]->positionX, cerealVector[i]->positionY,
+                                                            cereal.getWidth(), cereal.getHeight(),
                                                             brownAsteroidVector[j]->position.x, brownAsteroidVector[j]->position.y,
                                                             brownasteroid.size.x, brownasteroid.size.y)) {
                             //Collision detected.
-                            bulletVector[i]->isActive = false; //No longer rendered
-                            brownAsteroidVector[j]->applyDamage(bullet.bulletDamage);
+                            cerealVector[i]->isActive = false; //No longer rendered
+                            brownAsteroidVector[j]->applyDamage(cereal.cerealDamage);
                             if (!brownAsteroidVector[j]->isActive) {
                                 audio.enemyDeath.play();
                             }
@@ -477,18 +477,18 @@ int main()
                 }
             }
 
-            //Did any of our bullets collide with the black asteroid?
-            for (int i = 0; i < bullet.getMaxBullets(); ++i) {
+            //Did any of our cereals collide with the black asteroid?
+            for (int i = 0; i < cereal.getMaxCereals(); ++i) {
                 for (int j = 0; j < blackasteroid.getMaxEnemies(); ++j) {
-                    //Ensure our bullet is actually capable of damaging our enemies
-                    if (bulletVector[i]->isActive && blackAsteroidVector[j]->isActive) {
-                        if (collisionbox.checkAABBcollision(bulletVector[i]->positionX, bulletVector[i]->positionY,
-                                                            bullet.getWidth(), bullet.getHeight(),
+                    //Ensure our cereal is actually capable of damaging our enemies
+                    if (cerealVector[i]->isActive && blackAsteroidVector[j]->isActive) {
+                        if (collisionbox.checkAABBcollision(cerealVector[i]->positionX, cerealVector[i]->positionY,
+                                                            cereal.getWidth(), cereal.getHeight(),
                                                             blackAsteroidVector[j]->position.x, blackAsteroidVector[j]->position.y,
                                                             blackasteroid.size.x, blackasteroid.size.y)) {
                             //Collision detected.
-                            bulletVector[i]->isActive = false; //No longer rendered
-                            blackAsteroidVector[j]->applyDamage(bullet.bulletDamage);
+                            cerealVector[i]->isActive = false; //No longer rendered
+                            blackAsteroidVector[j]->applyDamage(cereal.cerealDamage);
                             if (!blackAsteroidVector[j]->isActive) {
                                 audio.enemyDeath.play();
                             }
@@ -497,20 +497,20 @@ int main()
                 }
             }
 
-            //If a bullet misses and goes off screen, kill it too
-            for (int i = 0; i < bullet.getMaxBullets(); ++i) {
-                if (bulletVector[i]->positionY > gmiscfuncandvar.screenHeight || bulletVector[i]->positionY < 0) {
-                    bulletVector[i]->isActive = false;
+            //If a cereal misses and goes off screen, kill it too
+            for (int i = 0; i < cereal.getMaxCereals(); ++i) {
+                if (cerealVector[i]->positionY > gmiscfuncandvar.screenHeight || cerealVector[i]->positionY < 0) {
+                    cerealVector[i]->isActive = false;
                 }
             }
 
-            //If the bullets are dead...
-            for (int i = 0; i < bullet.getMaxBullets(); ++i) {
-                if (!bulletVector[i]->isActive) {
+            //If the cereals are dead...
+            for (int i = 0; i < cereal.getMaxCereals(); ++i) {
+                if (!cerealVector[i]->isActive) {
                     //re-set their initial positions,
                     //so they can be used again
-                    bulletVector[i]->positionX = gmiscfuncandvar.screenWidth/ 2;
-                    bulletVector[i]->positionY = gmiscfuncandvar.screenHeight - player.getHeight();
+                    cerealVector[i]->positionX = gmiscfuncandvar.screenWidth/ 2;
+                    cerealVector[i]->positionY = gmiscfuncandvar.screenHeight - player.getHeight();
                 }
             }
 
@@ -651,13 +651,13 @@ int main()
                 }
             }
 
-            //Draw the bullets
-            for (int i = 0; i < bullet.getMaxBullets(); ++i) {
-                if (bulletVector[i]->isActive) { //Live bullet, so move it
-                    bulletVector[i]->positionX += bulletVector[i]->velocityX * timeStep;
-                    bulletVector[i]->positionY += bulletVector[i]->velocityY * timeStep;
-                    bulletVector[i]->bulletSprite.setPosition(bulletVector[i]->positionX, bulletVector[i]->positionY);
-                    window.draw(bulletVector[i]->bulletSprite);
+            //Draw the cereals
+            for (int i = 0; i < cereal.getMaxCereals(); ++i) {
+                if (cerealVector[i]->isActive) { //Live cereal, so move it
+                    cerealVector[i]->positionX += cerealVector[i]->velocityX * timeStep;
+                    cerealVector[i]->positionY += cerealVector[i]->velocityY * timeStep;
+                    cerealVector[i]->cerealSprite.setPosition(cerealVector[i]->positionX, cerealVector[i]->positionY);
+                    window.draw(cerealVector[i]->cerealSprite);
                 }
             }
 
@@ -679,9 +679,9 @@ int main()
             //Draw our player's health bar
             window.draw(player.healthBar);
         } else { //ui.isPlaying is now FALSE
-            //Remove any stray bullets
-            for (int i = 0; i < bullet.getMaxBullets(); ++i) {
-                bulletVector[i]->isActive = false;
+            //Remove any stray cereals
+            for (int i = 0; i < cereal.getMaxCereals(); ++i) {
+                cerealVector[i]->isActive = false;
             }
             //Ensure we are not in the main menu
             if (!ui.isMainMenu) {
@@ -748,8 +748,8 @@ int main()
         delete *it;
     }
 
-    std::cout << "Cleaning up bullet objects... Done\n";
-    for (std::vector<Bullet*>::iterator it = bulletVector.begin(); it != bulletVector.end(); it++){
+    std::cout << "Cleaning up cereal objects... Done\n";
+    for (std::vector<Cereal*>::iterator it = cerealVector.begin(); it != cerealVector.end(); it++){
         delete *it;
     }
 

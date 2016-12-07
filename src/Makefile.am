@@ -14,8 +14,8 @@ https://www.gnu.org/software/automake/manual/html_node/Program-Sources.html#Prog
 spaceyrocks_SOURCES = \
   Audio.cpp \
   Audio.h \
-  Bullet.cpp \
-  Bullet.h \
+  Cereal.cpp \
+  Cereal.h \
   CollisionBox.cpp \
   CollisionBox.h \
   Egg.cpp \

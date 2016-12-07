@@ -26,7 +26,7 @@ dist_texturesdata_DATA = \
   egg.png \
   brownasteroid.png \
   background.png \
-  bullet.png \
+  cereal.png \
   laser.png \
   moonbase.png \
   shield.png \
