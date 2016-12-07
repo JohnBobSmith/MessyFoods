@@ -31,7 +31,7 @@ int main()
     //Our background image
     sf::Sprite background;
     sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("../data//textures/bg.png");
+    backgroundTexture.loadFromFile("../data/textures/background.png");
     background.setTexture(backgroundTexture);
 
     //Our texts

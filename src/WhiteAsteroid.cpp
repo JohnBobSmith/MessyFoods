@@ -5,7 +5,7 @@
 WhiteAsteroid::WhiteAsteroid()
 {
     //Set the texture. Inherited from BaseEnemy
-    setTexture("../data/textures/asteroid.png");
+    setTexture("../data/textures/whiteasteroid.png");
 
     //The enemies modify-able health
     health = maxEnemyHealth;
