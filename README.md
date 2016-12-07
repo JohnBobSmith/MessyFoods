@@ -1,35 +1,31 @@
-# SpaceyRocks
-A space invaders inspired game. Pop the waves of asteroids with your main cannon,
-roast them with the laser if they try to get past you, and protect yourself
-with a destructible bubble shield! Be careful though! The laser damages you when
-in use! Collect powerups to replenish health. Alternatively, you can unlock temporary 
-upgrades like a rate of fire booster. Beware of things far worse than asteroids...
+# This project is undergoind massive reconstruction! Things are NOT in 
+there intended state right now!!
+
+---------------------------------------------------------------------------
+
+# Messy Foods
+Inspired by a delicious breakfast of bacon eggs toast and coffe.
 
 ##Basic storyline:
-You are at a research facility on the moon, investigating strange radio signals.
-A well established moon colony lay behind you. Your faciliity is positioned at the
-very edge of colony, for the best signal. Suddenly, a great deal of space debris
-starts rocketing towards you. A meteor shower! You decide to overload your radio, 
-turning it into a powerful space cannon! However, the energy drain nearly froze you
-and the research facility. You can no longer risk keeping the hot laser
-up at all times, for you may freese to death! As if things couldn't get any worse, 
-sure enough, the moonbase's defenses have mysteriously gone offline. It looks
-like its up to you to save the colony from complete desctruction... And it's 
-beginning to look like asteroids are the least of your concerns.
+You are eating breakfast, a normal everyday event. Suddenly, you drop 
+some toast and egg crumbs in your bowl. Your cereal is not happy. In 
+protest, they start chucking flakes and O's at you. This has made a huge 
+mess! And now you've been dragged down into the depths of Messy Foods,
+to determine which food is breakfast king.
 
 ##How to play:
-Left mouse - Fire main cannon
+Left mouse - Chuck cereal
 
-Right mouse - Laser
+Right mouse - Activate paper towel
 
-Mouse movement - Aim the main cannon
+Mouse movement - Aim
 
 ##Features:
 -Full GNU autotools support. This should make compiling/installing a breeze
 
--Destructible, non-regnerative bubble shield
+-Destructible coffee filter
 
--Laser, health, shield, and shooting mechanics
+-Unique mechanics like paper towel
 
 -Wave based gameplay
 
