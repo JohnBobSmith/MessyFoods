@@ -1,4 +1,6 @@
 #include "BlackAsteroid.h"
+#include "G_Miscfuncandvar.h"
+#include <cmath>
 
 BlackAsteroid::BlackAsteroid()
 {
@@ -17,9 +19,21 @@ BlackAsteroid::BlackAsteroid()
     size.y = texture.getSize().y;
 }
 
-void BlackAsteroid::spawnEnemy()
+void BlackAsteroid::spawnEnemy(std::vector<BlackAsteroid*> tempEnemyVector)
 {
-    //TBD what goes here...
+    //Screen width and RNG
+    G_Miscfuncandvar gmiscfuncandvar;
+
+    //Position directly above the player
+    for (int i = 0; i < maxEnemies; ++i) {
+        tempEnemyVector[i]->position.x = gmiscfuncandvar.screenWidth / 2 - size.x / 2;
+        //Start at the top of the screen, randomly. fabsf is absolute float
+        float randomNumber = -fabsf(gmiscfuncandvar.getRandomNumber() / 2);
+        tempEnemyVector[i]->position.y = randomNumber;
+
+        tempEnemyVector[i]->isActive = true;
+    }
+
 }
 
 void BlackAsteroid::applyDamage(float damage)

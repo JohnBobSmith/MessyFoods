@@ -85,6 +85,13 @@ int main()
         brownAsteroidVector.push_back(new BrownAsteroid());
     }
 
+    //Black asteroid/hard enemy object and pointers;
+    BlackAsteroid blackasteroid;
+    std::vector<BlackAsteroid*> blackAsteroidVector;
+    for (int i = 0; i < blackasteroid.getMaxEnemies(); ++i) {
+        blackAsteroidVector.push_back(new BlackAsteroid());
+    }
+
     //Shield object and pointers
     Shield shield;
     std::vector<Shield*> shieldVector;
@@ -244,6 +251,12 @@ int main()
                 brownasteroid.isEnemySpawned = true;
             }
 
+            //Spawn the lone black asteroid
+            if (!blackasteroid.isEnemySpawned) {
+                blackasteroid.spawnEnemy(blackAsteroidVector);
+                blackasteroid.isEnemySpawned = true;
+            }
+
             //Win checking
             //This is done right away, so that if this
             //returns false, checking for a loss still occurs
@@ -315,6 +328,28 @@ int main()
                         audio.enemyDeath.play();
                         brownAsteroidVector[i]->isActive = false;
                         player.playerHealth -= 10;
+                    }
+                }
+            }
+
+            //Check for black asteroid collision against the player
+            for (int i = 0; i < blackasteroid.getMaxEnemies(); ++i) {
+                //The player is assumed to be alive or we would not be playing.
+                if (blackAsteroidVector[i]->isActive) {
+                    //Slight offset on the Y collision to make it
+                    //look like the enemy is actually hitting the player hard
+                    if (collisionbox.checkAABBcollision(player.playerSprite.getPosition().x - player.getWidth() / 2,
+                                                        player.playerSprite.getPosition().y - player.getHeight() / 2 + 30,
+                                                        player.getWidth(), player.getHeight(),
+                                                        blackAsteroidVector[i]->position.x, blackAsteroidVector[i]->position.y,
+                                                        blackasteroid.size.x, blackasteroid.size.y)) {
+
+                        //Kill the enemy and the player
+                        audio.enemyDeath.play();
+                        blackAsteroidVector[i]->isActive = false;
+                        //Kill the player by ending the game
+                        ui.isWin = false;
+                        ui.isPlaying = false;
                     }
                 }
             }
@@ -442,6 +477,26 @@ int main()
                 }
             }
 
+            //Did any of our bullets collide with the black asteroid?
+            for (int i = 0; i < bullet.getMaxBullets(); ++i) {
+                for (int j = 0; j < blackasteroid.getMaxEnemies(); ++j) {
+                    //Ensure our bullet is actually capable of damaging our enemies
+                    if (bulletVector[i]->isActive && blackAsteroidVector[j]->isActive) {
+                        if (collisionbox.checkAABBcollision(bulletVector[i]->positionX, bulletVector[i]->positionY,
+                                                            bullet.getWidth(), bullet.getHeight(),
+                                                            blackAsteroidVector[j]->position.x, blackAsteroidVector[j]->position.y,
+                                                            blackasteroid.size.x, blackasteroid.size.y)) {
+                            //Collision detected.
+                            bulletVector[i]->isActive = false; //No longer rendered
+                            blackAsteroidVector[j]->applyDamage(bullet.bulletDamage);
+                            if (!blackAsteroidVector[j]->isActive) {
+                                audio.enemyDeath.play();
+                            }
+                        }
+                    }
+                }
+            }
+
             //If a bullet misses and goes off screen, kill it too
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
                 if (bulletVector[i]->positionY > gmiscfuncandvar.screenHeight || bulletVector[i]->positionY < 0) {
@@ -560,6 +615,18 @@ int main()
         //Draw our game stuff only when
         //we are playing
         if (ui.isPlaying) {
+            //Draw the black asteroid
+            for (int i = 0; i < blackasteroid.getMaxEnemies(); ++i) {
+                if (blackAsteroidVector[i]->isActive) { //The enemy is NOT dead...
+                    //Apply gravity AKA make our enemies move down and towards player
+                    blackAsteroidVector[i]->velocity.y = blackAsteroidVector[i]->enemyVelocity;
+                    blackAsteroidVector[i]->position.x += blackAsteroidVector[i]->velocity.x * timeStep;
+                    blackAsteroidVector[i]->position.y += blackAsteroidVector[i]->velocity.y * timeStep;
+                    blackAsteroidVector[i]->sprite.setPosition(blackAsteroidVector[i]->position.x, blackAsteroidVector[i]->position.y);
+                    window.draw(blackAsteroidVector[i]->sprite);
+                }
+            }
+
             //Draw the white asteroid
             for (int i = 0; i < whiteasteroid.getMaxEnemies(); ++i) {
                 if (whiteAsteroidVector[i]->isActive) { //The enemy is NOT dead...
@@ -644,14 +711,19 @@ int main()
                             whiteAsteroidVector[i]->health = whiteasteroid.getMaxEnemyHealth();
                         }
 
-                        //Reset our brown asteroids
+                        //Reset and respawn our brown asteroids
                         for (int i = 0; i < brownasteroid.getMaxEnemies(); ++i) {
                             brownAsteroidVector[i]->isActive = false;
                             brownAsteroidVector[i]->health = brownAsteroidVector[i]->maxHealth;
                         }
-
-                        //Spawn more brown asteroids
                         brownasteroid.isEnemySpawned = false;
+
+                        //Reset and respawn the black asteroid
+                        for (int i = 0; i < blackasteroid.getMaxEnemies(); ++i) {
+                            blackAsteroidVector[i]->isActive = false;
+                            blackAsteroidVector[i]->health = blackAsteroidVector[i]->maxHealth;
+                        }
+                        blackasteroid.isEnemySpawned = false;
 
                         //Start playing again
                         ui.isPlaying = true;
@@ -688,6 +760,11 @@ int main()
 
     std::cout << "Cleaning up brown asteroid... Done\n";
     for (std::vector<BrownAsteroid*>::iterator it = brownAsteroidVector.begin(); it != brownAsteroidVector.end(); it++){
+        delete *it;
+    }
+
+    std::cout << "Cleaning up black asteroid... Done\n";
+    for (std::vector<BlackAsteroid*>::iterator it = blackAsteroidVector.begin(); it != blackAsteroidVector.end(); it++){
         delete *it;
     }
 } //End main

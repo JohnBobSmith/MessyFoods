@@ -29,4 +29,5 @@ dist_texturesdata_DATA = \
   bullet.png \
   laser.png \
   moonbase.png \
-  shield.png
+  shield.png \
+  blackasteroid.png
