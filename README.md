@@ -4,7 +4,7 @@
 ---------------------------------------------------------------------------
 
 # Messy Foods
-Inspired by a delicious breakfast of bacon eggs toast and coffe.
+Inspired by a delicious breakfast of bacon eggs toast and coffee.
 
 ##Basic storyline:
 You are eating breakfast, a normal everyday event. Suddenly, you drop 
@@ -62,7 +62,7 @@ I've made a point of making some, but not all, of the audio myself. Some audio f
 Where this occured, I explicitly checked that the license was creative commons 0, thus (hopefully) allowing me to freely
 include the audio with my project. Again if you have any problems, email me.
 
-I've used space invaders as a reference and inspiration for this project, and as a reference and inspiration only. I take
+When I first started this project, I was using "Space Invaders" as a reference and inspiration for this project. I take
 no credit for the original space invaders released by Taito in 1978.
 
 ####Contributors to this project:
