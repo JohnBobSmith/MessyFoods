@@ -402,7 +402,6 @@ int main()
             }
 
             //Did any of our bullets collide with the white asteroid?
-            //If so, damage the enemy and remove the bullet
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
                 for (int j = 0; j < whiteasteroid.getMaxEnemies(); ++j) {
                     //Ensure our bullet is actually capable of damaging our enemies
@@ -422,8 +421,7 @@ int main()
                 }
             }
 
-            //Did any of our bullets collide with the white asteroid?
-            //If so, damage the enemy and remove the bullet
+            //Did any of our bullets collide with the brown asteroid?
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
                 for (int j = 0; j < brownasteroid.getMaxEnemies(); ++j) {
                     //Ensure our bullet is actually capable of damaging our enemies
@@ -442,7 +440,7 @@ int main()
                     }
                 }
             }
-
+            */
             //If a bullet misses and goes off screen, kill it too
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
                 if (bulletVector[i]->positionY > gmiscfuncandvar.screenHeight || bulletVector[i]->positionY < 0) {
@@ -460,11 +458,20 @@ int main()
                 }
             }
 
-            //If a white asteroid goes off screen, instant loss. Colony destroyed!
+            //If a white asteroid goes off screen, instant loss! Colony destroyed!
             for (int i = 0; i < whiteasteroid.getMaxEnemies(); ++i) {
                 if (whiteAsteroidVector[i]->position.y > gmiscfuncandvar.screenHeight) {
                     ui.isWin = false;
                     ui.isPlaying = false;
+                }
+            }
+
+            //If a brown asteroid goes off screen, lose all shields!
+            for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
+                for (int j = 0; j < brownasteroid.getMaxEnemies(); ++j) {
+                    if (brownAsteroidVector[j]->position.y > gmiscfuncandvar.screenHeight) {
+                        shieldVector[i]->isChunkActive = false;
+                    }
                 }
             }
         }
@@ -631,10 +638,19 @@ int main()
                         //Spawn more enemies
                         whiteasteroid.isWaveSpawned = false;
 
-                        //Reset the enemies health
+                        //Reset the white asteroids health
                         for (int i = 0; i < whiteasteroid.getMaxEnemies(); ++i) {
                             whiteAsteroidVector[i]->health = whiteasteroid.getMaxEnemyHealth();
                         }
+
+                        //Reset our brown asteroids
+                        for (int i = 0; i < brownasteroid.getMaxEnemies(); ++i) {
+                            brownAsteroidVector[i]->isActive = false;
+                            brownAsteroidVector[i]->health = brownAsteroidVector[i]->maxHealth;
+                        }
+
+                        //Spawn more brown asteroids
+                        brownasteroid.isEnemySpawned = false;
 
                         //Start playing again
                         ui.isPlaying = true;

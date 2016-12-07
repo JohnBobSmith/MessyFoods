@@ -6,7 +6,9 @@
 
 /*
     Brown asteroid. Our medium enemy. This enemy...
-    -Does NOT count towards a win
+    -Does NOT count towards a win. Instead, if this gets
+        past you, you will lose ALL shields due to this
+            asteroids electromagnetic properties!
     -Does roughly two times shield damage
     -Moves slightly faster than white asteroid
     -Requires slightly more shots to kill
@@ -40,10 +42,9 @@ class BrownAsteroid : public BaseEnemy
         int getMaxEnemies() { return maxEnemies; }
 
     private:
-        //A max of 25 enemies of this type
+        //A max of 5 enemies of this type
         //are permitted at any given time.
-        //For testings sake, only 1 enemy is permitted.
-        const int maxEnemies = 1;
+        const int maxEnemies = 5;
 
 
 };
