@@ -38,6 +38,8 @@ spaceyrocks_SOURCES = \
   BaseEnemy.h \
   BrownAsteroid.cpp \
   BrownAsteroid.h \
+  BlackAsteroid.cpp \
+  BlackAsteroid.h \
   main.cpp
 
 # NOTE: "CPP" stands for "C Pre-Processor".

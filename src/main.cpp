@@ -7,6 +7,7 @@
 #include "Bullet.h"
 #include "WhiteAsteroid.h"
 #include "BrownAsteroid.h"
+#include "BlackAsteroid.h"
 #include "Shield.h"
 #include "CollisionBox.h"
 #include "UI.h"
@@ -440,7 +441,7 @@ int main()
                     }
                 }
             }
-            */
+
             //If a bullet misses and goes off screen, kill it too
             for (int i = 0; i < bullet.getMaxBullets(); ++i) {
                 if (bulletVector[i]->positionY > gmiscfuncandvar.screenHeight || bulletVector[i]->positionY < 0) {

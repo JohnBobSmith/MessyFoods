@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include <random>
 
 /*
     Global miscellaneous functions and variables
@@ -18,13 +19,23 @@
 class G_Miscfuncandvar
 {
     public:
+        //Our pi value
         constexpr double pi_value() { return M_PI; }
         const double pi = pi_value();
 
+        //Screen dimensions
         const int screenWidth = 800;
         const int screenHeight = 600;
 
+        //Calculate a quadratic equation, for our shields
         sf::Vector2f calculateQuadratic(float n);
+
+        //Grab a random number from our RNG
+        float getRandomNumber();
+
+    private:
+        //The random number to return, from our RNG.
+        float randomNumber;
 };
 
 #endif // G_MISCFUNCANDVAR_H

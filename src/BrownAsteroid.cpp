@@ -1,7 +1,7 @@
 #include "BrownAsteroid.h"
 #include "G_Miscfuncandvar.h"
 #include <iostream>
-#include <random>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 
 BrownAsteroid::BrownAsteroid()
@@ -38,22 +38,17 @@ void BrownAsteroid::applyDamage(float damage)
 
 void BrownAsteroid::spawnRandomEnemy(std::vector<BrownAsteroid*> tempEnemyVector)
 {
-    //Screen width
+    //Screen width and RNG
     G_Miscfuncandvar gmiscfuncandvar;
 
-    //Our random number generator, more or less copy-pasted from
-    //stackoverlow. See here (second answer):
-    //http://stackoverflow.com/questions/7560114/random-number-c-in-some-range
-    std::random_device rd; // obtain a random number from hardware
-    std::mt19937 eng(rd()); // seed the generator
-    std::uniform_int_distribution<> distr(80, gmiscfuncandvar.screenWidth - 80);
-
     for (int i = 0; i < maxEnemies; ++i) {
-        //For the sake of testing, until this enemy
-        //is fully implemented, the X value is fixed.
-        tempEnemyVector[i]->position.x = distr(eng);
-        //Start slightly above the top of the screen
-        tempEnemyVector[i]->position.y = -(distr(eng) / 2);
+        //Random X positions. fabsf is absolute floating point
+        float randomNumberX = fabsf(gmiscfuncandvar.getRandomNumber());
+        tempEnemyVector[i]->position.x = randomNumberX;
+
+        //Start slightly above the top of the screen. fabsf is absolute floating point
+        float randomNumberY = -fabsf(gmiscfuncandvar.getRandomNumber()) / 2;
+        tempEnemyVector[i]->position.y = randomNumberY;
 
         //Enable the enemy
         tempEnemyVector[i]->isActive = true;
