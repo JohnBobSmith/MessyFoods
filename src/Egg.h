@@ -1,5 +1,5 @@
-#ifndef WHITEASTEROID_H
-#define WHITEASTEROID_H
+#ifndef EGG_H
+#define EGG_H
 
 #include <SFML/Graphics.hpp>
 #include "BaseEnemy.h"
@@ -14,12 +14,12 @@
     -Increases in numbers (wave based) as time goes by
 */
 
-class WhiteAsteroid : public BaseEnemy
+class Egg : public BaseEnemy
 {
     public:
         //Setup our textures and
         //variables automatically
-        WhiteAsteroid();
+        Egg();
 
         //Is an individual enemy spawned?
         bool isSpawned = false;
@@ -56,13 +56,13 @@ class WhiteAsteroid : public BaseEnemy
 
         //Did we win? Because this relates so heavily the the enemies,
         //it is present in the enemy class.
-        bool checkForWin(std::vector<WhiteAsteroid*> tempEnemyVector, int enemyCount);
+        bool checkForWin(std::vector<Egg*> tempEnemyVector, int enemyCount);
 
         //Spawn an enemy wave
-        void spawnEnemyWave(std::vector<WhiteAsteroid*> tempEnemyVector, int waveNumber);
+        void spawnEnemyWave(std::vector<Egg*> tempEnemyVector, int waveNumber);
 
         //Reset and respawn our enemies
-        void resetEnemy(std::vector<WhiteAsteroid*> tempEnemyVector);
+        void resetEnemy(std::vector<Egg*> tempEnemyVector);
 
     private:
         //For initializing, collision, and
@@ -76,4 +76,4 @@ class WhiteAsteroid : public BaseEnemy
         int localEnemyCount = 9;
 };
 
-#endif // WHITEASTEROID_H
+#endif // EGG_H

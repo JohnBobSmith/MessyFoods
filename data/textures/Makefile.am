@@ -23,7 +23,7 @@ texturesdatadir = $(pkgdatadir)/textures
 #
 # https://www.gnu.org/software/automake/manual/html_node/Data.html
 dist_texturesdata_DATA = \
-  whiteasteroid.png \
+  egg.png \
   brownasteroid.png \
   background.png \
   bullet.png \

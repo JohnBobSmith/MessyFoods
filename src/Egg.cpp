@@ -1,11 +1,11 @@
 #include <SFML/Graphics.hpp>
-#include "WhiteAsteroid.h"
+#include "Egg.h"
 #include <iostream>
 
-WhiteAsteroid::WhiteAsteroid()
+Egg::Egg()
 {
     //Set the texture. Inherited from BaseEnemy
-    setTexture("../data/textures/whiteasteroid.png");
+    setTexture("../data/textures/egg.png");
 
     //The enemies modify-able health
     health = maxEnemyHealth;
@@ -19,7 +19,7 @@ WhiteAsteroid::WhiteAsteroid()
     size.y = texture.getSize().y;
 }
 
-void WhiteAsteroid::applyDamage(float damage)
+void Egg::applyDamage(float damage)
 {
     //If they have even a smidgen of health
     if (health >= 0.0f) {
@@ -34,7 +34,7 @@ void WhiteAsteroid::applyDamage(float damage)
     }
 }
 
-bool WhiteAsteroid::checkForWin(std::vector<WhiteAsteroid*> tempEnemyVector, int enemyCount)
+bool Egg::checkForWin(std::vector<Egg*> tempEnemyVector, int enemyCount)
 {
     //Check for a win, where a win is defined as:
     //1) The enemy is not in play (dead)
@@ -87,7 +87,7 @@ bool WhiteAsteroid::checkForWin(std::vector<WhiteAsteroid*> tempEnemyVector, int
 }
 
 //Reset the asteroids positions, WIP wave-based system
-void WhiteAsteroid::resetEnemy(std::vector<WhiteAsteroid*> tempEnemyVector)
+void Egg::resetEnemy(std::vector<Egg*> tempEnemyVector)
 {
     //Position our enemies on the X axis
     for (int i = 0; i < localEnemyCount; ++i) {
@@ -133,7 +133,7 @@ void WhiteAsteroid::resetEnemy(std::vector<WhiteAsteroid*> tempEnemyVector)
     }
 }
 
-void WhiteAsteroid::spawnEnemyWave(std::vector<WhiteAsteroid*> tempEnemyVector, int waveNumber)
+void Egg::spawnEnemyWave(std::vector<Egg*> tempEnemyVector, int waveNumber)
 {
     //Count our waves and add enemies accordingly
     switch (waveNumber)

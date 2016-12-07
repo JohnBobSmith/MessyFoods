@@ -18,8 +18,8 @@ spaceyrocks_SOURCES = \
   Bullet.h \
   CollisionBox.cpp \
   CollisionBox.h \
-  WhiteAsteroid.cpp \
-  WhiteAsteroid.h \
+  Egg.cpp \
+  Egg.h \
   G_Miscfuncandvar.cpp \
   G_Miscfuncandvar.h \
   Laser.cpp \
