@@ -29,5 +29,5 @@ dist_texturesdata_DATA = \
   toast.png\
   bacon.png \
   laser.png \
-  moonbase.png \
+  cerealbowl.png \
   shield.png 

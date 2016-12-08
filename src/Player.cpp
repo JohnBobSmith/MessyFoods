@@ -3,8 +3,8 @@
 
 Player::Player()
 {
-    if(!playerTexture.loadFromFile("../data/textures/moonbase.png")) {
-        std::cout << "Error: Missing /textures/moonbase.png!";
+    if(!playerTexture.loadFromFile("../data/textures/cerealbowl.png")) {
+        std::cout << "Error: Missing /textures/cerealbowl.png!";
     }
     playerSprite.setTexture(playerTexture);
 
