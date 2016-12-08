@@ -1,13 +1,13 @@
-#include "BrownAsteroid.h"
+#include "Toast.h"
 #include "G_Miscfuncandvar.h"
 #include <iostream>
 #include <cmath>
 #include <SFML/Graphics.hpp>
 
-BrownAsteroid::BrownAsteroid()
+Toast::Toast()
 {
     //Set the texture. Inherited from BaseEnemy
-    setTexture("../data/textures/brownasteroid.png");
+    setTexture("../data/textures/toast.png");
 
     //The enemies modify-able health
     health = maxHealth;
@@ -21,7 +21,7 @@ BrownAsteroid::BrownAsteroid()
     size.y = texture.getSize().y;
 }
 
-void BrownAsteroid::applyDamage(float damage)
+void Toast::applyDamage(float damage)
 {
     //If they have even a smidgen of health
     if (health >= 0.0f) {
@@ -36,7 +36,7 @@ void BrownAsteroid::applyDamage(float damage)
     }
 }
 
-void BrownAsteroid::spawnRandomEnemy(std::vector<BrownAsteroid*> tempEnemyVector)
+void Toast::spawnRandomEnemy(std::vector<Toast*> tempEnemyVector)
 {
     //Screen width and RNG
     G_Miscfuncandvar gmiscfuncandvar;

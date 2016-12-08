@@ -4,14 +4,14 @@
 #
 # 
 https://www.gnu.org/software/automake/manual/html_node/Program-Sources.html#Program-Sources
-bin_PROGRAMS = spaceyrocks
+bin_PROGRAMS = messyfoods
 
 # A list of all of the source code files.
 # The "SOURCES" suffix marks it as source code.
 #
 # 
 https://www.gnu.org/software/automake/manual/html_node/Program-Sources.html#Program-Sources
-spaceyrocks_SOURCES = \
+messyfoods_SOURCES = \
   Audio.cpp \
   Audio.h \
   Cereal.cpp \
@@ -36,8 +36,8 @@ spaceyrocks_SOURCES = \
   Text.h \
   BaseEnemy.cpp \
   BaseEnemy.h \
-  BrownAsteroid.cpp \
-  BrownAsteroid.h \
+  Toast.cpp \
+  Toast.h \
   BlackAsteroid.cpp \
   BlackAsteroid.h \
   main.cpp
@@ -46,4 +46,4 @@ spaceyrocks_SOURCES = \
 #
 # 
 https://www.gnu.org/software/automake/manual/html_node/Program-and-Library-Variables.html
-spaceyrocks_CPPFLAGS = -Wall -std=c++11
+messyfoods_CPPFLAGS = -Wall -std=c++11

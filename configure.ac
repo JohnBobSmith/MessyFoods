@@ -4,7 +4,7 @@
 # the version number, and the contact information.
 #
 # https://www.gnu.org/software/autoconf/manual/autoconf.html#Initializing-configure
-AC_INIT([spaceyrocks], [0.1], [myrunescapeemail609@gmail.com])
+AC_INIT([messyfoods], [0.1], [myrunescapeemail609@gmail.com])
 
 # Initialize automake with all warnings.
 #

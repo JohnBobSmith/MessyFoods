@@ -6,7 +6,7 @@
 #include "Player.h"
 #include "Cereal.h"
 #include "Egg.h"
-#include "BrownAsteroid.h"
+#include "Toast.h"
 #include "BlackAsteroid.h"
 #include "Shield.h"
 #include "CollisionBox.h"
@@ -79,10 +79,10 @@ int main()
     }
 
     //Brown asteroid/medium enemy object and pointers;
-    BrownAsteroid brownasteroid;
-    std::vector<BrownAsteroid*> brownAsteroidVector;
-    for (int i = 0; i < brownasteroid.getMaxEnemies(); ++i) {
-        brownAsteroidVector.push_back(new BrownAsteroid());
+    Toast toast;
+    std::vector<Toast*> toastVector;
+    for (int i = 0; i < toast.getMaxEnemies(); ++i) {
+        toastVector.push_back(new Toast());
     }
 
     //Black asteroid/hard enemy object and pointers;
@@ -246,9 +246,9 @@ int main()
             }
 
             //Spawn our brown asteroids
-            if (!brownasteroid.isEnemySpawned) {
-                brownasteroid.spawnRandomEnemy(brownAsteroidVector);
-                brownasteroid.isEnemySpawned = true;
+            if (!toast.isEnemySpawned) {
+                toast.spawnRandomEnemy(toastVector);
+                toast.isEnemySpawned = true;
             }
 
             //Spawn the lone black asteroid
@@ -313,20 +313,20 @@ int main()
             }
 
             //Check for brown asteroid collision against the player
-            for (int i = 0; i < brownasteroid.getMaxEnemies(); ++i) {
+            for (int i = 0; i < toast.getMaxEnemies(); ++i) {
                 //The player is assumed to be alive or we would not be playing.
-                if (brownAsteroidVector[i]->isActive) {
+                if (toastVector[i]->isActive) {
                     //Slight offset on the Y collision to make it
                     //look like the enemy is actually hitting the player hard
                     if (collisionbox.checkAABBcollision(player.playerSprite.getPosition().x - player.getWidth() / 2,
                                                         player.playerSprite.getPosition().y - player.getHeight() / 2 + 30,
                                                         player.getWidth(), player.getHeight(),
-                                                        brownAsteroidVector[i]->position.x, brownAsteroidVector[i]->position.y,
-                                                        brownasteroid.size.x, brownasteroid.size.y)) {
+                                                        toastVector[i]->position.x, toastVector[i]->position.y,
+                                                        toast.size.x, toast.size.y)) {
 
                         //Kill the enemy, damage the player
                         audio.enemyDeath.play();
-                        brownAsteroidVector[i]->isActive = false;
+                        toastVector[i]->isActive = false;
                         player.playerHealth -= 10;
                     }
                 }
@@ -379,17 +379,17 @@ int main()
 
             //Check for collision of brown enemy against shield
             for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-                for (int j = 0; j < brownasteroid.getMaxEnemies(); ++j) {
+                for (int j = 0; j < toast.getMaxEnemies(); ++j) {
                     //Shield is up and enemy isnt dead
-                    if (shieldVector[i]->isChunkActive&& brownAsteroidVector[j]->isActive) {
+                    if (shieldVector[i]->isChunkActive&& toastVector[j]->isActive) {
                         if (collisionbox.checkAABBcollision(shieldVector[i]->positionX, shieldVector[i]->positionY,
                                                             shield.getWidth(), shield.getHeight(),
-                                                            brownAsteroidVector[j]->position.x, brownAsteroidVector[j]->position.y,
-                                                            brownasteroid.size.x, brownasteroid.size.y)) {
+                                                            toastVector[j]->position.x, toastVector[j]->position.y,
+                                                            toast.size.x, toast.size.y)) {
 
                             shieldVector[i]->applyDamage(999);
-                            brownAsteroidVector[j]->applyDamage(brownasteroid.health / 4);
-                            if (!brownAsteroidVector[j]->isActive) {
+                            toastVector[j]->applyDamage(toast.health / 4);
+                            if (!toastVector[j]->isActive) {
                                 audio.shieldImpact.play();
                             }
                         }
@@ -418,19 +418,19 @@ int main()
             }
 
             //Check collision of brown asteroid against laser
-            for (int i = 0; i < brownasteroid.getMaxEnemies(); ++i) {
+            for (int i = 0; i < toast.getMaxEnemies(); ++i) {
                 //Ensure we can damage our enemies with the laser
-                if (laser.isActive && brownAsteroidVector[i]->isActive) {
+                if (laser.isActive && toastVector[i]->isActive) {
                     if (collisionbox.checkAABBcollision(laser.laserSprite.getPosition().x,
                                                     laser.laserSprite.getPosition().y,
                                                     laser.getWidth(), laser.getHeight(),
-                                                    brownAsteroidVector[i]->position.x, brownAsteroidVector[i]->position.y,
-                                                    brownasteroid.size.x, brownasteroid.size.y)) {
+                                                    toastVector[i]->position.x, toastVector[i]->position.y,
+                                                    toast.size.x, toast.size.y)) {
 
                         //Slowly damage the enemy, for
                         //a more realistic laser burn effect
-                        brownAsteroidVector[i]->applyDamage(1.0);
-                        if (!brownAsteroidVector[i]->isActive) {
+                        toastVector[i]->applyDamage(1.0);
+                        if (!toastVector[i]->isActive) {
                             audio.enemyDeath.play();
                         }
                     }
@@ -459,17 +459,17 @@ int main()
 
             //Did any of our cereals collide with the brown asteroid?
             for (int i = 0; i < cereal.getMaxCereals(); ++i) {
-                for (int j = 0; j < brownasteroid.getMaxEnemies(); ++j) {
+                for (int j = 0; j < toast.getMaxEnemies(); ++j) {
                     //Ensure our cereal is actually capable of damaging our enemies
-                    if (cerealVector[i]->isActive && brownAsteroidVector[j]->isActive) {
+                    if (cerealVector[i]->isActive && toastVector[j]->isActive) {
                         if (collisionbox.checkAABBcollision(cerealVector[i]->positionX, cerealVector[i]->positionY,
                                                             cereal.getWidth(), cereal.getHeight(),
-                                                            brownAsteroidVector[j]->position.x, brownAsteroidVector[j]->position.y,
-                                                            brownasteroid.size.x, brownasteroid.size.y)) {
+                                                            toastVector[j]->position.x, toastVector[j]->position.y,
+                                                            toast.size.x, toast.size.y)) {
                             //Collision detected.
                             cerealVector[i]->isActive = false; //No longer rendered
-                            brownAsteroidVector[j]->applyDamage(cereal.cerealDamage);
-                            if (!brownAsteroidVector[j]->isActive) {
+                            toastVector[j]->applyDamage(cereal.cerealDamage);
+                            if (!toastVector[j]->isActive) {
                                 audio.enemyDeath.play();
                             }
                         }
@@ -524,8 +524,8 @@ int main()
 
             //If a brown asteroid goes off screen, lose all shields!
             for (int i = 0; i < shield.getMaxShieldBlocks(); ++i) {
-                for (int j = 0; j < brownasteroid.getMaxEnemies(); ++j) {
-                    if (brownAsteroidVector[j]->position.y > gmiscfuncandvar.screenHeight) {
+                for (int j = 0; j < toast.getMaxEnemies(); ++j) {
+                    if (toastVector[j]->position.y > gmiscfuncandvar.screenHeight) {
                         shieldVector[i]->isChunkActive = false;
                     }
                 }
@@ -640,14 +640,14 @@ int main()
             }
 
             //Draw the brown asteroid
-            for (int i = 0; i < brownasteroid.getMaxEnemies(); ++i) {
-                if (brownAsteroidVector[i]->isActive) { //The enemy is NOT dead...
+            for (int i = 0; i < toast.getMaxEnemies(); ++i) {
+                if (toastVector[i]->isActive) { //The enemy is NOT dead...
                     //Apply gravity AKA make our enemies move down and towards player
-                    brownAsteroidVector[i]->velocity.y = brownAsteroidVector[i]->enemyVelocity;
-                    brownAsteroidVector[i]->position.x += brownAsteroidVector[i]->velocity.x * timeStep;
-                    brownAsteroidVector[i]->position.y += brownAsteroidVector[i]->velocity.y * timeStep;
-                    brownAsteroidVector[i]->sprite.setPosition(brownAsteroidVector[i]->position.x, brownAsteroidVector[i]->position.y);
-                    window.draw(brownAsteroidVector[i]->sprite);
+                    toastVector[i]->velocity.y = toastVector[i]->enemyVelocity;
+                    toastVector[i]->position.x += toastVector[i]->velocity.x * timeStep;
+                    toastVector[i]->position.y += toastVector[i]->velocity.y * timeStep;
+                    toastVector[i]->sprite.setPosition(toastVector[i]->position.x, toastVector[i]->position.y);
+                    window.draw(toastVector[i]->sprite);
                 }
             }
 
@@ -712,11 +712,11 @@ int main()
                         }
 
                         //Reset and respawn our brown asteroids
-                        for (int i = 0; i < brownasteroid.getMaxEnemies(); ++i) {
-                            brownAsteroidVector[i]->isActive = false;
-                            brownAsteroidVector[i]->health = brownAsteroidVector[i]->maxHealth;
+                        for (int i = 0; i < toast.getMaxEnemies(); ++i) {
+                            toastVector[i]->isActive = false;
+                            toastVector[i]->health = toastVector[i]->maxHealth;
                         }
-                        brownasteroid.isEnemySpawned = false;
+                        toast.isEnemySpawned = false;
 
                         //Reset and respawn the black asteroid
                         for (int i = 0; i < blackasteroid.getMaxEnemies(); ++i) {
@@ -759,7 +759,7 @@ int main()
     }
 
     std::cout << "Cleaning up brown asteroid... Done\n";
-    for (std::vector<BrownAsteroid*>::iterator it = brownAsteroidVector.begin(); it != brownAsteroidVector.end(); it++){
+    for (std::vector<Toast*>::iterator it = toastVector.begin(); it != toastVector.end(); it++){
         delete *it;
     }
 
