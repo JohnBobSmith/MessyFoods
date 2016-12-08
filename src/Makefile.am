@@ -38,8 +38,8 @@ messyfoods_SOURCES = \
   BaseEnemy.h \
   Toast.cpp \
   Toast.h \
-  BlackAsteroid.cpp \
-  BlackAsteroid.h \
+  Bacon.cpp \
+  Bacon.h \
   main.cpp
 
 # NOTE: "CPP" stands for "C Pre-Processor".

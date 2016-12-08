@@ -7,7 +7,7 @@
 #include "Cereal.h"
 #include "Egg.h"
 #include "Toast.h"
-#include "BlackAsteroid.h"
+#include "Bacon.h"
 #include "Shield.h"
 #include "CollisionBox.h"
 #include "UI.h"
@@ -86,10 +86,10 @@ int main()
     }
 
     //Black asteroid/hard enemy object and pointers;
-    BlackAsteroid blackasteroid;
-    std::vector<BlackAsteroid*> blackAsteroidVector;
-    for (int i = 0; i < blackasteroid.getMaxEnemies(); ++i) {
-        blackAsteroidVector.push_back(new BlackAsteroid());
+    Bacon bacon;
+    std::vector<Bacon*> baconVector;
+    for (int i = 0; i < bacon.getMaxEnemies(); ++i) {
+        baconVector.push_back(new Bacon());
     }
 
     //Shield object and pointers
@@ -252,9 +252,9 @@ int main()
             }
 
             //Spawn the lone black asteroid
-            if (!blackasteroid.isEnemySpawned) {
-                blackasteroid.spawnEnemy(blackAsteroidVector);
-                blackasteroid.isEnemySpawned = true;
+            if (!bacon.isEnemySpawned) {
+                bacon.spawnEnemy(baconVector);
+                bacon.isEnemySpawned = true;
             }
 
             //Win checking
@@ -333,20 +333,20 @@ int main()
             }
 
             //Check for black asteroid collision against the player
-            for (int i = 0; i < blackasteroid.getMaxEnemies(); ++i) {
+            for (int i = 0; i < bacon.getMaxEnemies(); ++i) {
                 //The player is assumed to be alive or we would not be playing.
-                if (blackAsteroidVector[i]->isActive) {
+                if (baconVector[i]->isActive) {
                     //Slight offset on the Y collision to make it
                     //look like the enemy is actually hitting the player hard
                     if (collisionbox.checkAABBcollision(player.playerSprite.getPosition().x - player.getWidth() / 2,
                                                         player.playerSprite.getPosition().y - player.getHeight() / 2 + 30,
                                                         player.getWidth(), player.getHeight(),
-                                                        blackAsteroidVector[i]->position.x, blackAsteroidVector[i]->position.y,
-                                                        blackasteroid.size.x, blackasteroid.size.y)) {
+                                                        baconVector[i]->position.x, baconVector[i]->position.y,
+                                                        bacon.size.x, bacon.size.y)) {
 
                         //Kill the enemy and the player
                         audio.enemyDeath.play();
-                        blackAsteroidVector[i]->isActive = false;
+                        baconVector[i]->isActive = false;
                         //Kill the player by ending the game
                         ui.isWin = false;
                         ui.isPlaying = false;
@@ -479,17 +479,17 @@ int main()
 
             //Did any of our cereals collide with the black asteroid?
             for (int i = 0; i < cereal.getMaxCereals(); ++i) {
-                for (int j = 0; j < blackasteroid.getMaxEnemies(); ++j) {
+                for (int j = 0; j < bacon.getMaxEnemies(); ++j) {
                     //Ensure our cereal is actually capable of damaging our enemies
-                    if (cerealVector[i]->isActive && blackAsteroidVector[j]->isActive) {
+                    if (cerealVector[i]->isActive && baconVector[j]->isActive) {
                         if (collisionbox.checkAABBcollision(cerealVector[i]->positionX, cerealVector[i]->positionY,
                                                             cereal.getWidth(), cereal.getHeight(),
-                                                            blackAsteroidVector[j]->position.x, blackAsteroidVector[j]->position.y,
-                                                            blackasteroid.size.x, blackasteroid.size.y)) {
+                                                            baconVector[j]->position.x, baconVector[j]->position.y,
+                                                            bacon.size.x, bacon.size.y)) {
                             //Collision detected.
                             cerealVector[i]->isActive = false; //No longer rendered
-                            blackAsteroidVector[j]->applyDamage(cereal.cerealDamage);
-                            if (!blackAsteroidVector[j]->isActive) {
+                            baconVector[j]->applyDamage(cereal.cerealDamage);
+                            if (!baconVector[j]->isActive) {
                                 audio.enemyDeath.play();
                             }
                         }
@@ -616,14 +616,14 @@ int main()
         //we are playing
         if (ui.isPlaying) {
             //Draw the black asteroid
-            for (int i = 0; i < blackasteroid.getMaxEnemies(); ++i) {
-                if (blackAsteroidVector[i]->isActive) { //The enemy is NOT dead...
+            for (int i = 0; i < bacon.getMaxEnemies(); ++i) {
+                if (baconVector[i]->isActive) { //The enemy is NOT dead...
                     //Apply gravity AKA make our enemies move down and towards player
-                    blackAsteroidVector[i]->velocity.y = blackAsteroidVector[i]->enemyVelocity;
-                    blackAsteroidVector[i]->position.x += blackAsteroidVector[i]->velocity.x * timeStep;
-                    blackAsteroidVector[i]->position.y += blackAsteroidVector[i]->velocity.y * timeStep;
-                    blackAsteroidVector[i]->sprite.setPosition(blackAsteroidVector[i]->position.x, blackAsteroidVector[i]->position.y);
-                    window.draw(blackAsteroidVector[i]->sprite);
+                    baconVector[i]->velocity.y = baconVector[i]->enemyVelocity;
+                    baconVector[i]->position.x += baconVector[i]->velocity.x * timeStep;
+                    baconVector[i]->position.y += baconVector[i]->velocity.y * timeStep;
+                    baconVector[i]->sprite.setPosition(baconVector[i]->position.x, baconVector[i]->position.y);
+                    window.draw(baconVector[i]->sprite);
                 }
             }
 
@@ -719,11 +719,11 @@ int main()
                         toast.isEnemySpawned = false;
 
                         //Reset and respawn the black asteroid
-                        for (int i = 0; i < blackasteroid.getMaxEnemies(); ++i) {
-                            blackAsteroidVector[i]->isActive = false;
-                            blackAsteroidVector[i]->health = blackAsteroidVector[i]->maxHealth;
+                        for (int i = 0; i < bacon.getMaxEnemies(); ++i) {
+                            baconVector[i]->isActive = false;
+                            baconVector[i]->health = baconVector[i]->maxHealth;
                         }
-                        blackasteroid.isEnemySpawned = false;
+                        bacon.isEnemySpawned = false;
 
                         //Start playing again
                         ui.isPlaying = true;
@@ -764,7 +764,7 @@ int main()
     }
 
     std::cout << "Cleaning up black asteroid... Done\n";
-    for (std::vector<BlackAsteroid*>::iterator it = blackAsteroidVector.begin(); it != blackAsteroidVector.end(); it++){
+    for (std::vector<Bacon*>::iterator it = baconVector.begin(); it != baconVector.end(); it++){
         delete *it;
     }
 } //End main

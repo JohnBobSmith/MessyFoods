@@ -1,32 +1,32 @@
-#ifndef BLACKASTEROID_H
-#define BLACKASTEROID_H
+#ifndef BACON_H
+#define BACON_H
 
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "BaseEnemy.h"
 
 /*
-    Our black asteroid! The hardest enemy!
-    This enemy will make your life miserable because...
-    -It completely ignores the shield
-    -It completely ignores the laser
-    -It takes a great deal of shots to kill
-    -It will only spawn directly above the player!
-    -It is hard to see!
-    -It moves the fastest!
-    -IT CAUSES INSTANT DEATH!!!
+    Our BACON!! Who doesn't love bacon right?
+    This enemy will make your life deliciously miserable...
+    -Bacon completely ignores the coffee filter
+    -Bacon completely ignores the paper towel
+    -Bacon takes a lot of cheerios to destroy
+    -Bacon will only spawn directly above the player!
+        -BACON IS COMING FOR YOU!!!
+    -Contrary to popular belief, bacon moves fast!
+    -BACON CAUSES INSTANT DEATH IF IT POLLUTES YOUR CEREAL BOWL!
 
-    Saving grace?
-    -Will only spawn one enemy, once per round
-    -The spawn point doesnt change (dead center above player
+    The good news is...
+    -Bacon will only spawn once per round
+    -Bacon will always spawn directly above the player
     -Random spawn height (may take longer to reach player)
 */
 
-class BlackAsteroid : public BaseEnemy
+class Bacon : public BaseEnemy
 {
     public:
         //Automatic textures and variables
-        BlackAsteroid();
+        Bacon();
 
         //Velocity - faster than the brown asteroid!
         const float enemyVelocity = 9.0f;
@@ -38,7 +38,7 @@ class BlackAsteroid : public BaseEnemy
         const float maxHealth = 160;
 
         //Spawn our enemy
-        void spawnEnemy(std::vector<BlackAsteroid*> tempEnemyVector);
+        void spawnEnemy(std::vector<Bacon*> tempEnemyVector);
 
         //Damage this enemy
         void applyDamage(float damage);

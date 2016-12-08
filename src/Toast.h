@@ -46,7 +46,6 @@ class Toast : public BaseEnemy
         //are permitted at any given time.
         const int maxEnemies = 5;
 
-
 };
 
 #endif // TOAST_H
