@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="messyfoods" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/messyfoods" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/messyfoods" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Linker>
+			<Add library="sfml-graphics" />
+			<Add library="sfml-window" />
+			<Add library="sfml-system" />
+			<Add library="sfml-audio" />
+		</Linker>
+		<Unit filename="Audio.cpp" />
+		<Unit filename="Audio.h" />
+		<Unit filename="Bacon.cpp" />
+		<Unit filename="Bacon.h" />
+		<Unit filename="BaseEnemy.cpp" />
+		<Unit filename="BaseEnemy.h" />
+		<Unit filename="Cereal.cpp" />
+		<Unit filename="Cereal.h" />
+		<Unit filename="CollisionBox.cpp" />
+		<Unit filename="CollisionBox.h" />
+		<Unit filename="Egg.cpp" />
+		<Unit filename="Egg.h" />
+		<Unit filename="G_Miscfuncandvar.cpp" />
+		<Unit filename="G_Miscfuncandvar.h" />
+		<Unit filename="Laser.cpp" />
+		<Unit filename="Laser.h" />
+		<Unit filename="Mouse.cpp" />
+		<Unit filename="Mouse.h" />
+		<Unit filename="Player.cpp" />
+		<Unit filename="Player.h" />
+		<Unit filename="Shield.cpp" />
+		<Unit filename="Shield.h" />
+		<Unit filename="Text.cpp" />
+		<Unit filename="Text.h" />
+		<Unit filename="Toast.cpp" />
+		<Unit filename="Toast.h" />
+		<Unit filename="UI.cpp" />
+		<Unit filename="UI.h" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<lib_finder disable_auto="1" />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

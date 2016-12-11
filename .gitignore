@@ -33,10 +33,11 @@ bin/
 obj/
 src/obj/
 
-# Code blocks files
-*.cbp
-*.depend
-*.layout
+# Ignore code blocks files, only in src/
+# Do not ignore code blocks stuff in dev/
+src/*.cbp
+src/*.depend
+src/*.layout
 
 # Additional files to ignore (may be duplicates)
 *~
