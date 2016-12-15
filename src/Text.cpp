@@ -1,3 +1,4 @@
+#include "Resources.h"
 #include "Text.h"
 #include "G_Miscfuncandvar.h"
 
@@ -7,7 +8,7 @@ Text::Text()
     G_Miscfuncandvar gmiscfuncandvar;
 
     //Load our font
-    blockFont.loadFromFile("../data/fonts/ehsmb.ttf");
+    blockFont.loadFromFile( PKGDATADIR "/fonts/ehsmb.ttf");
 
     //Load our game over text
     gameOverText.setFont(blockFont);

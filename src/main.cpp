@@ -16,6 +16,7 @@
 #include "Mouse.h"
 #include "G_Miscfuncandvar.h"
 #include "Text.h"
+#include "Resources.h"
 
 int main()
 {
@@ -33,7 +34,7 @@ int main()
     //Our background image
     sf::Sprite background;
     sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("../data/textures/background.png");
+    backgroundTexture.loadFromFile( PKGDATADIR "/textures/background.png");
     background.setTexture(backgroundTexture);
 
     //Our texts

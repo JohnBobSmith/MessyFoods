@@ -1,11 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include "Egg.h"
+#include "Resources.h"
 #include <iostream>
 
 Egg::Egg()
 {
     //Set the texture. Inherited from BaseEnemy
-    setTexture("../data/textures/egg.png");
+    setTexture( PKGDATADIR "/textures/egg.png");
 
     //The enemies modify-able health
     health = maxEnemyHealth;

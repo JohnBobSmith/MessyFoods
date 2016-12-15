@@ -1,9 +1,10 @@
 #include "Player.h"
+#include "Resources.h"
 #include <iostream>
 
 Player::Player()
 {
-    if(!playerTexture.loadFromFile("../data/textures/cerealbowl.png")) {
+    if(!playerTexture.loadFromFile( PKGDATADIR "/textures/cerealbowl.png")) {
         std::cout << "Error: Missing /textures/cerealbowl.png!";
     }
     playerSprite.setTexture(playerTexture);

@@ -1,10 +1,11 @@
 #include <SFML/Graphics.hpp>
+#include "Resources.h"
 #include "Shield.h"
 #include <iostream>
 
 Shield::Shield()
 {
-    if (!shieldTexture.loadFromFile("../data//textures/shield.png")) {
+    if (!shieldTexture.loadFromFile( PKGDATADIR "//textures/shield.png")) {
         std::cout << "Error, missing shield texture...\n";
     }
     shieldSprite.setTexture(shieldTexture);

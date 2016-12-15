@@ -1,3 +1,4 @@
+#include "Resources.h"
 #include "Toast.h"
 #include "G_Miscfuncandvar.h"
 #include <iostream>
@@ -7,7 +8,7 @@
 Toast::Toast()
 {
     //Set the texture. Inherited from BaseEnemy
-    setTexture("../data/textures/toast.png");
+    setTexture( PKGDATADIR "/textures/toast.png");
 
     //The enemies modify-able health
     health = maxHealth;

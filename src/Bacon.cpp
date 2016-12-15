@@ -1,11 +1,12 @@
 #include "Bacon.h"
 #include "G_Miscfuncandvar.h"
+#include "Resources.h"
 #include <cmath>
 
 Bacon::Bacon()
 {
     //Set the texture. Inherited from BaseEnemy
-    setTexture("../data/textures/bacon.png");
+    setTexture( PKGDATADIR "/textures/bacon.png");
 
     //The enemies modify-able health
     health = maxHealth;
