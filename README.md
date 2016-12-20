@@ -51,8 +51,9 @@ should allow you to compile the project. Any bug reports or refinements to the m
 normally use one.
 
 ##NOTES:
-I made a point of making all the artwork myself, using gimp. If you believe there has been a copyright infringement,
-please contact me and we will settle it right away. This also means you are free to use all of my art, subject to the MIT license. I'll try to include .xcf (open source image) whenever it makes sense to do so.
+I made a point of making all the artwork myself, using gimp. Where this was not possible, images have been taken from the public domain (google images).
+If you believe there has been a copyright infringement,please contact me and we will settle it right away. This also means you are free to use all of my art,
+subject to the MIT license. I'll try to include .xcf (open source image) whenever it makes sense to do so.
 
 Included is the electronic highway sign font from: 
 http://www.dafont.com/theme.php?cat=302&page=2
