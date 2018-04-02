@@ -56,7 +56,7 @@ If you believe there has been a copyright infringement,please contact me and we 
 subject to the MIT license. I'll try to include .xcf (open source image) whenever it makes sense to do so.
 
 Included is the electronic highway sign font from: 
-http://www.dafont.com/theme.php?cat=302&page=2
+https://www.dafont.com/electronic-highway-sign.font
 The font description says "100%" free so I hope that means I can include it here. :)
 
 I've made a point of making some, but not all, of the audio myself. Some audio files have been taken from www.freesound.org
